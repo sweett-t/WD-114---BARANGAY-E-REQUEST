@@ -1,0 +1,225 @@
+/*  NAVBAR  */
+.navbar {
+    background-color: var(--color-white);
+    border-bottom: 1px solid #E5E7EB;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    box-shadow: var(--shadow-light);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+.navbar-nav {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    list-style: none;
+}
+
+.navbar-nav a {
+    text-decoration: none;
+    color: var(--color-secondary);
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 0.25rem 0;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s;
+}
+
+.navbar-nav a:hover,
+.navbar-nav a.active {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+}
+
+.navbar-user {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--color-secondary);
+}
+
+.avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background-color: var(--color-primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+/*  FOOTER  */
+.footer {
+    background-color: var(--color-light);
+    padding: var(--spacing-md);
+    text-align: center;
+}
+
+.footer p {
+    margin: 0;
+    color: #6B7280;
+    font-size: 0.9rem;
+}
+
+/*  FORM WRAPPER  */
+.form-wrapper {
+    max-width: 700px;
+    margin: auto;
+    padding: 1rem;
+}
+
+.return-dashboard {
+    margin-bottom: 1rem;
+}
+
+.return-dashboard a {
+    display: inline-block;
+    text-decoration: none;
+    color: var(--color-primary);
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.return-dashboard a:hover {
+    color: var(--color-accent);
+}
+
+.form-page-title {
+    margin-bottom: 1.5rem;
+}
+
+.form-page-title h2 {
+    font-size: 1.5rem;
+    color: var(--color-secondary);
+    font-weight: 700;
+}
+
+.form-page-title p {
+    font-size: 0.9rem;
+    color: #6B7280;
+    margin-bottom: 0;
+}
+
+.form-container {
+    padding: 2rem;
+}
+
+fieldset {
+    border: 1px solid #E5E7EB;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    border-radius: var(--border-radius);
+}
+
+legend {
+    font-weight: 600;
+    color: var(--color-primary);
+    padding: 0 0.5rem;
+    font-size: 0.95rem;
+}
+
+label.field-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-secondary);
+    margin-bottom: 0.25rem;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 0.6rem;
+    border: 1px solid #CBD5E1;
+    border-radius: var(--border-radius);
+    font-size: 0.95rem;
+}
+
+/* Certification Section */
+.certification-section {
+    margin-top: 1.5rem;
+    padding: 1.5rem 2rem;
+    background-color: var(--color-light);
+    border-radius: var(--border-radius);
+    border: 1px solid #E5E7EB;
+}
+
+.certification-section .checkbox-inline {
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.certification-section .checkbox-inline span {
+    font-size: 0.95rem;
+}
+
+.checkbox-inline {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    font-size: 0.95rem;
+    margin-bottom: 1.25rem;
+    color: var(--color-secondary);
+    line-height: 1.5;
+    cursor: pointer;
+}
+
+.checkbox-inline input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    margin-top: 2px;
+    accent-color: var(--color-primary);
+    cursor: pointer;
+}
+
+.form-buttons-centered {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.form-buttons-centered .btn-outline {
+    order: 1;
+}
+
+.form-buttons-centered .btn-primary {
+    order: 2;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .navbar-nav {
+        display: none;
+    }
+
+    .form-wrapper {
+        padding: 0.5rem;
+    }
+
+    .form-buttons-centered {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .certification-section {
+        padding: 1.25rem;
+    }
+}

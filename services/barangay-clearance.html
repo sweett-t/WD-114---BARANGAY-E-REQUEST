@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Barangay Clearance Application</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/forms-barangay-clearance.css" />
+  </head>
+  <body>
+    <!--  NAVBAR  -->
+    <nav class="navbar">
+      <a href="index.html" class="navbar-brand"> Barangay E-request </a>
+
+      <ul class="navbar-nav">
+        <li><a href="user-dashboard.html">Dashboard</a></li>
+        <li><a href="#" class="active">Request Documents</a></li>
+        <li><a href="my-requests.html">My Requests</a></li>
+      </ul>
+
+      <div class="navbar-user">
+        <div class="avatar">JD</div>
+        <span>Juan Dela Cruz</span>
+      </div>
+    </nav>
+
+    <!--  MAIN CONTENT  -->
+    <section class="section">
+      <div class="form-wrapper">
+        <!-- Return to Dashboard -->
+        <div class="return-dashboard">
+          <a href="user-dashboard.html">← Return to Dashboard</a>
+        </div>
+
+        <!-- Page Title -->
+        <div class="form-page-title">
+          <h2>Barangay Clearance Application</h2>
+          <p>
+            Please fill out all required fields accurately. This document will
+            be processed within 1–3 business days.
+          </p>
+        </div>
+
+        <!-- Form Card -->
+        <div class="card form-container">
+          <form>
+            <!-- Personal Info -->
+            <fieldset>
+              <legend>Personal Information</legend>
+              <input
+                type="text"
+                placeholder="Full Name (as shown on valid ID)"
+                required
+              />
+              <input
+                type="text"
+                placeholder="Address (House No., Street, Purok)"
+                required
+              />
+              <input type="date" placeholder="Date of Birth" required />
+              <select required>
+                <option value="" disabled selected>Civil Status</option>
+                <option value="Single">Single</option>
+                <option value="Married">Married</option>
+                <option value="Widowed">Widowed</option>
+                <option value="Separated">Separated</option>
+                <option value="Divorced">Divorced</option>
+                <option value="Annulled">Annulled</option>
+              </select>
+              <input
+                type="text"
+                placeholder="Purpose (employment, loan, travel, etc.)"
+                required
+              />
+              <input type="text" placeholder="Years of Residency" required />
+              <input type="tel" placeholder="Contact Number" required />
+              <input type="email" placeholder="Email" required />
+            </fieldset>
+
+            <!-- Uploads -->
+            <fieldset>
+              <legend>Required Uploads</legend>
+
+              <div class="file-field">
+                <label class="field-label"
+                  >Valid Government ID <span style="color: red">*</span></label
+                >
+                <input type="file" accept="image/*,.pdf" required />
+              </div>
+
+              <div class="file-field">
+                <label class="field-label"
+                  >Proof of Residency <span style="color: red">*</span></label
+                >
+                <select required>
+                  <option value="" disabled selected>
+                    Select type of proof
+                  </option>
+                  <option value="utility-bill">Utility Bill</option>
+                  <option value="lease-contract">Lease Contract</option>
+                  <option value="voters-id">Voter’s ID showing barangay</option>
+                </select>
+                <input type="file" accept="image/*,.pdf" required />
+              </div>
+            </fieldset>
+          </form>
+        </div>
+
+        <!-- Certification & Buttons -->
+        <div class="certification-section">
+          <label class="checkbox-inline">
+            <input type="checkbox" required />
+            <span
+              >I hereby confirm that the information provided above is true and
+              accurate to the best of my knowledge, and I understand that any
+              false statement may be subject to legal consequences.</span
+            >
+          </label>
+
+          <div class="form-buttons-centered">
+            <a href="user-dashboard.html" class="btn btn-outline">Cancel</a>
+            <a href="request-success.html" class="btn btn-primary">Submit</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <p>&copy; 2026 Barangay Records System. All rights reserved.</p>
+    </footer>
+  </body>
+</html>
