@@ -1,78 +1,6 @@
-h2 {
-    color: var(--color-secondary);
-}
-
-/*  NAVBAR  */
-.navbar {
-    background-color: var(--color-white);
-    border-bottom: 1px solid #E5E7EB;
-    padding: 0 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 64px;
-    box-shadow: var(--shadow-light);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
-
-.navbar-brand {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    font-weight: 700;
-    font-size: 1.1rem;
-    color: var(--color-primary);
+a.btn {
+    display: inline-block;
     text-decoration: none;
-}
-
-.navbar-brand svg {
-    flex-shrink: 0;
-}
-
-.navbar-nav {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    list-style: none;
-}
-
-.navbar-nav a {
-    text-decoration: none;
-    color: var(--color-secondary);
-    font-size: 0.95rem;
-    font-weight: 500;
-    transition: color 0.2s;
-    padding: 0.25rem 0;
-    border-bottom: 2px solid transparent;
-}
-
-.navbar-nav a:hover,
-.navbar-nav a.active {
-    color: var(--color-primary);
-    border-bottom-color: var(--color-primary);
-}
-
-.navbar-user {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.9rem;
-    color: var(--color-secondary);
-}
-
-.avatar {
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    background-color: var(--color-primary);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    font-size: 0.85rem;
 }
 
 /*  FOOTER  */
@@ -80,20 +8,12 @@ h2 {
     background-color: var(--color-light);
     padding: var(--spacing-md);
     text-align: center;
-    margin-top: 0%;
 }
 
 .footer p {
     margin: 0;
     color: #6B7280;
     font-size: 0.9rem;
-}
-
-/*  a.btn FIX  */
-/* <a> tags used as buttons need display:inline-block to behave correctly */
-a.btn {
-    display: inline-block;
-    text-decoration: none;
 }
 
 /*  FORM WRAPPER  */
@@ -103,7 +23,7 @@ a.btn {
     padding: 1rem;
 }
 
-/*  Return to Dashboard  */
+/*  RETURN TO DASHBOARD  */
 .return-dashboard {
     margin-bottom: 1rem;
 }
@@ -120,7 +40,7 @@ a.btn {
     color: var(--color-accent);
 }
 
-/*  Page Title  */
+/*  PAGE TITLE  */
 .form-page-title {
     margin-bottom: 1.5rem;
 }
@@ -137,12 +57,12 @@ a.btn {
     margin-bottom: 0;
 }
 
-/*  Form Card  */
+/*  FORM CARD  */
 .form-container {
     padding: 2rem;
 }
 
-/*  Fieldsets  */
+/*  FIELDSETS  */
 fieldset {
     border: 1px solid #E5E7EB;
     padding: 1.25rem;
@@ -157,7 +77,7 @@ legend {
     font-size: 0.95rem;
 }
 
-/*  Field Labels  */
+/*  FIELD LABELS  */
 label.field-label {
     display: block;
     font-size: 0.875rem;
@@ -166,13 +86,13 @@ label.field-label {
     margin-bottom: 0.25rem;
 }
 
-/*  Textarea  */
+/*  TEXTAREA  */
 textarea {
     resize: vertical;
     min-height: 80px;
 }
 
-/*  File Inputs  */
+/*  FILE INPUTS  */
 .file-field {
     margin-bottom: 1rem;
 }
@@ -198,7 +118,7 @@ input[type="file"]:hover {
     background-color: #EFF6FF;
 }
 
-/*  Police Buttons Inline  */
+/*  POLICE REPORT RADIO  */
 .police-text {
     display: flex;
     align-items: center;
@@ -226,13 +146,13 @@ input[type="file"]:hover {
     font-size: 0.95rem;
 }
 
-.police-buttons-inline input[type="radio"]:checked+label {
+.police-buttons-inline input[type="radio"]:checked + label {
     background-color: var(--color-primary);
     color: var(--color-white);
     border-color: var(--color-primary);
 }
 
-/*  Certification Section  */
+/*  CERTIFICATION SECTION  */
 .certification-section {
     margin-top: 1.5rem;
     padding: 1.5rem 2rem;
@@ -241,7 +161,6 @@ input[type="file"]:hover {
     border: 1px solid #E5E7EB;
 }
 
-/* Checkbox inline with text */
 .checkbox-inline {
     display: flex;
     align-items: flex-start;
@@ -260,35 +179,26 @@ input[type="file"]:hover {
     margin-top: 2px;
     accent-color: var(--color-primary);
     cursor: pointer;
+    margin-bottom: 0;
 }
 
 .checkbox-inline span {
     font-size: 0.95rem;
+    margin-bottom: 0;
 }
 
-/*  Buttons below Certification  */
+/*  FORM BUTTONS  */
 .form-buttons-centered {
     display: flex;
     justify-content: center;
     gap: 1rem;
 }
 
-.form-buttons-centered .btn-outline {
-    order: 1;
-    /* Cancel on left */
-}
+.form-buttons-centered .btn-outline { order: 1; }
+.form-buttons-centered .btn-primary { order: 2; }
 
-.form-buttons-centered .btn-primary {
-    order: 2;
-    /* Submit on right */
-}
-
-/*  Responsive  */
+/*  RESPONSIVE  */
 @media (max-width: 768px) {
-    .navbar-nav {
-        display: none;
-    }
-
     .form-wrapper {
         padding: 0.5rem;
     }
