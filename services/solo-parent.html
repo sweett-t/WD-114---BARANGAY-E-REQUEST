@@ -1,193 +1,250 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Solo Parent Certification</title>
-  <link rel="stylesheet" href="../css/style.css">
-  <link rel="stylesheet" href="../css/forms-solo-parent.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Solo Parent Certification</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/navbar.css" />
+    <link rel="stylesheet" href="../css/forms-solo-parent.css" />
+  </head>
+  <body>
+   <!-- NAVBAR -->
+    <nav class="navbar">
+      <a href="index.html" class="navbar-brand">Barangay E-Request</a>
 
-  <!-- NAVBAR -->
-  <nav class="navbar">
-    <a href="index.html" class="navbar-brand">Barangay E-request</a>
-    <ul class="navbar-nav">
-      <li><a href="user-dashboard.html">Dashboard</a></li>
-      <li><a href="#" class="active">Request Documents</a></li>
-      <li><a href="my-requests.html">My Requests</a></li>
-    </ul>
-    <div class="navbar-user">
-      <div class="avatar">JD</div>
-      <span>Juan Dela Cruz</span>
-    </div>
-  </nav>
+      <!-- Hidden checkbox toggle-->
+      <input
+        type="checkbox"
+        id="nav-toggle"
+        class="nav-toggle"
+        aria-hidden="true"
+      />
 
-  <!-- MAIN CONTENT -->
-  <section class="section">
-    <div class="form-wrapper">
+      <ul class="navbar-nav">
+        <li><a href="../user/user-dashboard.html">Dashboard</a></li>
+        <li><a href="#" class="active">Request Documents</a></li>
+        <li><a href="../user/my-requests.html">My Requests</a></li>
+        <li><a href="../user/user-profile.html">Profile</a></li>
+      </ul>
 
-      <!-- Return to Dashboard -->
-      <div class="return-dashboard">
-        <a href="user-dashboard.html">← Return to Dashboard</a>
-      </div>
-
-      <!-- Page Title -->
-      <div class="form-page-title">
-        <h2>Solo Parent Certification Application</h2>
-        <p>Please fill out all required fields accurately. The document will be processed within 3–5 business days.</p>
-      </div>
-
-      <!-- Form Card -->
-      <div class="card form-container">
-        <form id="solo-parent-form">
-
-          <!-- Personal Info -->
-          <fieldset>
-            <legend>Personal Information</legend>
-            <input type="text" placeholder="Full Name" required>
-            <input type="text" placeholder="Address (House No., Street, Purok/Barangay)" required>
-            <div style="display:flex; gap:1rem;">
-              <input type="date" id="birthdate" placeholder="Birthdate" required>
-              <input type="text" id="age" placeholder="Age" readonly style="width:80px;">
-            </div>
-            <select required>
-              <option value="">Gender</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Other">Other</option>
-            </select>
-            <select required>
-              <option value="">Civil Status</option>
-              <option value="Single">Single</option>
-              <option value="Married">Married</option>
-              <option value="Widowed">Widowed</option>
-              <option value="Separated">Separated</option>
-            </select>
-          </fieldset>
-
-          <!-- Children Info -->
-          <fieldset>
-            <legend>Children Information</legend>
-            <input type="number" id="num-children" placeholder="Number of Children" min="0" required>
-            <div id="children-container"></div>
-          </fieldset>
-
-          <!-- Reason for Solo Parenting -->
-          <fieldset>
-            <legend>Reason for Solo Parenting</legend>
-            <select id="reason" required>
-              <option value="">Select Reason</option>
-              <option value="widow">Widow/Widower</option>
-              <option value="separated">Annulled/Separated</option>
-              <option value="ofw">OFW Spouse Abandonment</option>
-              <option value="unmarried">Unmarried Parent</option>
-              <option value="legal_guardian">Legal Guardian</option>
-            </select>
-          </fieldset>
-
-          <!-- Required Uploads -->
-          <fieldset>
-            <legend>Required Uploads</legend>
-            <div class="file-field">
-              <label class="field-label">Valid ID <span style="color:red">*</span></label>
-              <input type="file" accept="image/*,.pdf" required>
-            </div>
-
-            <div class="file-field" id="conditional-uploads"></div>
-
-            <div class="file-field">
-              <label class="field-label">Proof of Residency <span style="color:red">*</span></label>
-              <input type="file" accept="image/*,.pdf" required>
-            </div>
-          </fieldset>
-
-        </form>
-      </div>
-
-      <!-- Certification & Buttons -->
-      <div class="certification-section">
-        <label class="checkbox-inline">
-          <input type="checkbox" required>
-          <span>I hereby confirm that the information provided above is true and accurate to the best of my knowledge.</span>
+      <div class="navbar-right">
+        <div class="navbar-user">
+          <div class="avatar">JD</div>
+          <span class="navbar-username">Juan Dela Cruz</span>
+        </div>
+        <!-- Hamburger label tied to checkbox -->
+        <label for="nav-toggle" class="hamburger" aria-label="Toggle menu">
+          <span></span>
+          <span></span>
+          <span></span>
         </label>
-        <div class="form-buttons-centered">
-          <a href="user-dashboard.html" class="btn btn-outline">Cancel</a>
-          <a href="request-success.html" class="btn btn-primary">Submit</a>
+      </div>
+    </nav>
+    
+    <!-- MAIN CONTENT -->
+    <section class="section">
+      <div class="form-wrapper">
+        <!-- Return to Dashboard -->
+        <div class="return-dashboard">
+          <a href="../user/user-dashboard.html">← Return to Dashboard</a>
+        </div>
+
+        <!-- Page Title -->
+        <div class="form-page-title">
+          <h2>Solo Parent Certification Application</h2>
+          <p>
+            Please fill out all required fields accurately. The document will be
+            processed within 3–5 business days.
+          </p>
+        </div>
+
+        <!-- Form Card -->
+        <div class="card form-container">
+          <form id="solo-parent-form">
+            <!-- Personal Info -->
+            <fieldset>
+              <legend>Personal Information</legend>
+              <input type="text" placeholder="Full Name" required />
+              <input
+                type="text"
+                placeholder="Address (House No., Street, Purok/Barangay)"
+                required
+              />
+              <div style="display: flex; gap: 1rem">
+                <input
+                  type="date"
+                  id="birthdate"
+                  placeholder="Birthdate"
+                  required
+                />
+                <input
+                  type="text"
+                  id="age"
+                  placeholder="Age"
+                  readonly
+                  style="width: 80px"
+                />
+              </div>
+              <select required>
+                <option value="">Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+              <select required>
+                <option value="">Civil Status</option>
+                <option value="Single">Single</option>
+                <option value="Married">Married</option>
+                <option value="Widowed">Widowed</option>
+                <option value="Separated">Separated</option>
+              </select>
+            </fieldset>
+
+            <!-- Children Info -->
+            <fieldset>
+              <legend>Children Information</legend>
+              <input
+                type="number"
+                id="num-children"
+                placeholder="Number of Children"
+                min="0"
+                required
+              />
+              <div id="children-container"></div>
+            </fieldset>
+
+            <!-- Reason for Solo Parenting -->
+            <fieldset>
+              <legend>Reason for Solo Parenting</legend>
+              <select id="reason" required>
+                <option value="">Select Reason</option>
+                <option value="widow">Widow/Widower</option>
+                <option value="separated">Annulled/Separated</option>
+                <option value="ofw">OFW Spouse Abandonment</option>
+                <option value="unmarried">Unmarried Parent</option>
+                <option value="legal_guardian">Legal Guardian</option>
+              </select>
+            </fieldset>
+
+            <!-- Required Uploads -->
+            <fieldset>
+              <legend>Required Uploads</legend>
+              <div class="file-field">
+                <label class="field-label"
+                  >Valid ID <span style="color: red">*</span></label
+                >
+                <input type="file" accept="image/*,.pdf" required />
+              </div>
+
+              <div class="file-field" id="conditional-uploads"></div>
+
+              <div class="file-field">
+                <label class="field-label"
+                  >Proof of Residency <span style="color: red">*</span></label
+                >
+                <input type="file" accept="image/*,.pdf" required />
+              </div>
+            </fieldset>
+          </form>
+        </div>
+
+        <!-- Certification & Buttons -->
+        <div class="certification-section">
+          <label class="checkbox-inline">
+            <input type="checkbox" required />
+            <span
+              >I hereby confirm that the information provided above is true and
+              accurate to the best of my knowledge.</span
+            >
+          </label>
+          <div class="form-buttons-centered">
+            <a href="../user/user-dashboard.html" class="btn btn-outline"
+              >Cancel</a
+            >
+            <a href="request-success.html" class="btn btn-primary">Submit</a>
+          </div>
         </div>
       </div>
+    </section>
 
-    </div>
-  </section>
+    <!-- FOOTER -->
+    <footer class="footer">
+      <p>&copy; 2026 Barangay Records System. All rights reserved.</p>
+    </footer>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <p>&copy; 2026 Barangay Records System. All rights reserved.</p>
-  </footer>
+    <!-- EMBEDDED JS -->
+    <script>
+      // Auto-calculate age from birthdate
+      const birthdate = document.getElementById("birthdate");
+      const ageInput = document.getElementById("age");
+      birthdate.addEventListener("change", () => {
+        const birth = new Date(birthdate.value);
+        const today = new Date();
+        let age = today.getFullYear() - birth.getFullYear();
+        const m = today.getMonth() - birth.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+        ageInput.value = age;
+      });
 
-  <!-- EMBEDDED JS -->
-  <script>
-    // Auto-calculate age from birthdate
-    const birthdate = document.getElementById('birthdate');
-    const ageInput = document.getElementById('age');
-    birthdate.addEventListener('change', () => {
-      const birth = new Date(birthdate.value);
-      const today = new Date();
-      let age = today.getFullYear() - birth.getFullYear();
-      const m = today.getMonth() - birth.getMonth();
-      if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
-      ageInput.value = age;
-    });
+      // Dynamic children fields
+      const numChildrenInput = document.getElementById("num-children");
+      const childrenContainer = document.getElementById("children-container");
 
-    // Dynamic children fields
-    const numChildrenInput = document.getElementById('num-children');
-    const childrenContainer = document.getElementById('children-container');
-
-    numChildrenInput.addEventListener('input', () => {
-      const num = parseInt(numChildrenInput.value) || 0;
-      childrenContainer.innerHTML = '';
-      for(let i = 1; i <= num; i++){
-        const div = document.createElement('div');
-        div.classList.add('child-info');
-        div.innerHTML = `
+      numChildrenInput.addEventListener("input", () => {
+        const num = parseInt(numChildrenInput.value) || 0;
+        childrenContainer.innerHTML = "";
+        for (let i = 1; i <= num; i++) {
+          const div = document.createElement("div");
+          div.classList.add("child-info");
+          div.innerHTML = `
           <input type="text" placeholder="Child ${i} Name" required>
           <input type="date" placeholder="Child ${i} Birthdate" required>
         `;
-        childrenContainer.appendChild(div);
-      }
-    });
+          childrenContainer.appendChild(div);
+        }
+      });
 
-    // Conditional uploads based on reason
-    const reasonSelect = document.getElementById('reason');
-    const conditionalUploads = document.getElementById('conditional-uploads');
+      // Conditional uploads based on reason
+      const reasonSelect = document.getElementById("reason");
+      const conditionalUploads = document.getElementById("conditional-uploads");
 
-    reasonSelect.addEventListener('change', () => {
-      const reason = reasonSelect.value;
-      conditionalUploads.innerHTML = ''; // reset
+      reasonSelect.addEventListener("change", () => {
+        const reason = reasonSelect.value;
+        conditionalUploads.innerHTML = ""; // reset
 
-      const createFileInput = (label) => {
-        const div = document.createElement('div');
-        div.classList.add('file-field');
-        div.innerHTML = `
+        const createFileInput = (label) => {
+          const div = document.createElement("div");
+          div.classList.add("file-field");
+          div.innerHTML = `
           <label class="field-label">${label} <span style="color:red">*</span></label>
           <input type="file" accept="image/*,.pdf" required>
         `;
-        return div;
-      };
+          return div;
+        };
 
-      if(reason === 'widow'){
-        conditionalUploads.appendChild(createFileInput("Death Certificate of Spouse"));
-      } else if(reason === 'separated'){
-        conditionalUploads.appendChild(createFileInput("Court Order or Legal Separation Papers"));
-      } else if(reason === 'unmarried'){
-        conditionalUploads.appendChild(createFileInput("Child's Birth Certificate (showing sole parent)"));
-      } else if(reason === 'ofw'){
-        conditionalUploads.appendChild(createFileInput("Affidavit of Abandonment"));
-        conditionalUploads.appendChild(createFileInput("Barangay Blotter Record (if available)"));
-      }
-      // Legal guardian has no extra conditional uploads
-    });
-  </script>
-
-</body>
+        if (reason === "widow") {
+          conditionalUploads.appendChild(
+            createFileInput("Death Certificate of Spouse"),
+          );
+        } else if (reason === "separated") {
+          conditionalUploads.appendChild(
+            createFileInput("Court Order or Legal Separation Papers"),
+          );
+        } else if (reason === "unmarried") {
+          conditionalUploads.appendChild(
+            createFileInput("Child's Birth Certificate (showing sole parent)"),
+          );
+        } else if (reason === "ofw") {
+          conditionalUploads.appendChild(
+            createFileInput("Affidavit of Abandonment"),
+          );
+          conditionalUploads.appendChild(
+            createFileInput("Barangay Blotter Record (if available)"),
+          );
+        }
+        // Legal guardian has no extra conditional uploads
+      });
+    </script>
+  </body>
 </html>

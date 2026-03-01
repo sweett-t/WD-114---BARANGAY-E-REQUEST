@@ -1,37 +1,54 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Senior Citizen Certificate Application</title>
     <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/navbar.css" />
     <link rel="stylesheet" href="../css/form-senior-citizen.css" />
   </head>
 
   <body>
     <!-- NAVBAR -->
     <nav class="navbar">
-      <a href="index.html" class="navbar-brand">Barangay E-request</a>
+      <a href="index.html" class="navbar-brand">Barangay E-Request</a>
+
+      <!-- Hidden checkbox toggle-->
+      <input
+        type="checkbox"
+        id="nav-toggle"
+        class="nav-toggle"
+        aria-hidden="true"
+      />
 
       <ul class="navbar-nav">
-        <li><a href="user-dashboard.html">Dashboard</a></li>
+        <li><a href="../user/user-dashboard.html">Dashboard</a></li>
         <li><a href="#" class="active">Request Documents</a></li>
-        <li><a href="my-requests.html">My Requests</a></li>
+        <li><a href="../user/my-requests.html">My Requests</a></li>
+        <li><a href="../user/user-profile.html">Profile</a></li>
       </ul>
 
-      <div class="navbar-user">
-        <div class="avatar">JD</div>
-        <span>Juan Dela Cruz</span>
+      <div class="navbar-right">
+        <div class="navbar-user">
+          <div class="avatar">JD</div>
+          <span class="navbar-username">Juan Dela Cruz</span>
+        </div>
+        <!-- Hamburger label tied to checkbox -->
+        <label for="nav-toggle" class="hamburger" aria-label="Toggle menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </label>
       </div>
     </nav>
 
     <!-- MAIN CONTENT -->
     <section class="section">
       <div class="form-wrapper">
-
         <!-- Return -->
         <div class="return-dashboard">
-          <a href="user-dashboard.html">← Return to Dashboard</a>
+          <a href="../user/user-dashboard.html">← Return to Dashboard</a>
         </div>
 
         <!-- Title -->
@@ -46,7 +63,6 @@
         <!-- Form -->
         <div class="card form-container">
           <form>
-
             <fieldset>
               <legend>Personal Information</legend>
 
@@ -59,14 +75,14 @@
               />
 
               <!-- Birthdate + Age -->
-              <div style="display:flex; align-items:center; gap:1rem;">
+              <div style="display: flex; align-items: center; gap: 1rem">
                 <input type="date" id="birthdate" required />
                 <input
                   type="text"
                   id="age"
                   placeholder="Age"
                   readonly
-                  style="width:80px;"
+                  style="width: 80px"
                 />
               </div>
 
@@ -86,7 +102,6 @@
               </select>
 
               <input type="tel" placeholder="Contact Number" required />
-
             </fieldset>
 
             <!-- Uploads -->
@@ -96,7 +111,7 @@
               <div class="file-field">
                 <label class="field-label">
                   Age Verification Document
-                  <span style="color:red">*</span>
+                  <span style="color: red">*</span>
                 </label>
 
                 <select required>
@@ -112,9 +127,7 @@
 
                 <input type="file" accept="image/*,.pdf" required />
               </div>
-
             </fieldset>
-
           </form>
         </div>
 
@@ -130,11 +143,12 @@
           </label>
 
           <div class="form-buttons-centered">
-            <a href="user-dashboard.html" class="btn btn-outline">Cancel</a>
+            <a href="../user/user-dashboard.html" class="btn btn-outline"
+              >Cancel</a
+            >
             <a href="request-success.html" class="btn btn-primary">Submit</a>
           </div>
         </div>
-
       </div>
     </section>
 
@@ -167,6 +181,5 @@
         ageInput.value = age >= 0 ? age : "";
       });
     </script>
-
   </body>
 </html>
