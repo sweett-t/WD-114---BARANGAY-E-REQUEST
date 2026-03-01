@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -7,8 +7,9 @@
     <link rel="stylesheet" href="../css/style.css" />
     <link rel="stylesheet" href="../css/form-senior-citizen.css" />
   </head>
+
   <body>
-    <!--  NAVBAR  -->
+    <!-- NAVBAR -->
     <nav class="navbar">
       <a href="index.html" class="navbar-brand">Barangay E-request</a>
 
@@ -24,15 +25,16 @@
       </div>
     </nav>
 
-    <!--  MAIN CONTENT  -->
+    <!-- MAIN CONTENT -->
     <section class="section">
       <div class="form-wrapper">
-        <!-- Return to Dashboard -->
+
+        <!-- Return -->
         <div class="return-dashboard">
           <a href="user-dashboard.html">← Return to Dashboard</a>
         </div>
 
-        <!-- Page Title -->
+        <!-- Title -->
         <div class="form-page-title">
           <h2>Senior Citizen Certificate Application</h2>
           <p>
@@ -41,26 +43,30 @@
           </p>
         </div>
 
-        <!-- Form Card -->
+        <!-- Form -->
         <div class="card form-container">
           <form>
-            <!-- Personal Information -->
+
             <fieldset>
               <legend>Personal Information</legend>
+
               <input type="text" placeholder="Full Name" required />
+
               <input
                 type="text"
                 placeholder="Address (House No., Street, Purok/Barangay)"
                 required
               />
 
-              <div style="display: flex; align-items: center; gap: 1rem">
-                <input type="date" placeholder="Birthdate" required />
+              <!-- Birthdate + Age -->
+              <div style="display:flex; align-items:center; gap:1rem;">
+                <input type="date" id="birthdate" required />
                 <input
                   type="text"
+                  id="age"
                   placeholder="Age"
                   readonly
-                  style="width: 80px"
+                  style="width:80px;"
                 />
               </div>
 
@@ -80,18 +86,19 @@
               </select>
 
               <input type="tel" placeholder="Contact Number" required />
+
             </fieldset>
 
-            <!-- Required Uploads -->
+            <!-- Uploads -->
             <fieldset>
               <legend>Required Uploads</legend>
 
-              <!-- Age Verification Document Dropdown -->
               <div class="file-field">
-                <label class="field-label"
-                  >Age Verification Document
-                  <span style="color: red">*</span></label
-                >
+                <label class="field-label">
+                  Age Verification Document
+                  <span style="color:red">*</span>
+                </label>
+
                 <select required>
                   <option value="" disabled selected>
                     Select Document Type
@@ -102,21 +109,24 @@
                     Other Document (Showing Age)
                   </option>
                 </select>
+
                 <input type="file" accept="image/*,.pdf" required />
               </div>
+
             </fieldset>
+
           </form>
         </div>
 
-        <!-- Certification & Buttons -->
+        <!-- Certification -->
         <div class="certification-section">
           <label class="checkbox-inline">
             <input type="checkbox" required />
-            <span
-              >I hereby confirm that the information provided above is true and
+            <span>
+              I hereby confirm that the information provided above is true and
               accurate to the best of my knowledge, and I understand that any
-              false statement may be subject to legal consequences.</span
-            >
+              false statement may be subject to legal consequences.
+            </span>
           </label>
 
           <div class="form-buttons-centered">
@@ -124,6 +134,7 @@
             <a href="request-success.html" class="btn btn-primary">Submit</a>
           </div>
         </div>
+
       </div>
     </section>
 
@@ -131,6 +142,31 @@
     <footer class="footer">
       <p>&copy; 2026 Barangay Records System. All rights reserved.</p>
     </footer>
+
+    <!-- ✅ AGE CALCULATION SCRIPT -->
+    <script>
+      const birthdateInput = document.getElementById("birthdate");
+      const ageInput = document.getElementById("age");
+
+      birthdateInput.addEventListener("change", function () {
+        const birthDate = new Date(this.value);
+        const today = new Date();
+
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+
+        // adjust if birthday not reached yet this year
+        if (
+          monthDiff < 0 ||
+          (monthDiff === 0 && today.getDate() < birthDate.getDate())
+        ) {
+          age--;
+        }
+
+        // prevent negative age
+        ageInput.value = age >= 0 ? age : "";
+      });
+    </script>
 
   </body>
 </html>
