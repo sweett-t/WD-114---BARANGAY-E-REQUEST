@@ -1,9 +1,4 @@
-/* =============================================
-   SUBMISSION SUCCESS PAGE
-   Depends on: style.css (global), navbar.css
-   ============================================= */
-
-/* ── CENTERED WRAPPER ── */
+/*  CENTERED WRAPPER  */
 .success-wrapper {
   flex: 1;
   display: flex;
@@ -12,7 +7,7 @@
   padding: var(--spacing-lg) var(--spacing-md);
 }
 
-/* ── CARD ── */
+/*  CARD  */
 .success-card {
   background: var(--color-white);
   border: 1px solid #e5e7eb;
@@ -30,7 +25,7 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── SUCCESS ICON ── */
+/*  SUCCESS ICON  */
 .success-icon-wrap {
   width: 80px;
   height: 80px;
@@ -55,7 +50,7 @@
   stroke-width: 2.5;
 }
 
-/* ── HEADING & SUBTITLE ── */
+/*  HEADING & SUBTITLE  */
 .success-card h1 {
   font-size: clamp(1.35rem, 3vw, 1.75rem);
   font-weight: 700;
@@ -71,7 +66,7 @@
   margin-bottom: 0;
 }
 
-/* ── TRACKING BOX ── */
+/*  TRACKING BOX  */
 .tracking-box {
   background-color: #eff6ff;
   border: 1.5px solid #bfdbfe;
@@ -104,7 +99,7 @@
   margin-bottom: 0;
 }
 
-/* ── REQUEST DETAILS ── */
+/*  REQUEST DETAILS  */
 .request-details {
   text-align: left;
   border: 1px solid #e5e7eb;
@@ -158,7 +153,7 @@
   border-radius: 9999px;
 }
 
-/* ── NOTIFICATION NOTICE ── */
+/*  NOTIFICATION NOTICE  */
 .notif-notice {
   display: flex;
   gap: 0.75rem;
@@ -190,7 +185,7 @@
   text-decoration: underline;
 }
 
-/* ── WHAT HAPPENS NEXT ── */
+/*  WHAT HAPPENS NEXT  */
 .next-steps {
   text-align: left;
   margin-bottom: var(--spacing-lg);
@@ -258,7 +253,20 @@
   line-height: 1.5;
 }
 
-/* ── ACTION BUTTONS ── */
+/*  FOOTER  */
+.footer {
+  background-color: var(--color-light);
+  padding: var(--spacing-md);
+  text-align: center;
+}
+
+.footer p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+/*  ACTION BUTTONS  */
 .action-buttons {
   display: flex;
   gap: 0.75rem;
@@ -270,7 +278,7 @@
   text-align: center;
 }
 
-/* ── RESPONSIVE ── */
+/*  RESPONSIVE  */
 @media (max-width: 480px) {
   .success-card { padding: var(--spacing-lg) var(--spacing-md); }
   .action-buttons { flex-direction: column; }
