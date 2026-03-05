@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -9,31 +9,21 @@
     <link rel="stylesheet" href="../css/forms-solo-parent.css" />
   </head>
   <body>
-   <!-- NAVBAR -->
+    <!-- NAVBAR -->
     <nav class="navbar">
       <a href="index.html" class="navbar-brand">Barangay E-Request</a>
-
-      <!-- Hidden checkbox toggle-->
-      <input
-        type="checkbox"
-        id="nav-toggle"
-        class="nav-toggle"
-        aria-hidden="true"
-      />
-
+      <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-hidden="true" />
       <ul class="navbar-nav">
         <li><a href="../user/user-dashboard.html">Dashboard</a></li>
         <li><a href="#" class="active">Request Documents</a></li>
         <li><a href="../user/my-requests.html">My Requests</a></li>
         <li><a href="../user/user-profile.html">Profile</a></li>
       </ul>
-
       <div class="navbar-right">
         <div class="navbar-user">
           <div class="avatar">JD</div>
           <span class="navbar-username">Juan Dela Cruz</span>
         </div>
-        <!-- Hamburger label tied to checkbox -->
         <label for="nav-toggle" class="hamburger" aria-label="Toggle menu">
           <span></span>
           <span></span>
@@ -41,7 +31,7 @@
         </label>
       </div>
     </nav>
-    
+
     <!-- MAIN CONTENT -->
     <section class="section">
       <div class="form-wrapper">
@@ -61,7 +51,7 @@
 
         <!-- Form Card -->
         <div class="card form-container">
-          <form id="solo-parent-form">
+          <form>
             <!-- Personal Info -->
             <fieldset>
               <legend>Personal Information</legend>
@@ -72,28 +62,22 @@
                 required
               />
               <div style="display: flex; gap: 1rem">
+                <input type="date" required />
                 <input
-                  type="date"
-                  id="birthdate"
-                  placeholder="Birthdate"
-                  required
-                />
-                <input
-                  type="text"
-                  id="age"
+                  type="number"
                   placeholder="Age"
-                  readonly
+                  min="0"
                   style="width: 80px"
                 />
               </div>
               <select required>
-                <option value="">Gender</option>
+                <option value="" disabled selected>Gender</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
                 <option value="Other">Other</option>
               </select>
               <select required>
-                <option value="">Civil Status</option>
+                <option value="" disabled selected>Civil Status</option>
                 <option value="Single">Single</option>
                 <option value="Married">Married</option>
                 <option value="Widowed">Widowed</option>
@@ -101,24 +85,30 @@
               </select>
             </fieldset>
 
-            <!-- Children Info -->
+            <!-- Children Info (static — up to 3 children) -->
             <fieldset>
               <legend>Children Information</legend>
-              <input
-                type="number"
-                id="num-children"
-                placeholder="Number of Children"
-                min="0"
-                required
-              />
-              <div id="children-container"></div>
+              <input type="number" placeholder="Number of Children" min="0" required />
+
+              <div class="child-info">
+                <input type="text" placeholder="Child 1 Name" />
+                <input type="date" />
+              </div>
+              <div class="child-info">
+                <input type="text" placeholder="Child 2 Name" />
+                <input type="date" />
+              </div>
+              <div class="child-info">
+                <input type="text" placeholder="Child 3 Name" />
+                <input type="date" />
+              </div>
             </fieldset>
 
             <!-- Reason for Solo Parenting -->
             <fieldset>
               <legend>Reason for Solo Parenting</legend>
-              <select id="reason" required>
-                <option value="">Select Reason</option>
+              <select required>
+                <option value="" disabled selected>Select Reason</option>
                 <option value="widow">Widow/Widower</option>
                 <option value="separated">Annulled/Separated</option>
                 <option value="ofw">OFW Spouse Abandonment</option>
@@ -130,19 +120,31 @@
             <!-- Required Uploads -->
             <fieldset>
               <legend>Required Uploads</legend>
+
               <div class="file-field">
-                <label class="field-label"
-                  >Valid ID <span style="color: red">*</span></label
-                >
+                <label class="field-label">Valid ID <span style="color: red">*</span></label>
                 <input type="file" accept="image/*,.pdf" required />
               </div>
 
-              <div class="file-field" id="conditional-uploads"></div>
+              <!-- Conditional uploads — all shown statically, user submits what applies -->
+              <div class="file-field">
+                <label class="field-label">
+                  Supporting Document
+                  <span style="color: #6b7280; font-weight: 400">(submit whichever applies to your reason)</span>
+                </label>
+                <select>
+                  <option value="" disabled selected>Select Document Type</option>
+                  <option value="death-cert">Death Certificate of Spouse</option>
+                  <option value="court-order">Court Order or Legal Separation Papers</option>
+                  <option value="birth-cert">Child's Birth Certificate (showing sole parent)</option>
+                  <option value="affidavit">Affidavit of Abandonment</option>
+                  <option value="blotter">Barangay Blotter Record</option>
+                </select>
+                <input type="file" accept="image/*,.pdf" />
+              </div>
 
               <div class="file-field">
-                <label class="field-label"
-                  >Proof of Residency <span style="color: red">*</span></label
-                >
+                <label class="field-label">Proof of Residency <span style="color: red">*</span></label>
                 <input type="file" accept="image/*,.pdf" required />
               </div>
             </fieldset>
@@ -153,15 +155,10 @@
         <div class="certification-section">
           <label class="checkbox-inline">
             <input type="checkbox" required />
-            <span
-              >I hereby confirm that the information provided above is true and
-              accurate to the best of my knowledge.</span
-            >
+            <span>I hereby confirm that the information provided above is true and accurate to the best of my knowledge.</span>
           </label>
           <div class="form-buttons-centered">
-            <a href="../user/user-dashboard.html" class="btn btn-outline"
-              >Cancel</a
-            >
+            <a href="../user/user-dashboard.html" class="btn btn-outline">Cancel</a>
             <a href="request-success.html" class="btn btn-primary">Submit</a>
           </div>
         </div>
@@ -172,79 +169,5 @@
     <footer class="footer">
       <p>&copy; 2026 Barangay Records System. All rights reserved.</p>
     </footer>
-
-    <!-- EMBEDDED JS -->
-    <script>
-      // Auto-calculate age from birthdate
-      const birthdate = document.getElementById("birthdate");
-      const ageInput = document.getElementById("age");
-      birthdate.addEventListener("change", () => {
-        const birth = new Date(birthdate.value);
-        const today = new Date();
-        let age = today.getFullYear() - birth.getFullYear();
-        const m = today.getMonth() - birth.getMonth();
-        if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
-        ageInput.value = age;
-      });
-
-      // Dynamic children fields
-      const numChildrenInput = document.getElementById("num-children");
-      const childrenContainer = document.getElementById("children-container");
-
-      numChildrenInput.addEventListener("input", () => {
-        const num = parseInt(numChildrenInput.value) || 0;
-        childrenContainer.innerHTML = "";
-        for (let i = 1; i <= num; i++) {
-          const div = document.createElement("div");
-          div.classList.add("child-info");
-          div.innerHTML = `
-          <input type="text" placeholder="Child ${i} Name" required>
-          <input type="date" placeholder="Child ${i} Birthdate" required>
-        `;
-          childrenContainer.appendChild(div);
-        }
-      });
-
-      // Conditional uploads based on reason
-      const reasonSelect = document.getElementById("reason");
-      const conditionalUploads = document.getElementById("conditional-uploads");
-
-      reasonSelect.addEventListener("change", () => {
-        const reason = reasonSelect.value;
-        conditionalUploads.innerHTML = ""; // reset
-
-        const createFileInput = (label) => {
-          const div = document.createElement("div");
-          div.classList.add("file-field");
-          div.innerHTML = `
-          <label class="field-label">${label} <span style="color:red">*</span></label>
-          <input type="file" accept="image/*,.pdf" required>
-        `;
-          return div;
-        };
-
-        if (reason === "widow") {
-          conditionalUploads.appendChild(
-            createFileInput("Death Certificate of Spouse"),
-          );
-        } else if (reason === "separated") {
-          conditionalUploads.appendChild(
-            createFileInput("Court Order or Legal Separation Papers"),
-          );
-        } else if (reason === "unmarried") {
-          conditionalUploads.appendChild(
-            createFileInput("Child's Birth Certificate (showing sole parent)"),
-          );
-        } else if (reason === "ofw") {
-          conditionalUploads.appendChild(
-            createFileInput("Affidavit of Abandonment"),
-          );
-          conditionalUploads.appendChild(
-            createFileInput("Barangay Blotter Record (if available)"),
-          );
-        }
-        // Legal guardian has no extra conditional uploads
-      });
-    </script>
   </body>
 </html>
