@@ -4,7 +4,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--spacing-lg) var(--spacing-md);
+  padding: var(--spacing-lg) var(--spacing-md); 
 }
 
 /*  CARD  */
