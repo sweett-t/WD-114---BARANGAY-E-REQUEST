@@ -1,0 +1,17 @@
+.service-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: #f4f4f4;
+    padding: 30px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.card:hover {
+    background: #007bff;
+    color: white;
+}
