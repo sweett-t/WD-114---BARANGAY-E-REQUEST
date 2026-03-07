@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>E-Request System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/hero.css">
+    <link rel="stylesheet" href="css/services-section.css">
+    <link rel="stylesheet" href="css/about-section.css">
+    <link rel="stylesheet" href="css/contact-section.css">
+    
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="logo">Barangay E-Request</div>
+    <ul class="nav-links">
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="auth/login.html" class="btn-login">Login</a></li>
+    </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero" class="hero">
+    <h1>Fast & Easy Barangay Document Requests</h1>
+    <p>Request your documents online anytime, anywhere.</p>
+    <a href="#services" class="btn-primary">View Services</a>
+</section>
+
+<!-- SERVICES -->
+<section id="services" class="services">
+    <h2>Our Services</h2>
+    <div class="service-container">
+        <div class="card">Barangay Clearance</div>
+        <div class="card">Barangay ID</div>
+        <div class="card">Certificate of Residency</div>
+        <div class="card">Certificate of Indigency</div>
+        <div class="card">Business Permit</div>
+        <div class="card">Affidavit of Loss</div>
+        <div class="card">Solo Parent Certificate</div>
+        <div class="card">Senior Citizen Certificate</div>
+        <div class="card">Good Moral Certificate</div>
+    </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="about">
+    <h2>About Us</h2>
+    <p>
+        The Barangay E-Request System allows residents to request documents online.
+        It reduces long lines and improves efficiency.
+    </p>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact">
+    <h2>Contact Us</h2>
+    <form id="contactForm">
+        <input type="text" placeholder="Your Name" required>
+        <input type="email" placeholder="Your Email" required>
+        <textarea placeholder="Your Message" required></textarea>
+        <button type="submit">Send Message</button>
+    </form>
+</section>
+
+<script src="js/script.js"></script>
+</body>
+</html>
