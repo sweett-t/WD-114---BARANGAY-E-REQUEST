@@ -18,7 +18,7 @@
     text-decoration: none;
 }
 
-navbar {
+.navbar {
   position: sticky;
   top: 0;
   z-index: 200;
@@ -28,7 +28,6 @@ navbar {
   flex-wrap: wrap;
   gap: 0.5rem;
   padding: 0.9rem 2rem;
-  background-color: var(--color-primary);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 

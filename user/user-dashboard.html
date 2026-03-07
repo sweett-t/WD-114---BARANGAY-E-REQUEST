@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Dashboard</title>
+
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/navbar.css" />
+    <link rel="stylesheet" href="../css/user-dashboard.css" />
+  </head>
+  <body>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+      <a href="index.html" class="navbar-brand">Barangay E-Request</a>
+
+      <!-- Hidden checkbox toggle (no JS) -->
+      <input
+        type="checkbox"
+        id="nav-toggle"
+        class="nav-toggle"
+        aria-hidden="true"
+      />
+
+      <ul class="navbar-nav">
+        <li><a href="user-dashboard.html" class="active">Dashboard</a></li>
+        <li><a href="request.html">New Request</a></li>
+        <li><a href="my-requests.html">My Requests</a></li>
+        <li><a href="user-profile.html">Profile</a></li>
+      </ul>
+
+      <div class="navbar-right">
+        <div class="navbar-user">
+          <div class="avatar">JD</div>
+          <span class="navbar-username">Juan Dela Cruz</span>
+        </div>
+        <!-- Hamburger label tied to checkbox -->
+        <label for="nav-toggle" class="hamburger" aria-label="Toggle menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </label>
+      </div>
+    </nav>
+
+    <!-- MAIN DASHBOARD CONTENT -->
+    <main class="dashboard-content">
+      <!-- DASHBOARD HEADER -->
+      <div class="dashboard-header">
+        <div class="dashboard-header-top">
+          <h1>Welcome back, <span id="welcomeName">Juan</span>!</h1>
+          <a href="request.html" class="btn btn-primary btn-new-request">
+            + New Request
+          </a>
+        </div>
+        <p>
+          Manage your document requests and stay updated with your barangay.
+        </p>
+      </div>
+
+      <!-- STAT CARDS -->
+      <section class="stats-grid">
+        <div class="card stat-card total">
+          <h4>Total Requests</h4>
+          <p class="stat-number" id="totalReq">14</p>
+          <span class="stat-label">This month</span>
+        </div>
+
+        <div class="card stat-card pending">
+          <h4>Pending Approval</h4>
+          <p class="stat-number" id="pendingReq">3</p>
+          <span class="stat-label">Awaiting verification</span>
+        </div>
+
+        <div class="card stat-card approved">
+          <h4>Approved / Ready</h4>
+          <p class="stat-number" id="approvedReq">9</p>
+          <span class="stat-label">Ready for pickup</span>
+        </div>
+
+        <div class="card stat-card rejected">
+          <h4>Rejected</h4>
+          <p class="stat-number" id="rejectedReq">2</p>
+          <span class="stat-label">Needs attention</span>
+        </div>
+      </section>
+
+      <!-- RECENT REQUESTS -->
+      <div class="card requests-card">
+        <div class="card-header">
+          <h3>My Recent Requests</h3>
+          <a href="my-requests.html">View All</a>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Service Type</th>
+              <th>Date Requested</th>
+              <th>Tracking #</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Barangay Clearance</td>
+              <td>2026-02-28</td>
+              <td>BC12345</td>
+              <td class="status-approved">Approved</td>
+              <td><a href="#">View</a></td>
+            </tr>
+            <tr>
+              <td>Certificate of Residency</td>
+              <td>2026-02-25</td>
+              <td>CR98765</td>
+              <td class="status-pending">Pending</td>
+              <td><a href="#">View</a></td>
+            </tr>
+            <tr>
+              <td>Certificate of Indigency</td>
+              <td>2026-02-20</td>
+              <td>IC54321</td>
+              <td class="status-approved">Approved</td>
+              <td><a href="#">View</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ANNOUNCEMENTS -->
+      <div class="card announcement">
+        <h4>Barangay Update: Office Schedule</h4>
+        <p>
+          Document pickups are available Monday to Friday, 8:00 AM to 5:00 PM.
+          Please bring your tracking ID and valid identification when claiming
+          requests.
+        </p>
+      </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <p>&copy; 2026 Barangay Records System. All rights reserved.</p>
+    </footer>
+
+    <script src="../js/user-dashboard.js"></script>
+  </body>
+</html>
