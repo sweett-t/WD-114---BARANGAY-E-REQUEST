@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Requests | Barangay E-Request</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/navbar.css" />
+    <link rel="stylesheet" href="../css/user-requests.css" />
+  </head>
+  <body>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+      <a href="index.html" class="navbar-brand"> Barangay E-Request</a>
+      <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-hidden="true" />
+      <ul class="navbar-nav">
+        <li><a href="user-dashboard.html">Dashboard</a></li>
+        <li><a href="request.html">New Request</a></li>
+        <li><a href="my-requests.html" class="active">My Requests</a></li>
+        <li><a href="user-profile.html">Profile</a></li>
+      </ul>
+      <div class="navbar-right">
+        <div class="navbar-user">
+          <div class="avatar">JD</div>
+          <span class="navbar-username">Juan Dela Cruz</span>
+        </div>
+        <label for="nav-toggle" class="hamburger" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </label>
+      </div>
+    </nav>
+
+    <!-- MAIN -->
+    <main class="dashboard-content">
+      <div class="dashboard-header">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;">
+          <div>
+            <h1>My Requests</h1>
+            <p>Track and manage all your document requests.</p>
+          </div>
+          <a href="request.html" class="btn btn-primary">+ New Request</a>
+        </div>
+      </div>
+
+      <!-- Status pills (static) -->
+      <div class="status-pills" role="group" aria-label="Filter by status">
+        <button class="pill active" data-status="all">All <span class="pill-count">14</span></button>
+        <button class="pill approved" data-status="approved">Approved <span class="pill-count">9</span></button>
+        <button class="pill pending" data-status="pending">Pending <span class="pill-count">3</span></button>
+        <button class="pill rejected" data-status="rejected">Rejected <span class="pill-count">2</span></button>
+      </div>
+
+      <!-- Filter bar (static, no JS) -->
+      <div class="filter-bar">
+        <div class="filter-group">
+          <label for="filter-type">Document Type</label>
+          <select id="filter-type">
+            <option value="all">All Types</option>
+            <option>Barangay Clearance</option>
+            <option>Barangay ID</option>
+            <option>Certificate of Residency</option>
+            <option>Certificate of Indigency</option>
+            <option>Business Permit</option>
+            <option>Affidavit of Loss</option>
+            <option>Solo Parent Certification</option>
+            <option>Senior Citizen Certificate</option>
+            <option>Good Moral Certificate</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="filter-date-from">Date From</label>
+          <input type="date" id="filter-date-from" />
+        </div>
+        <div class="filter-group">
+          <label for="filter-date-to">Date To</label>
+          <input type="date" id="filter-date-to" />
+        </div>
+        <div class="filter-group">
+          <label for="filter-search">Search</label>
+          <input type="text" id="filter-search" placeholder="Tracking # or type…"
+             />
+        </div>
+        <div class="filter-actions">
+          <button class="btn-reset">Reset</button>
+        </div>
+      </div>
+
+      <!-- Table card -->
+      <div class="requests-table-card">
+        <div class="card-header">
+          <h3>All Requests</h3>
+          <span class="results-count">Showing 14 of 14</span>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="requests-table">
+            <thead>
+              <tr>
+                <th>Document Type</th>
+                <th>Date Requested</th>
+                <th>Tracking #</th>
+                <th>Status</th>
+                <th>Purpose</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-label="Document Type">Barangay Clearance</td>
+                <td data-label="Date Requested">Feb 28, 2026</td>
+                <td data-label="Tracking #">BC-2026-001</td>
+                <td data-label="Status"><span class="badge badge-approved">Approved</span></td>
+                <td data-label="Purpose">Employment</td>
+                <td data-label="Action"><div class="action-links"><a href="#">View</a></div></td>
+              </tr>
+              <tr>
+                <td data-label="Document Type">Barangay ID</td>
+                <td data-label="Date Requested">Feb 25, 2026</td>
+                <td data-label="Tracking #">BI-2026-002</td>
+                <td data-label="Status"><span class="badge badge-approved">Approved</span></td>
+                <td data-label="Purpose">Personal Identification</td>
+                <td data-label="Action"><div class="action-links"><a href="#">View</a></div></td>
+              </tr>
+              <tr>
+                <td data-label="Document Type">Certificate of Residency</td>
+                <td data-label="Date Requested">Feb 20, 2026</td>
+                <td data-label="Tracking #">CR-2026-003</td>
+                <td data-label="Status"><span class="badge badge-approved">Approved</span></td>
+                <td data-label="Purpose">School Enrollment</td>
+                <td data-label="Action"><div class="action-links"><a href="#">View</a></div></td>
+              </tr>
+              <tr>
+                <td data-label="Document Type">Certificate of Indigency</td>
+                <td data-label="Date Requested">Feb 18, 2026</td>
+                <td data-label="Tracking #">CI-2026-004</td>
+                <td data-label="Status"><span class="badge badge-approved">Approved</span></td>
+                <td data-label="Purpose">Medical Assistance</td>
+                <td data-label="Action"><div class="action-links"><a href="#">View</a></div></td>
+              </tr>
+              <tr>
+                <td data-label="Document Type">Business Permit</td>
+                <td data-label="Date Requested">Feb 14, 2026</td>
+                <td data-label="Tracking #">BP-2026-005</td>
+                <td data-label="Status"><span class="badge badge-approved">Approved</span></td>
+                <td data-label="Purpose">Business Permit Renewal</td>
+                <td data-label="Action"><div class="action-links"><a href="#">View</a></div></td>
+              </tr>
+              <tr>
+                <td data-label="Document Type">Affidavit of Loss</td>
+                <td data-label="Date Requested">Feb 10, 2026</td>
+                <td data-label="Tracking #">AL-2026-006</td>
+                <td data-label="Status"><span class="badge badge-approved">Approved</span></td>
+                <td data-label="Purpose">Lost ID Replacement</td>
+                <td data-label="Action"><div class="action-links"><a href="#">View</a></div></td>
+              </tr>
+              <tr>
+                <td data-label="Document Type">Good Moral Certificate</td>
+                <td data-label="Date Requested">Feb 5, 2026</td>
+                <td data-label="Tracking #">GM-2026-007</td>
+                <td data-label="Status"><span class="badge badge-approved">Approved</span></td>
+                <td data-label="Purpose">Scholarship Application</td>
+                <td data-label="Action"><div class="action-links"><a href="#">View</a></div></td>
+              </tr>
+              <tr>
+                <td data-label="Document Type">Senior Citizen Certificate</td>
+                <td data-label="Date Requested">Jan 28, 2026</td>
+                <td data-label="Tracking #">SC-2026-008</td>
+                <td data-label="Status"><span class="badge badge-approved">Approved</span></td>
+                <td data-label="Purpose">Senior Citizen Benefits</td>
+                <td data-label="Action"><div class="action-links"><a href="#">View</a></div></td>
+              </tr>
+              <tr>
+                <td data-label="Document Type">Solo Parent Certification</td>
+                <td data-label="Date Requested">Jan 20, 2026</td>
+                <td data-label="Tracking #">SP-2026-009</td>
+                <td data-label="Status"><span class="badge badge-approved">Approved</span></td>
+                <td data-label="Purpose">Government Benefit</td>
+                <td data-label="Action"><div class="action-links"><a href="#">View</a></div></td>
+              </tr>
+              <tr>
+                <td data-label="Document Type">Barangay Clearance</td>
+                <td data-label="Date Requested">Feb 27, 2026</td>
+                <td data-label="Tracking #">BC-2026-010</td>
+                <td data-label="Status"><span class="badge badge-pending">Pending</span></td>
+                <td data-label="Purpose">Travel Requirement</td>
+                <td data-label="Action"><div class="action-links"><a href="#">View</a></div></td>
+              </tr>
+              <tr>
+                <td data-label="Document Type">Good Moral Certificate</td>
+                <td data-label="Date Requested">Feb 24, 2026</td>
+                <td data-label="Tracking #">GM-2026-011</td>
+                <td data-label="Status"><span class="badge badge-pending">Pending</span></td>
+                <td data-label="Purpose">Employment</td>
+                <td data-label="Action"><div class="action-links"><a href="#">View</a></div></td>
+              </tr>
+              <tr>
+                <td data-label="Document Type">Business Permit</td>
+                <td data-label="Date Requested">Feb 22, 2026</td>
+                <td data-label="Tracking #">BP-2026-012</td>
+                <td data-label="Status"><span class="badge badge-pending">Pending</span></td>
+                <td data-label="Purpose">New Business</td>
+                <td data-label="Action"><div class="action-links"><a href="#">View</a></div></td>
+              </tr>
+              <tr>
+                <td data-label="Document Type">Affidavit of Loss</td>
+                <td data-label="Date Requested">Feb 15, 2026</td>
+                <td data-label="Tracking #">AL-2026-013</td>
+                <td data-label="Status"><span class="badge badge-rejected">Rejected</span></td>
+                <td data-label="Purpose">Lost Documents</td>
+                <td data-label="Action"><div class="action-links"><a href="#">View</a></div></td>
+              </tr>
+              <tr>
+                <td data-label="Document Type">Certificate of Indigency</td>
+                <td data-label="Date Requested">Jan 30, 2026</td>
+                <td data-label="Tracking #">CI-2026-014</td>
+                <td data-label="Status"><span class="badge badge-rejected">Rejected</span></td>
+                <td data-label="Purpose">Housing Assistance</td>
+                <td data-label="Action"><div class="action-links"><a href="#">View</a></div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <p>&copy; 2026 Barangay Records System. All rights reserved.</p>
+    </footer>
+  </body>
+</html>
