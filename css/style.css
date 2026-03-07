@@ -171,21 +171,6 @@ textarea:focus {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }
 
-/* ---------- HERO / LANDING ---------- */
-.hero {
-    padding: clamp(2rem, 8vw, 6rem) clamp(1rem, 5vw, 3rem);
-    text-align: center;
-    background-color: var(--color-light);
-}
-
-.hero-title {
-    margin-bottom: var(--spacing-md);
-}
-
-.hero-subtitle {
-    margin-bottom: var(--spacing-lg);
-}
-
 /* ---------- ADMIN TABLES ---------- */
 .admin-table {
     width: 100%;

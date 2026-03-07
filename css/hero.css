@@ -3,3 +3,16 @@
     color: white;
     padding: 100px 20px;
 }
+.hero {
+    padding: clamp(2rem, 8vw, 6rem) clamp(1rem, 5vw, 3rem);
+    text-align: center;
+    background-color: var(--color-light);
+}
+
+.hero-title {
+    margin-bottom: var(--spacing-md);
+}
+
+.hero-subtitle {
+    margin-bottom: var(--spacing-lg);
+}
