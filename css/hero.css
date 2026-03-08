@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .hero {
     background: linear-gradient(to right, #05264a, #044559);
     color: white;
@@ -16,3 +17,23 @@
 .hero-subtitle {
     margin-bottom: var(--spacing-lg);
 }
+=======
+.hero {
+    background: linear-gradient(to right, #05264a, #044559);
+    color: white;
+    padding: 100px 20px;
+}
+.hero {
+    padding: clamp(2rem, 8vw, 6rem) clamp(1rem, 5vw, 3rem);
+    text-align: center;
+    background-color: var(--color-light);
+}
+
+.hero-title {
+    margin-bottom: var(--spacing-md);
+}
+
+.hero-subtitle {
+    margin-bottom: var(--spacing-lg);
+}
+>>>>>>> f3f04629725473dee9c4c41d686006edae10413d
