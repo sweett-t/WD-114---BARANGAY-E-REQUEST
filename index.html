@@ -1,154 +1,324 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Barangay E-Request System</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/hero.css" />
+  </head>
+  <body>
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/navbar.css">
-    <link rel="stylesheet" href="css/hero.css">
-    <link rel="stylesheet" href="css/services-section.css">
-    <link rel="stylesheet" href="css/about-section.css">
-    <link rel="stylesheet" href="css/contact-section.css">
-    
-</head>
-<body>
-
-<!-- NAVBAR -->
-<nav class="navbar">
-    <div class="logo">Barangay E-Request</div>
-    <ul class="nav-links">
-        <li><a href="#hero">Home</a></li>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+      <input type="checkbox" id="nav-toggle" class="nav-toggle" />
+      <div class="logo">Barangay E-Request</div>
+      <ul class="nav-links">
+        <li><a href="#hero" class="active">Home</a></li>
         <li><a href="#services">Services</a></li>
         <li><a href="#about">About</a></li>
+        <li><a href="#how">How It Works</a></li>
         <li><a href="#contact">Contact</a></li>
         <li><a href="auth/login.html" class="btn-login">Login</a></li>
-    </ul>
-</nav>
+      </ul>
+      <label for="nav-toggle" class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </label>
+    </nav>
 
-<!-- HERO -->
-<section id="hero" class="hero">
-    <h1>Fast & Easy Barangay Document Requests</h1>
-    <p>Request your documents online anytime, anywhere.</p>
-    <a href="#services" class="btn-primary">View Services</a>
-</section>
+    <!-- HERO -->
+    <section id="hero" class="hero">
+      <span class="hero-eyebrow">Official Barangay Portal</span>
+      <h1>Request Documents <em>Online,</em><br />Skip the Queue</h1>
+      <p class="hero-sub">
+        Fast, paperless, and hassle-free barangay document requests — anytime,
+        anywhere.
+      </p>
+      <div class="hero-cta">
+        <a href="auth/signup.html" class="btn-hero-primary">Sign Up</a>
+        <a href="#services" class="btn-hero-outline">View Services</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <strong>9</strong>
+          <span>Document Types</span>
+        </div>
+        <div class="stat-item">
+          <strong>24/7</strong>
+          <span>Online Access</span>
+        </div>
+        <div class="stat-item">
+          <strong>Fast</strong>
+          <span>Processing Time</span>
+        </div>
+        <div class="stat-item">
+          <strong>100%</strong>
+          <span>Paperless</span>
+        </div>
+      </div>
+    </section>
 
-<!-- SERVICES -->
-<section id="services" class="services">
-    <h2>Our Services</h2>
-    <div class="service-container">
-        <div class="card">Barangay Clearance</div>
-        <div class="card">Barangay ID</div>
-        <div class="card">Certificate of Residency</div>
-        <div class="card">Certificate of Indigency</div>
-        <div class="card">Business Permit</div>
-        <div class="card">Affidavit of Loss</div>
-        <div class="card">Solo Parent Certificate</div>
-        <div class="card">Senior Citizen Certificate</div>
-        <div class="card">Good Moral Certificate</div>
-    </div>
-</section>
+    <!-- SERVICES -->
+    <section id="services" class="services">
+      <span class="section-tag">What We Offer</span>
+      <h2>Available Documents</h2>
+      <p class="services-intro">
+        Request any of the following documents directly from your device — no
+        need to visit the barangay hall.
+      </p>
+      <div class="service-container">
+        <div class="service-card">
+          <span class="service-tag">Identity</span>
+          <h4>Barangay Clearance</h4>
+          <p>Certifies that you have no pending cases or complaints within the barangay. Commonly required for employment, travel abroad, bank transactions, and legal purposes.</p>
+          <ul class="service-reqs">
+            <li>Valid government-issued ID</li>
+            <li>Proof of residency</li>
+            <li>Accomplished request form</li>
+          </ul>
+          <span class="service-processing">Processing: 1–2 business days</span>
+        </div>
+        <div class="service-card">
+          <span class="service-tag">Identity</span>
+          <h4>Barangay ID</h4>
+          <p>An official barangay-issued identification card for residents. Accepted as a valid government ID for transactions requiring proof of identity and local residency.</p>
+          <ul class="service-reqs">
+            <li>1x1 or 2x2 ID photo</li>
+            <li>Birth certificate or valid ID</li>
+            <li>Proof of residency (6 months minimum)</li>
+          </ul>
+          <span class="service-processing">Processing: 2–3 business days</span>
+        </div>
+        <div class="service-card">
+          <span class="service-tag">Residency</span>
+          <h4>Certificate of Residency</h4>
+          <p>Confirms that you are a current and legitimate resident of Barangay Lunzuran. Required for school enrollment, scholarship applications, and government benefit claims.</p>
+          <ul class="service-reqs">
+            <li>Valid ID with address</li>
+            <li>Utility bill or lease contract</li>
+            <li>Accomplished request form</li>
+          </ul>
+          <span class="service-processing">Processing: 1 business day</span>
+        </div>
+        <div class="service-card">
+          <span class="service-tag">Social</span>
+          <h4>Certificate of Indigency</h4>
+          <p>Attests that a resident belongs to a low-income household. Needed to access free medical services, legal aid, educational assistance, and government welfare programs.</p>
+          <ul class="service-reqs">
+            <li>Valid ID</li>
+            <li>Proof of income or employment status</li>
+            <li>Referral letter (if applicable)</li>
+          </ul>
+          <span class="service-processing">Processing: 1–2 business days</span>
+        </div>
+        <div class="service-card">
+          <span class="service-tag">Business</span>
+          <h4>Business Permit</h4>
+          <p>Required for any business operating within the barangay. Ensures that your business is properly registered and compliant with local ordinances. Must be renewed every year.</p>
+          <ul class="service-reqs">
+            <li>DTI or SEC registration</li>
+            <li>Lease contract or proof of location</li>
+            <li>Valid ID of business owner</li>
+          </ul>
+          <span class="service-processing">Processing: 2–3 business days</span>
+        </div>
+        <div class="service-card">
+          <span class="service-tag">Legal</span>
+          <h4>Affidavit of Loss</h4>
+          <p>A notarized sworn statement declaring the loss of an important document or item such as an ID, certificate, or passbook. Required for replacement applications.</p>
+          <ul class="service-reqs">
+            <li>Valid ID</li>
+            <li>Description of lost item/document</li>
+            <li>Police report (for lost IDs)</li>
+          </ul>
+          <span class="service-processing">Processing: 1–2 business days</span>
+        </div>
+        <div class="service-card">
+          <span class="service-tag">Family</span>
+          <h4>Solo Parent Certificate</h4>
+          <p>Issued under Republic Act 8972. Entitles solo parents to government benefits including flexible work arrangements, parental leave, and discounts on goods and services.</p>
+          <ul class="service-reqs">
+            <li>Birth certificate of child/children</li>
+            <li>Valid ID</li>
+            <li>Proof of solo parent status (death cert, court order, etc.)</li>
+          </ul>
+          <span class="service-processing">Processing: 2–3 business days</span>
+        </div>
+        <div class="service-card">
+          <span class="service-tag">Senior</span>
+          <h4>Senior Citizen Certificate</h4>
+          <p>Issued to residents 60 years old and above. Grants access to senior citizen privileges including 20% discounts, priority lanes, and government pension assistance.</p>
+          <ul class="service-reqs">
+            <li>Birth certificate</li>
+            <li>Valid ID with age verification</li>
+            <li>1x1 or 2x2 ID photo</li>
+          </ul>
+          <span class="service-processing">Processing: 1–2 business days</span>
+        </div>
+        <div class="service-card">
+          <span class="service-tag">Character</span>
+          <h4>Good Moral Certificate</h4>
+          <p>Certifies that a resident is of good moral character and standing in the community. Required for job applications, scholarship grants, and school admissions.</p>
+          <ul class="service-reqs">
+            <li>Valid ID</li>
+            <li>Barangay Clearance (if not yet obtained)</li>
+            <li>Letter of purpose</li>
+          </ul>
+          <span class="service-processing">Processing: 1 business day</span>
+        </div>
+      </div>
+    </section>
 
-<!-- ABOUT -->
-<section id="about" class="about">
-    <h2>About Us</h2>
-    <p>
-        The Barangay E-Request System allows residents to request documents online.
-        It reduces long lines and improves efficiency.
-    </p>
-</section>
+    <!-- ABOUT -->
+    <section id="about" class="about">
+      <div class="about-text">
+        <span class="section-tag">About the System</span>
+        <h2>Built for Residents,<br />Designed for Ease</h2>
+        <p>The Barangay E-Request System is a digital platform that lets residents request official documents without the need to physically visit the barangay hall.</p>
+        <p>Our goal is to reduce waiting time, eliminate unnecessary paperwork, and make government services more accessible to everyone in the community.</p>
+      </div>
+      <div class="about-features">
+        <div class="feature-item">
+          <div class="feature-icon"></div>
+          <div>
+            <h4>Fast Processing</h4>
+            <p>Submit requests online and receive updates in real time.</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon"></div>
+          <div>
+            <h4>Secure & Private</h4>
+            <p>Your personal data is protected and handled with care.</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon"></div>
+          <div>
+            <h4>Mobile Friendly</h4>
+            <p>Works seamlessly on any device — phone, tablet, or desktop.</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon"></div>
+          <div>
+            <h4>Track Your Requests</h4>
+            <p>Monitor the status of your documents anytime, anywhere.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<!-- CONTACT -->
-<section id="contact" class="contact">
-    <h2>Contact Us</h2>
-    <form id="contactForm">
-        <input type="text" placeholder="Your Name" required>
-        <input type="email" placeholder="Your Email" required>
-        <textarea placeholder="Your Message" required></textarea>
-        <button type="submit">Send Message</button>
-    </form>
-</section>
+    <!-- HOW IT WORKS -->
+    <section id="how" class="how">
+      <div class="how-inner">
+        <span class="section-tag">How It Works</span>
+        <h2>Request a Document in 4 Easy Steps</h2>
+        <p class="how-intro">No more long queues. Submit your request online and pick up your document once it's ready.</p>
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-num">01</div>
+            <h4>Create an Account</h4>
+            <p>Register with your full name, address, and a valid ID. Your account will be used to track all your requests in one place.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-num">02</div>
+            <h4>Choose a Document</h4>
+            <p>Browse from 9 available document types. Select the one you need and fill out the online request form with your details and purpose.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-num">03</div>
+            <h4>Wait for Approval</h4>
+            <p>The barangay admin will review your request. You will be notified by SMS or email once your document is approved, rejected, or ready.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-num">04</div>
+            <h4>Pick Up Your Document</h4>
+            <p>Visit the Barangay Hall during office hours to claim your document. Bring a valid ID and your tracking number for verification.</p>
+          </div>
+        </div>
+        <div class="how-note">
+          <strong>Processing Time:</strong> Most requests are processed within
+          <strong>1–3 business days</strong>. Urgent requests may be accommodated upon coordination with the barangay office.
+        </div>
+      </div>
+    </section>
 
-<script src="js/script.js"></script>
-</body>
+    <!-- CONTACT -->
+    <section id="contact" class="contact">
+      <div class="contact-grid">
+        <div class="contact-form-wrap">
+          <span class="section-tag">Get in Touch</span>
+          <h2>Contact Us</h2>
+          <p>Have a question or concern? Send us a message and we'll get back to you as soon as possible.</p>
+          <form id="contactForm">
+            <input type="text" placeholder="Your Name" required />
+            <input type="email" placeholder="Your Email" required />
+            <textarea placeholder="Your Message" required></textarea>
+            <button type="submit">Send Message</button>
+          </form>
+        </div>
+        <div class="contact-info-wrap">
+          <div class="contact-info-card">
+            <h4>Our Location</h4>
+            <p>Barangay Hall, Brgy. Lunzuran<br />Zamboanga City, Zamboanga del Sur 7000<br />Philippines</p>
+          </div>
+          <div class="contact-info-card">
+            <h4>Office Hours</h4>
+            <p>Monday – Friday<br /><strong>8:00 AM – 5:00 PM</strong></p>
+            <p>Saturday<br /><strong>8:00 AM – 12:00 PM</strong></p>
+            <p class="closed-note">Closed on Sundays & Public Holidays</p>
+          </div>
+          <div class="contact-info-card">
+            <h4>Contact Details</h4>
+            <p>brgylunzuran@request.com</p>
+            <p>(082) 123-4567</p>
+            <p>+63 912 345 6789</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-col">
+          <div class="footer-brand">Barangay E-Request</div>
+          <p class="footer-desc">Serving the residents of Brgy. Lunzuran, Zamboanga City with fast and accessible digital government services.</p>
+        </div>
+        <div class="footer-col">
+          <h5>Quick Links</h5>
+          <ul>
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Our Services</h5>
+          <ul>
+            <li><a href="#">Barangay Clearance</a></li>
+            <li><a href="#">Certificate of Residency</a></li>
+            <li><a href="#">Business Permit</a></li>
+            <li><a href="#">Good Moral Certificate</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Get in Touch</h5>
+          <ul class="footer-contact-list">
+            <li>brgylunzuran@request.com</li>
+            <li>(082) 123-4567</li>
+            <li>Brgy. Lunzuran<br />Zamboanga City 7000</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Barangay Lunzuran E-Request System. All rights reserved.</p>
+      </div>
+    </footer>
+
+  </body>
 </html>
-=======
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>E-Request System</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/navbar.css">
-    <link rel="stylesheet" href="css/hero.css">
-    <link rel="stylesheet" href="css/services-section.css">
-    <link rel="stylesheet" href="css/about-section.css">
-    <link rel="stylesheet" href="css/contact-section.css">
-    
-</head>
-<body>
-
-<!-- NAVBAR -->
-<nav class="navbar">
-    <div class="logo">Barangay E-Request</div>
-    <ul class="nav-links">
-        <li><a href="#hero">Home</a></li>
-        <li><a href="#services">Services</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#contact">Contact</a></li>
-        <li><a href="auth/login.html" class="btn-login">Login</a></li>
-    </ul>
-</nav>
-
-<!-- HERO -->
-<section id="hero" class="hero">
-    <h1>Fast & Easy Barangay Document Requests</h1>
-    <p>Request your documents online anytime, anywhere.</p>
-    <a href="#services" class="btn-primary">View Services</a>
-</section>
-
-<!-- SERVICES -->
-<section id="services" class="services">
-    <h2>Our Services</h2>
-    <div class="service-container">
-        <div class="card">Barangay Clearance</div>
-        <div class="card">Barangay ID</div>
-        <div class="card">Certificate of Residency</div>
-        <div class="card">Certificate of Indigency</div>
-        <div class="card">Business Permit</div>
-        <div class="card">Affidavit of Loss</div>
-        <div class="card">Solo Parent Certificate</div>
-        <div class="card">Senior Citizen Certificate</div>
-        <div class="card">Good Moral Certificate</div>
-    </div>
-</section>
-
-<!-- ABOUT -->
-<section id="about" class="about">
-    <h2>About Us</h2>
-    <p>
-        The Barangay E-Request System allows residents to request documents online.
-        It reduces long lines and improves efficiency.
-    </p>
-</section>
-
-<!-- CONTACT -->
-<section id="contact" class="contact">
-    <h2>Contact Us</h2>
-    <form id="contactForm">
-        <input type="text" placeholder="Your Name" required>
-        <input type="email" placeholder="Your Email" required>
-        <textarea placeholder="Your Message" required></textarea>
-        <button type="submit">Send Message</button>
-    </form>
-</section>
-
-<script src="js/script.js"></script>
-</body>
-</html>
->>>>>>> f3f04629725473dee9c4c41d686006edae10413d

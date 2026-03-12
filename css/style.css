@@ -1,13 +1,9 @@
 /* ---------- ROOT VARIABLES ---------- */
 :root {
     --color-primary: #2563EB;
-    /* main blue */
     --color-secondary: #1F2937;
-    /* dark gray */
     --color-accent: #3B82F6;
-    /* lighter blue for hover */
     --color-light: #F3F4F6;
-    /* light gray background */
     --color-white: #ffffff;
 
     --spacing-sm: 0.5rem;
@@ -36,24 +32,12 @@ body {
 }
 
 /* ---------- HEADINGS & TEXT ---------- */
-h1 {
-    font-size: clamp(2rem, 5vw, 3rem);
-}
+h1 { font-size: clamp(2rem, 5vw, 3rem); }
+h2 { font-size: clamp(1.5rem, 4vw, 2.5rem); }
+h3 { font-size: clamp(1.25rem, 3vw, 2rem); }
+h4 { font-size: clamp(1rem, 2.5vw, 1.5rem); }
 
-h2 {
-    font-size: clamp(1.5rem, 4vw, 2.5rem);
-}
-
-h3 {
-    font-size: clamp(1.25rem, 3vw, 2rem);
-}
-
-h4 {
-    font-size: clamp(1rem, 2.5vw, 1.5rem);
-}
-
-p,
-span {
+p, span {
     font-size: clamp(0.9rem, 2vw, 1.1rem);
     margin-bottom: var(--spacing-md);
 }
@@ -64,14 +48,10 @@ a {
     color: var(--color-primary);
     transition: color 0.2s;
 }
-
-a:hover {
-    color: var(--color-accent);
-}
+a:hover { color: var(--color-accent); }
 
 /* ---------- BUTTONS ---------- */
-button,
-.btn {
+button, .btn {
     font-family: 'Helvetica', Arial, sans-serif;
     font-weight: 500;
     font-size: clamp(0.875rem, 1.5vw, 1rem);
@@ -82,12 +62,10 @@ button,
     transition: all 0.3s ease-in-out;
 }
 
-/* Primary filled button */
 .btn-primary {
-    background-color: none;
+    background-color: var(--color-primary);
     color: var(--color-white);
 }
-
 .btn-primary:hover {
     background-color: var(--color-accent);
     color: var(--color-white);
@@ -95,13 +73,11 @@ button,
     box-shadow: var(--shadow-hover);
 }
 
-/* Outline button */
 .btn-outline {
     background: none;
     border: 2px solid var(--color-primary);
     color: var(--color-primary);
 }
-
 .btn-outline:hover {
     background-color: var(--color-accent);
     color: var(--color-white);
@@ -110,9 +86,7 @@ button,
 }
 
 /* ---------- CARDS / BOXES ---------- */
-.card,
-.service-card,
-.user-card {
+.card, .service-card, .user-card {
     background-color: var(--color-white);
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-light);
@@ -120,20 +94,14 @@ button,
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
     border: 1px solid #E5E7EB;
 }
-
-.card:hover,
-.service-card:hover,
-.user-card:hover {
+.card:hover, .service-card:hover, .user-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 8px 16px rgba(37, 99, 235, 0.3);
-    /* blue shadow */
-    border-color: var(--color-priy);
+    border-color: var(--color-primary);
 }
 
 /* ---------- FORMS ---------- */
-input,
-select,
-textarea {
+input, select, textarea {
     font-family: 'Helvetica', Arial, sans-serif;
     font-size: clamp(0.9rem, 2vw, 1rem);
     padding: clamp(0.5rem, 1vw, 0.75rem);
@@ -142,10 +110,7 @@ textarea {
     width: 100%;
     margin-bottom: var(--spacing-md);
 }
-
-input:focus,
-select:focus,
-textarea:focus {
+input:focus, select:focus, textarea:focus {
     border-color: var(--color-primary);
     outline: none;
 }
@@ -155,49 +120,39 @@ textarea:focus {
     padding: clamp(2rem, 2vw, 4rem) clamp(1rem, 2vw, 3rem);
 }
 
-.services-grid,
-.contact-grid,
-.about-features {
+.services-grid, .contact-grid, .about-features {
     display: grid;
     gap: var(--spacing-lg);
 }
-
 .services-grid {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
-
-.contact-grid,
-.about-features {
+.contact-grid, .about-features {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }
+
+/* ---------- HERO / LANDING ---------- */
+.hero {
+    padding: clamp(2rem, 8vw, 6rem) clamp(1rem, 5vw, 3rem);
+    text-align: center;
+    background-color: var(--color-light);
+}
+.hero-title { margin-bottom: var(--spacing-md); }
+.hero-subtitle { margin-bottom: var(--spacing-lg); }
 
 /* ---------- ADMIN TABLES ---------- */
 .admin-table {
     width: 100%;
     border-collapse: collapse;
 }
-
-.admin-table th,
-.admin-table td {
+.admin-table th, .admin-table td {
     padding: var(--spacing-sm);
     border-bottom: 1px solid #E5E7EB;
     text-align: left;
 }
-
-.status-approved {
-    color: green;
-    font-weight: 600;
-}
-
-.status-pending {
-    color: orange;
-    font-weight: 600;
-}
-
-.status-rejected {
-    color: red;
-    font-weight: 600;
-}
+.status-approved { color: green; font-weight: 600; }
+.status-pending  { color: orange; font-weight: 600; }
+.status-rejected { color: red; font-weight: 600; }
 
 /* ---------- USER DASHBOARD ---------- */
 .user-dashboard {
@@ -207,9 +162,113 @@ textarea:focus {
     padding: var(--spacing-lg);
 }
 
+/* ---------- NAVBAR ---------- */
+.navbar {
+    background-color: var(--color-white);
+    border-bottom: 1px solid #e5e7eb;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--color-primary);
+    flex-shrink: 0;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    list-style: none;
+}
+
+.nav-links a {
+    color: #64748b;
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 0.25rem 0;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+}
+
+.btn-login {
+    background-color: var(--color-primary);
+    color: var(--color-white) !important;
+    padding: 0.4rem 1.1rem;
+    border-radius: var(--border-radius);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+.btn-login:hover {
+    background-color: var(--color-accent);
+    color: var(--color-white) !important;
+}
+
+/* ---------- HAMBURGER ---------- */
+.nav-toggle {
+    display: none;
+}
+
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+}
+.hamburger:hover {
+    background-color: #f3f4f6;
+}
+
+.hamburger span {
+    display: block !important;
+    height: 2px !important;
+    width: 22px;
+    background-color: #1f2937 !important;
+    border-radius: 2px;
+    margin-bottom: 0 !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+    flex-shrink: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    transform-origin: center;
+}
+
+/* X animation */
+.nav-toggle:checked ~ .hamburger span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+.nav-toggle:checked ~ .hamburger span:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+}
+.nav-toggle:checked ~ .hamburger span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
 /* ---------- MEDIA QUERIES ---------- */
 @media (max-width: 768px) {
-
     .contact-grid,
     .about-features,
     .services-grid {
@@ -222,5 +281,56 @@ textarea:focus {
 
     h1 {
         font-size: clamp(1.75rem, 6vw, 2.5rem);
+    }
+
+    /* Navbar mobile */
+    .navbar {
+        padding: 0 1rem;
+        position: relative;
+    }
+
+    .hamburger {
+        display: flex;
+    }
+
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 64px;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0;
+        background-color: var(--color-white);
+        border-bottom: 1px solid #e5e7eb;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        padding: 0.5rem 0;
+        z-index: 99;
+    }
+
+    .nav-toggle:checked ~ .nav-links {
+        display: flex;
+    }
+
+    .nav-links li {
+        width: 100%;
+    }
+
+    .nav-links a {
+        display: block;
+        width: 100%;
+        padding: 0.75rem 1.5rem;
+        border-bottom: none;
+        border-left: 3px solid transparent;
+        font-size: 0.95rem;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+        border-bottom-color: transparent;
+        border-left-color: var(--color-primary);
+        background-color: #eff6ff;
+        color: var(--color-primary);
     }
 }
