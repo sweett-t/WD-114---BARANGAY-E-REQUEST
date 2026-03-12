@@ -1,101 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>New Request - Barangay E-Request</title>
-    <link rel="stylesheet" href="../css/style.css" />
-    <link rel="stylesheet" href="../css/navbar.css" />
-    <link rel="stylesheet" href="../css/request.css" />
-  </head>
-  <body>
-    <!-- NAVBAR -->
-    <nav class="navbar">
-      <a href="index.html" class="navbar-brand">Barangay E-Request</a>
+<html>
+<head>
+    <title>Request Submitted</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/user-success.css">
+</head>
+<body>
 
-      <!-- Hidden checkbox toggle (no JS) -->
-      <input
-        type="checkbox"
-        id="nav-toggle"
-        class="nav-toggle"
-        aria-hidden="true"
-      />
+<div class="success-container">
+    <h1>Request Submitted Successfully!</h1>
+    <p>Your request is now being reviewed.</p>
+    <a href="dashboard.html" class="back-btn">Back to Dashboard</a>
+</div>
 
-      <ul class="navbar-nav">
-        <li><a href="user-dashboard.html">Dashboard</a></li>
-        <li><a href="#" class="active">New Request</a></li>
-        <li><a href="my-requests.html">My Requests</a></li>
-        <li><a href="user-profile.html">Profile</a></li>
-      </ul>
-
-      <div class="navbar-right">
-        <div class="navbar-user">
-          <div class="avatar">JD</div>
-          <span class="navbar-username">Juan Dela Cruz</span>
-        </div>
-        <!-- Hamburger label tied to checkbox -->
-        <label for="nav-toggle" class="hamburger" aria-label="Toggle menu">
-          <span></span>
-          <span></span>
-          <span></span>
-        </label>
-      </div>
-    </nav>
-
-    <!-- MAIN -->
-    <main>
-      <div class="page-header">
-        <h1>Select a Service</h1>
-        <p>
-          Choose any service below to start your request quickly and
-          conveniently. We aim to make document requests seamless and easy to
-          track.
-        </p>
-      </div>
-
-      <div class="services-grid">
-        <a href="../services/affidavit-loss.html" class="service-card">
-          <span class="service-name">Affidavit of Loss</span>
-          <span class="request-btn">Request Now →</span>
-        </a>
-        <a href="../services/barangay-clearance.html" class="service-card">
-          <span class="service-name">Barangay Clearance</span>
-          <span class="request-btn">Request Now →</span>
-        </a>
-        <a href="../services/barangay-id.html" class="service-card">
-          <span class="service-name">Barangay ID</span>
-          <span class="request-btn">Request Now →</span>
-        </a>
-        <a href="../services/business-permit.html" class="service-card">
-          <span class="service-name">Business Permit</span>
-          <span class="request-btn">Request Now →</span>
-        </a>
-        <a href="../services/indigency.html" class="service-card">
-          <span class="service-name">Certificate of Indigency</span>
-          <span class="request-btn">Request Now →</span>
-        </a>
-        <a href="../services/residency.html" class="service-card">
-          <span class="service-name">Certificate of Residency</span>
-          <span class="request-btn">Request Now →</span>
-        </a>
-        <a href="../services/good-moral.html" class="service-card">
-          <span class="service-name">Good Moral Certificate</span>
-          <span class="request-btn">Request Now →</span>
-        </a>
-        <a href="../services/senior-citizen.html" class="service-card">
-          <span class="service-name">Senior Citizen Certificate</span>
-          <span class="request-btn">Request Now →</span>
-        </a>
-        <a href="../services/solo-parent.html" class="service-card">
-          <span class="service-name">Solo Parent Certification</span>
-          <span class="request-btn">Request Now →</span>
-        </a>
-      </div>
-    </main>
-
-    <!-- FOOTER -->
-    <footer class="footer">
-      <p>&copy; 2026 Barangay Records System. All rights reserved.</p>
-    </footer>
-  </body>
+</body>
 </html>
