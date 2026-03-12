@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Profile | Barangay E-Request</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/navbar.css" />
+    <link rel="stylesheet" href="../css/user-profile.css" />
+  </head>
+  <body>
+    <!-- CHECKBOX STATES -->
+    <input type="checkbox" id="toast-save" />
+    <input type="checkbox" id="toast-logout-confirm" />
+    <input type="checkbox" id="toast-logout-cancel" />
+
+    <!-- TOASTS -->
+    <div class="toast-wrap">
+      <div class="toast toast-success toast-save-msg">
+        ✅ Your profile has been saved successfully!
+      </div>
+      <div class="toast toast-warning toast-logout-msg toast-confirm-wrap">
+        <div>⚠️ Are you sure you want to log out?</div>
+        <div class="toast-actions">
+          <a href="../auth/login.html" class="toast-btn toast-btn-danger"
+            >Yes, Log Out</a
+          >
+          <label for="toast-logout-cancel" class="toast-btn toast-btn-cancel"
+            >Cancel</label
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+      <a href="../index.html" class="navbar-brand">Barangay E-Request</a>
+      <input
+        type="checkbox"
+        id="nav-toggle"
+        class="nav-toggle"
+        aria-hidden="true"
+      />
+      <ul class="navbar-nav">
+        <li><a href="../user/user-dashboard.html">Dashboard</a></li>
+        <li><a href="../user/request.html">New Request</a></li>
+        <li><a href="../user/my-requests.html">My Requests</a></li>
+        <li><a href="../user/user-profile.html" class="active">Profile</a></li>
+      </ul>
+      <div class="navbar-right">
+        <div class="navbar-user">
+          <div class="avatar">JD</div>
+          <span class="navbar-username">Juan Dela Cruz</span>
+        </div>
+        <label for="nav-toggle" class="hamburger" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </label>
+      </div>
+    </nav>
+
+    <main class="dashboard-content">
+      <div class="dashboard-header">
+        <h1>My Profile</h1>
+        <p>
+          Update and manage your personal information, contact details, and
+          account settings.
+        </p>
+      </div>
+
+      <div class="profile-grid">
+        <!-- LEFT: Summary -->
+        <div class="card profile-summary">
+          <div class="profile-avatar">
+            <div class="avatar avatar-large">JD</div>
+            <button class="btn btn-outline btn-change-photo">
+              Change Photo
+            </button>
+          </div>
+          <h3>Juan Dela Cruz</h3>
+          <p>Username: juandelacruz</p>
+          <p>Email: juan.delacruz@example.com</p>
+        </div>
+
+        <!-- RIGHT: Form -->
+        <div class="card profile-form">
+          <form action="#" method="post">
+            <h3>Personal Information</h3>
+            <label for="fullname">Full Name</label>
+            <input
+              id="fullname"
+              type="text"
+              value="Juan Michael Dela Cruz"
+              disabled
+            />
+            <label for="dob">Date of Birth</label>
+            <input id="dob" type="date" value="1990-05-15" disabled />
+            <label for="gender">Gender</label>
+            <select id="gender">
+              <option selected>Male</option>
+              <option>Female</option>
+              <option>Other</option>
+            </select>
+            <label for="civil">Civil Status</label>
+            <select id="civil">
+              <option selected>Single</option>
+              <option>Married</option>
+              <option>Widowed</option>
+            </select>
+
+            <h3>Identification / Verification</h3>
+            <label for="idtype">Valid ID Type</label>
+            <input id="idtype" type="text" value="Passport" disabled />
+            <label for="idnum">ID Number</label>
+            <input id="idnum" type="text" value="P12345678" disabled />
+            <label for="bcnum">Barangay Clearance Number</label>
+            <input id="bcnum" type="text" value="BC98765" />
+
+            <h3>Contact Information</h3>
+            <label for="email">Email Address</label>
+            <input id="email" type="email" value="juan.delacruz@example.com" />
+            <label for="mobile">Mobile Number</label>
+            <input id="mobile" type="tel" value="+63 912 345 6789" />
+            <label for="address">Home Address / Street / Purok / Sitio</label>
+            <textarea id="address">
+Purok 4, Calle Harmonia, Lunzuran, Zamboanga City</textarea
+            >
+            <label for="emergency">Emergency Contact (optional)</label>
+            <input id="emergency" type="tel" value="+63 915 111 2222" />
+
+            <h3>Account Credentials</h3>
+            <label for="username">Username</label>
+            <input id="username" type="text" value="juandelacruz" disabled />
+            <label for="password">Password</label>
+            <input id="password" type="password" value="********" />
+            <button type="button" class="btn btn-outline btn-change-password">
+              Change / Reset
+            </button>
+            <label for="secq">Security Question</label>
+            <input id="secq" type="text" value="What is your favorite color?" />
+            <label for="seca">Answer</label>
+            <input id="seca" type="text" value="Blue" />
+
+            <h3>Preferences / Settings</h3>
+            <label for="notif">Notification Preferences</label>
+            <select id="notif">
+              <option>Email</option>
+              <option selected>SMS</option>
+              <option>Email + SMS</option>
+            </select>
+            <label for="lang">Language Preference</label>
+            <select id="lang">
+              <option selected>English</option>
+              <option>Filipino</option>
+            </select>
+
+            <!-- Save triggers toast -->
+            <label
+              for="toast-save"
+              class="btn btn-primary"
+              style="
+                width: 100%;
+                box-sizing: border-box;
+                padding: 0.75rem;
+                font-size: 1rem;
+                font-weight: 600;
+                margin-top: 1rem;
+                display: block;
+                text-align: center;
+                cursor: pointer;
+              "
+              >Save Changes</label
+            >
+
+            <div class="logout-section">
+              <label for="toast-logout-confirm" class="btn btn-logout"
+                >Log Out</label
+              >
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>&copy; 2026 Barangay Records System. All rights reserved.</p>
+    </footer>
+  </body>
+</html>
+S

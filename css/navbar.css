@@ -1,4 +1,4 @@
-/*  NAVBAR CONTAINER  */
+/* NAVBAR CONTAINER */
 .navbar {
   background-color: var(--color-white);
   border-bottom: 1px solid #e5e7eb;
@@ -12,7 +12,7 @@
   z-index: 100;
 }
 
-/*  BRAND / LOGO  */
+/* BRAND / LOGO */
 .navbar-brand {
   font-weight: 700;
   font-size: 1.1rem;
@@ -21,7 +21,7 @@
   flex-shrink: 0;
 }
 
-/*  NAV LINKS (desktop)  */
+/* NAV LINKS (desktop) */
 .navbar-nav {
   display: flex;
   align-items: center;
@@ -36,9 +36,7 @@
   font-weight: 500;
   padding: 0.25rem 0;
   border-bottom: 2px solid transparent;
-  transition:
-    color 0.2s,
-    border-color 0.2s;
+  transition: color 0.2s, border-color 0.2s;
 }
 
 .navbar-nav a:hover,
@@ -47,7 +45,7 @@
   border-bottom-color: var(--color-primary);
 }
 
-/*  RIGHT SIDE  */
+/* RIGHT SIDE */
 .navbar-right {
   display: flex;
   align-items: center;
@@ -83,7 +81,7 @@
   line-height: 1;
 }
 
-/* Hide the checkbox toggle */
+/* Hide the checkbox */
 .nav-toggle {
   display: none;
 }
@@ -102,41 +100,39 @@
   border-radius: 6px;
   transition: background-color 0.2s;
 }
+
 .hamburger:hover {
   background-color: #f3f4f6;
 }
 
-/* The 3 bars — override global span rules from style.css */
+/* The 3 bars */
 .hamburger span {
   display: block !important;
   height: 2px !important;
   width: 22px;
-  min-width: 22px;
   background-color: #1f2937 !important;
   border-radius: 2px;
   margin-bottom: 0 !important;
   font-size: 0 !important;
   line-height: 0 !important;
   flex-shrink: 0;
-  transition:
-    transform 0.3s ease,
-    opacity 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease;
   transform-origin: center;
 }
 
-/* Animate into X when open */
-.nav-toggle:checked ~ .navbar-nav + .navbar-right .hamburger span:nth-child(1) {
+/* Animate into X — works because hamburger is a direct sibling of nav-toggle */
+.nav-toggle:checked ~ .hamburger span:nth-child(1) {
   transform: translateY(7px) rotate(45deg);
 }
-.nav-toggle:checked ~ .navbar-nav + .navbar-right .hamburger span:nth-child(2) {
+.nav-toggle:checked ~ .hamburger span:nth-child(2) {
   opacity: 0;
   transform: scaleX(0);
 }
-.nav-toggle:checked ~ .navbar-nav + .navbar-right .hamburger span:nth-child(3) {
+.nav-toggle:checked ~ .hamburger span:nth-child(3) {
   transform: translateY(-7px) rotate(-45deg);
 }
 
-/*  RESPONSIVE  */
+/* RESPONSIVE */
 @media (max-width: 768px) {
   .navbar {
     padding: 0 1rem;
@@ -163,6 +159,7 @@
     z-index: 99;
   }
 
+  /* Show nav when checked */
   .nav-toggle:checked ~ .navbar-nav {
     display: flex;
   }

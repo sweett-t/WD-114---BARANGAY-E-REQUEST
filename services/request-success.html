@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Request Submitted | Barangay E-Request</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/navbar.css" />
+    <link rel="stylesheet" href="../css/user-success.css" />
+  </head>
+  <body>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+      <a href="../index.html" class="navbar-brand">Barangay E-Request</a>
+      <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-hidden="true" />
+      <ul class="navbar-nav">
+        <li><a href="../user/user-dashboard.html">Dashboard</a></li>
+        <li><a href="#">Request Documents</a></li>
+        <li><a href="../user/my-requests.html">My Requests</a></li>
+        <li><a href="../user/user-profile.html">Profile</a></li>
+      </ul>
+      <div class="navbar-right">
+        <div class="navbar-user">
+          <div class="avatar">JD</div>
+          <span class="navbar-username">Juan Dela Cruz</span>
+        </div>
+        <label for="nav-toggle" class="hamburger" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </label>
+      </div>
+    </nav>
+
+    <!-- SUCCESS CONTENT -->
+    <div class="success-wrapper">
+      <div class="success-card">
+
+        <!-- Animated checkmark -->
+        <div class="success-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 6L9 17l-5-5" />
+          </svg>
+        </div>
+
+        <h1>Request Submitted!</h1>
+        <div class="subtitle">
+          <p>Your document request has been successfully received by the barangay. Please wait while it is being processed.</p>
+        </div>
+
+        <!-- Tracking number -->
+        <div class="tracking-box">
+          <p class="track-label">Your Tracking Number</p>
+          <p class="track-number">BR-2026-XXX</p>
+          <p class="track-hint">Save this number to track your request status.</p>
+        </div>
+
+        <!-- Request summary -->
+        <div class="request-details">
+          <div class="detail-header">Request Summary</div>
+          <div class="detail-row">
+            <span class="dk">Document Type</span>
+            <span class="dv">—</span>
+          </div>
+          <div class="detail-row">
+            <span class="dk">Purpose</span>
+            <span class="dv">—</span>
+          </div>
+          <div class="detail-row">
+            <span class="dk">Date Submitted</span>
+            <span class="dv">—</span>
+          </div>
+          <div class="detail-row">
+            <span class="dk">Processing Time</span>
+            <span class="dv">1–3 business days</span>
+          </div>
+          <div class="detail-row">
+            <span class="dk">Status</span>
+            <span class="dv">
+              <span class="badge-pending-review">● Pending Review</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Notification notice -->
+        <div class="notif-notice">
+          <div class="notif-icon">🔔</div>
+          <div class="notif-text">
+            <p>You will be notified via <strong>SMS and Email</strong> once your request has been reviewed and is ready for pickup. Make sure your contact details are up to date in your <a href="../user/user-profile.html">profile</a>.</p>
+          </div>
+        </div>
+
+        <!-- What happens next -->
+        <div class="next-steps">
+          <h3>What Happens Next</h3>
+          <div class="steps-list">
+            <div class="step-item">
+              <div class="step-left">
+                <div class="step-num">1</div>
+                <div class="step-connector"></div>
+              </div>
+              <div class="step-body">
+                <h4>Barangay Reviews Your Request</h4>
+                <p>The barangay secretary will verify your submitted information and supporting requirements.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-left">
+                <div class="step-num">2</div>
+                <div class="step-connector"></div>
+              </div>
+              <div class="step-body">
+                <h4>You'll Receive a Notification</h4>
+                <p>Once approved, you'll get an SMS and email with your pickup details and schedule.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-left">
+                <div class="step-num">3</div>
+                <div class="step-connector"></div>
+              </div>
+              <div class="step-body">
+                <h4>Claim Your Document</h4>
+                <p>Visit the barangay hall during office hours. Bring a valid ID and your tracking number.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-left">
+                <div class="step-num">4</div>
+                <div class="step-connector"></div>
+              </div>
+              <div class="step-body">
+                <h4>Pay the Processing Fee</h4>
+                <p>Payment is collected at the barangay hall upon release of your document.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action buttons -->
+        <div class="action-buttons">
+          <a href="../user/my-requests.html" class="btn btn-primary">Track My Request</a>
+          <a href="../user/user-dashboard.html" class="btn btn-outline">Back to Dashboard</a>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <p>&copy; 2026 Barangay Records System. All rights reserved.</p>
+    </footer>
+  </body>
+</html>
