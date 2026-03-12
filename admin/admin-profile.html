@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Profile | Barangay E-Request</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/navbar.css" />
+    <link rel="stylesheet" href="../css/admin-profile.css" />
+  </head>
+  <body>
+    <!-- CHECKBOX STATES -->
+    <input type="checkbox" id="toast-save" />
+    <input type="checkbox" id="toast-logout-confirm" />
+    <input type="checkbox" id="toast-logout-cancel" />
+
+    <!-- TOASTS -->
+    <div class="toast-wrap">
+      <div class="toast toast-success toast-save-msg">
+        ✅ Changes saved successfully!
+      </div>
+      <div class="toast toast-warning toast-logout-msg toast-confirm-wrap">
+        <div>⚠️ Are you sure you want to log out?</div>
+        <div class="toast-actions">
+          <a href="../auth/login.html" class="toast-btn toast-btn-danger"
+            >Yes, Log Out</a
+          >
+          <label for="toast-logout-cancel" class="toast-btn toast-btn-cancel"
+            >Cancel</label
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+      <a href="admin-dashboard.html" class="navbar-brand">Barangay E-Request</a>
+      <input
+        type="checkbox"
+        id="nav-toggle"
+        class="nav-toggle"
+        aria-hidden="true"
+      />
+      <ul class="navbar-nav">
+        <li><a href="../admin/admin-dashboard.html">Dashboard</a></li>
+        <li><a href="../admin/manage-requests.html">Requests</a></li>
+        <li><a href="../admin/manage-users.html">Users</a></li>
+        <li><a href="../admin/report.html">Reports</a></li>
+        <li>
+          <a href="../admin/admin-profile.html" class="active">Profile</a>
+        </li>
+      </ul>
+      <div class="navbar-right">
+        <div class="navbar-user">
+          <div class="avatar">AD</div>
+          <span class="navbar-username">Admin</span>
+        </div>
+        <label for="nav-toggle" class="hamburger" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </label>
+      </div>
+    </nav>
+
+    <main class="dashboard-content">
+      <div class="dashboard-header">
+        <h1>Admin Profile</h1>
+        <p>Manage your admin account details and credentials.</p>
+      </div>
+
+      <div class="profile-grid">
+        <div class="profile-summary">
+          <div class="profile-avatar">
+            <div class="admin-avatar-large">AD</div>
+            <span class="admin-role-badge">Administrator</span>
+          </div>
+          <h3>Barangay Admin</h3>
+          <p>admin@barangay.gov.ph</p>
+          <p>Barangay Records System</p>
+          <div class="summary-stats">
+            <div class="summary-stat">
+              <span class="stat-num">42</span>
+              <span class="stat-lbl">Requests Handled</span>
+            </div>
+            <div class="summary-stat">
+              <span class="stat-num">5</span>
+              <span class="stat-lbl">Users Managed</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-form">
+          <form action="#" method="post">
+            <h3>Account Information</h3>
+            <label for="admin-name">Full Name</label>
+            <input id="admin-name" type="text" value="Barangay Admin" />
+            <label for="admin-email">Email Address</label>
+            <input
+              id="admin-email"
+              type="email"
+              value="admin@barangay.gov.ph"
+            />
+            <label for="admin-contact">Contact Number</label>
+            <input id="admin-contact" type="tel" value="+63 912 000 0001" />
+            <label for="admin-position">Position / Role</label>
+            <input id="admin-position" type="text" value="Barangay Secretary" />
+            <label for="admin-barangay">Barangay</label>
+            <input
+              id="admin-barangay"
+              type="text"
+              value="Barangay 1 - Lunzuran"
+            />
+
+            <h3>Security</h3>
+            <label for="admin-username">Username</label>
+            <input
+              id="admin-username"
+              type="text"
+              value="brgy.admin"
+              disabled
+            />
+            <label for="admin-password">Password</label>
+            <input id="admin-password" type="password" value="********" />
+            <button type="button" class="btn btn-outline btn-change-password">
+              Change / Reset
+            </button>
+            <label for="admin-secq">Security Question</label>
+            <input
+              id="admin-secq"
+              type="text"
+              value="What is the barangay code?"
+            />
+            <label for="admin-seca">Answer</label>
+            <input id="admin-seca" type="text" value="*******" />
+
+            <!-- Save triggers toast -->
+            <label
+              for="toast-save"
+              class="btn btn-primary"
+              style="
+                width: 100%;
+                box-sizing: border-box;
+                padding: 0.75rem;
+                font-size: 1rem;
+                font-weight: 600;
+                margin-top: 1rem;
+                display: block;
+                text-align: center;
+                cursor: pointer;
+              "
+              >Save Changes</label
+            >
+
+            <div class="logout-section">
+              <label for="toast-logout-confirm" class="btn btn-logout"
+                >Log Out</label
+              >
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>&copy; 2026 Barangay Records System. All rights reserved.</p>
+    </footer>
+  </body>
+</html>
