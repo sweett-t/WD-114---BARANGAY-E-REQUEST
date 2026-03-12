@@ -1,0 +1,194 @@
+/*  NAVBAR CONTAINER  */
+.navbar {
+  background-color: var(--color-white);
+  border-bottom: 1px solid #e5e7eb;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/*  BRAND / LOGO  */
+.navbar-brand {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--color-primary);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+/*  NAV LINKS (desktop)  */
+.navbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  list-style: none;
+}
+
+.navbar-nav a {
+  text-decoration: none;
+  color: #64748b;
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 0.25rem 0;
+  border-bottom: 2px solid transparent;
+  transition:
+    color 0.2s,
+    border-color 0.2s;
+}
+
+.navbar-nav a:hover,
+.navbar-nav a.active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+/*  RIGHT SIDE  */
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.navbar-user {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+.navbar-username {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-bottom: 0;
+  line-height: 1;
+}
+
+/* Hide the checkbox toggle */
+.nav-toggle {
+  display: none;
+}
+
+/* Hamburger — hidden on desktop */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+.hamburger:hover {
+  background-color: #f3f4f6;
+}
+
+/* The 3 bars — override global span rules from style.css */
+.hamburger span {
+  display: block !important;
+  height: 2px !important;
+  width: 22px;
+  min-width: 22px;
+  background-color: #1f2937 !important;
+  border-radius: 2px;
+  margin-bottom: 0 !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
+  flex-shrink: 0;
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
+  transform-origin: center;
+}
+
+/* Animate into X when open */
+.nav-toggle:checked ~ .navbar-nav + .navbar-right .hamburger span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.nav-toggle:checked ~ .navbar-nav + .navbar-right .hamburger span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.nav-toggle:checked ~ .navbar-nav + .navbar-right .hamburger span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/*  RESPONSIVE  */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0 1rem;
+    position: relative;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .navbar-nav {
+    display: none;
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    background-color: var(--color-white);
+    border-bottom: 1px solid #e5e7eb;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    padding: 0.5rem 0;
+    z-index: 99;
+  }
+
+  .nav-toggle:checked ~ .navbar-nav {
+    display: flex;
+  }
+
+  .navbar-nav li {
+    width: 100%;
+  }
+
+  .navbar-nav a {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    border-bottom: none;
+    border-left: 3px solid transparent;
+    font-size: 0.95rem;
+  }
+
+  .navbar-nav a:hover,
+  .navbar-nav a.active {
+    border-bottom-color: transparent;
+    border-left-color: var(--color-primary);
+    background-color: #eff6ff;
+    color: var(--color-primary);
+  }
+
+  .navbar-username {
+    display: none;
+  }
+}
