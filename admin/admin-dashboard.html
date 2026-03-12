@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard | Barangay E-Request</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/navbar.css" />
+    <link rel="stylesheet" href="../css/admin-dashboard.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <a href="../admin/admin-dashboard.html" class="navbar-brand"
+        >Barangay E-Request</a
+      >
+      <input
+        type="checkbox"
+        id="nav-toggle"
+        class="nav-toggle"
+        aria-hidden="true"
+      />
+      <ul class="navbar-nav">
+        <li>
+          <a href="../admin/admin-dashboard.html" class="active">Dashboard</a>
+        </li>
+        <li><a href="../admin/manage-requests.html">Requests</a></li>
+        <li><a href="../admin/manage-users.html">Users</a></li>
+        <li><a href="../admin/report.html">Reports</a></li>
+        <li><a href="../admin/admin-profile.html">Profile</a></li>
+      </ul>
+      <div class="navbar-right">
+        <div class="navbar-user">
+          <div class="avatar">AD</div>
+          <span class="navbar-username">Admin</span>
+        </div>
+        <label for="nav-toggle" class="hamburger" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </label>
+      </div>
+    </nav>
+
+    <main class="dashboard-content">
+      <div class="dashboard-header">
+        <div class="dashboard-header-top">
+          <h1>Welcome back, <span>Admin</span>!</h1>
+          <a
+            href="../admin/manage-requests.html"
+            class="btn btn-primary btn-new-request"
+            >View All Requests</a
+          >
+        </div>
+        <p>Overview of all barangay document requests and activity.</p>
+      </div>
+
+      <!-- STAT CARDS -->
+      <section class="stats-grid">
+        <div class="card stat-card total">
+          <h4>Total Requests</h4>
+          <p class="stat-number">42</p>
+          <span class="stat-label">All time</span>
+        </div>
+        <div class="card stat-card pending">
+          <h4>Pending Approval</h4>
+          <p class="stat-number">11</p>
+          <span class="stat-label">Awaiting review</span>
+        </div>
+        <div class="card stat-card approved">
+          <h4>Approved</h4>
+          <p class="stat-number">27</p>
+          <span class="stat-label">Ready for pickup</span>
+        </div>
+        <div class="card stat-card rejected">
+          <h4>Rejected</h4>
+          <p class="stat-number">4</p>
+          <span class="stat-label">Needs attention</span>
+        </div>
+      </section>
+
+      <!-- CHARTS ROW -->
+      <div class="charts-row">
+        <div class="card chart-card">
+          <div class="card-header"><h3>Requests Overview</h3></div>
+          <div class="bar-chart">
+            <div class="bar-group">
+              <div class="bar approved-bar" style="height: 64%">
+                <span>27</span>
+              </div>
+              <span class="bar-label">Approved</span>
+            </div>
+            <div class="bar-group">
+              <div class="bar pending-bar" style="height: 26%">
+                <span>11</span>
+              </div>
+              <span class="bar-label">Pending</span>
+            </div>
+            <div class="bar-group">
+              <div class="bar rejected-bar" style="height: 10%">
+                <span>4</span>
+              </div>
+              <span class="bar-label">Rejected</span>
+            </div>
+          </div>
+        </div>
+        <div class="card chart-card">
+          <div class="card-header"><h3>By Document Type</h3></div>
+          <div class="donut-legend">
+            <div class="legend-item">
+              <div class="legend-dot" style="background: #2563eb"></div>
+              <span class="legend-label">Barangay Clearance</span
+              ><span class="legend-val">10</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot" style="background: #059669"></div>
+              <span class="legend-label">Certificate of Residency</span
+              ><span class="legend-val">8</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot" style="background: #d97706"></div>
+              <span class="legend-label">Certificate of Indigency</span
+              ><span class="legend-val">6</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot" style="background: #7c3aed"></div>
+              <span class="legend-label">Business Permit</span
+              ><span class="legend-val">5</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot" style="background: #db2777"></div>
+              <span class="legend-label">Barangay ID</span
+              ><span class="legend-val">7</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot" style="background: #0891b2"></div>
+              <span class="legend-label">Others</span
+              ><span class="legend-val">6</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RECENT REQUESTS -->
+      <div class="card requests-card">
+        <div class="card-header">
+          <h3>Recent Requests</h3>
+          <a href="../admin/manage-requests.html">View All</a>
+        </div>
+        <div style="overflow-x: auto">
+          <table>
+            <thead>
+              <tr>
+                <th>Tracking #</th>
+                <th>Resident</th>
+                <th>Document Type</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>BC-2026-001</td>
+                <td>Juan Dela Cruz</td>
+                <td>Barangay Clearance</td>
+                <td>Feb 28, 2026</td>
+                <td class="status-approved">Approved</td>
+                <td><a href="../admin/manage-requests.html">View</a></td>
+              </tr>
+              <tr>
+                <td>BC-2026-010</td>
+                <td>Maria Santos</td>
+                <td>Barangay Clearance</td>
+                <td>Feb 27, 2026</td>
+                <td class="status-pending">Pending</td>
+                <td><a href="../admin/manage-requests.html">View</a></td>
+              </tr>
+              <tr>
+                <td>GM-2026-011</td>
+                <td>Jose Reyes</td>
+                <td>Good Moral Certificate</td>
+                <td>Feb 24, 2026</td>
+                <td class="status-pending">Pending</td>
+                <td><a href="../admin/manage-requests.html">View</a></td>
+              </tr>
+              <tr>
+                <td>AL-2026-013</td>
+                <td>Ana Lim</td>
+                <td>Affidavit of Loss</td>
+                <td>Feb 15, 2026</td>
+                <td class="status-rejected">Rejected</td>
+                <td><a href="../admin/manage-requests.html">View</a></td>
+              </tr>
+              <tr>
+                <td>CR-2026-003</td>
+                <td>Rosa Cruz</td>
+                <td>Certificate of Residency</td>
+                <td>Feb 20, 2026</td>
+                <td class="status-approved">Approved</td>
+                <td><a href="../admin/manage-requests.html">View</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ANNOUNCEMENT -->
+      <div class="card announcement">
+        <h4>Admin Notice: Document Processing</h4>
+        <p>
+          All pending requests older than 5 business days require immediate
+          review. Please ensure timely processing of resident document requests.
+        </p>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>&copy; 2026 Barangay Records System. All rights reserved.</p>
+    </footer>
+  </body>
+</html>

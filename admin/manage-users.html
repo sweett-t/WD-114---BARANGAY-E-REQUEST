@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manage Users | Barangay E-Request Admin</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/navbar.css" />
+    <link rel="stylesheet" href="../css/manage-users.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <a href="../admin/admin-dashboard.html" class="navbar-brand"
+        >Barangay E-Request</a
+      >
+      <input
+        type="checkbox"
+        id="nav-toggle"
+        class="nav-toggle"
+        aria-hidden="true"
+      />
+      <ul class="navbar-nav">
+        <li><a href="../admin/admin-dashboard.html">Dashboard</a></li>
+        <li><a href="../admin/manage-requests.html">Requests</a></li>
+        <li><a href="../admin/manage-users.html" class="active">Users</a></li>
+        <li><a href="../admin/report.html">Reports</a></li>
+        <li><a href="../admin/admin-profile.html">Profile</a></li>
+      </ul>
+      <div class="navbar-right">
+        <div class="navbar-user">
+          <div class="avatar">AD</div>
+          <span class="navbar-username">Admin</span>
+        </div>
+        <label for="nav-toggle" class="hamburger" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </label>
+      </div>
+    </nav>
+
+    <main class="dashboard-content">
+      <div class="dashboard-header">
+        <h1>Manage Users</h1>
+        <p>View and manage registered resident accounts.</p>
+      </div>
+
+      <div class="user-filter-bar">
+        <input
+          type="text"
+          placeholder="Search by name or email…"
+          style="max-width: 300px; margin-bottom: 0"
+        />
+        <select style="max-width: 180px; margin-bottom: 0">
+          <option value="all">All Accounts</option>
+          <option>Active</option>
+          <option>Suspended</option>
+        </select>
+      </div>
+
+      <div class="users-table-card">
+        <div class="card-header">
+          <h3>Registered Users</h3>
+          <span class="results-count">5 users</span>
+        </div>
+        <div style="overflow-x: auto">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Email</th>
+                <th>Contact</th>
+                <th>Address</th>
+                <th>Requests</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Row 1 -->
+              <tr>
+                <td data-label="User">
+                  <div class="user-cell">
+                    <div class="user-avatar">JD</div>
+                    Juan Dela Cruz
+                  </div>
+                </td>
+                <td data-label="Email">juan@example.com</td>
+                <td data-label="Contact">+63 912 345 6789</td>
+                <td data-label="Address">
+                  Purok 4, Calle Harmonia, Lunzuran, Zamboanga City
+                </td>
+                <td data-label="Requests">7</td>
+                <td data-label="Status">
+                  <span class="account-badge active">Active</span>
+                </td>
+                <td data-label="Actions">
+                  <div class="action-links">
+                    <a
+                      href="../admin/trial-user-profile.html"
+                      class="btn-view-user"
+                      >View</a
+                    >
+                    <button class="btn-suspend">Suspend</button>
+                  </div>
+                </td>
+              </tr>
+              <!-- Row 2 -->
+              <tr>
+                <td data-label="User">
+                  <div class="user-cell">
+                    <div class="user-avatar">MS</div>
+                    Maria Santos
+                  </div>
+                </td>
+                <td data-label="Email">maria@example.com</td>
+                <td data-label="Contact">+63 917 222 3344</td>
+                <td data-label="Address">45 Rizal Ave, Purok 2</td>
+                <td data-label="Requests">3</td>
+                <td data-label="Status">
+                  <span class="account-badge active">Active</span>
+                </td>
+                <td data-label="Actions">
+                  <div class="action-links">
+                    <button class="btn-view-user">View</button>
+                    <button class="btn-suspend">Suspend</button>
+                  </div>
+                </td>
+              </tr>
+              <!-- Row 3 -->
+              <tr>
+                <td data-label="User">
+                  <div class="user-cell">
+                    <div class="user-avatar">JR</div>
+                    Jose Reyes
+                  </div>
+                </td>
+                <td data-label="Email">jose@example.com</td>
+                <td data-label="Contact">+63 905 888 1122</td>
+                <td data-label="Address">78 Mabini St, Sitio 1</td>
+                <td data-label="Requests">2</td>
+                <td data-label="Status">
+                  <span class="account-badge active">Active</span>
+                </td>
+                <td data-label="Actions">
+                  <div class="action-links">
+                    <button class="btn-view-user">View</button>
+                    <button class="btn-suspend">Suspend</button>
+                  </div>
+                </td>
+              </tr>
+              <!-- Row 4 -->
+              <tr>
+                <td data-label="User">
+                  <div class="user-cell">
+                    <div class="user-avatar">AL</div>
+                    Ana Lim
+                  </div>
+                </td>
+                <td data-label="Email">ana@example.com</td>
+                <td data-label="Contact">+63 920 444 5566</td>
+                <td data-label="Address">12 Bonifacio Rd, Purok 3</td>
+                <td data-label="Requests">3</td>
+                <td data-label="Status">
+                  <span class="account-badge suspended">Suspended</span>
+                </td>
+                <td data-label="Actions">
+                  <div class="action-links">
+                    <button class="btn-view-user">View</button>
+                    <button class="btn-activate">Activate</button>
+                  </div>
+                </td>
+              </tr>
+              <!-- Row 5 — FIXED (was incomplete) -->
+              <tr>
+                <td data-label="User">
+                  <div class="user-cell">
+                    <div class="user-avatar">PG</div>
+                    Pedro Garcia
+                  </div>
+                </td>
+                <td data-label="Email">pedro@example.com</td>
+                <td data-label="Contact">+63 999 000 1111</td>
+                <td data-label="Address">56 Luna St, Purok 1</td>
+                <td data-label="Requests">1</td>
+                <td data-label="Status">
+                  <span class="account-badge active">Active</span>
+                </td>
+                <td data-label="Actions">
+                  <div class="action-links">
+                    <button class="btn-view-user">View</button>
+                    <button class="btn-suspend">Suspend</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>&copy; 2025 Barangay E-Request. All rights reserved.</p>
+    </footer>
+  </body>
+</html>
