@@ -48,7 +48,7 @@ main {
     background-color: var(--color-white);
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-light);
-    border: 1px solid #E5E7EB;
+    border: 1px solid #26488b;
     transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
 }
 
@@ -87,8 +87,8 @@ main {
     font-size: 0.78rem;
     font-weight: 600;
     color: var(--color-primary);
-    background-color: #EFF6FF;
-    border: 1px solid #BFDBFE;
+    background-color: #f4f7f9;
+    border: 1px solid #0c1725;
     border-radius: 999px;
     padding: 0.3rem 0.9rem;
     transition: background-color 0.2s, color 0.2s, border-color 0.2s;

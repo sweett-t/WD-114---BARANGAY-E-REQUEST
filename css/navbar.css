@@ -163,6 +163,7 @@
     z-index: 99;
   }
 
+  /* Show nav when checked */
   .nav-toggle:checked ~ .navbar-nav {
     display: flex;
   }
