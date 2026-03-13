@@ -239,3 +239,37 @@ textarea:focus {
         font-size: clamp(1.75rem, 6vw, 2.5rem);
     }
 }
+
+/* ---------- AUTH / LOGIN PAGE ---------- */
+
+.auth-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-light);
+    padding: var(--spacing-lg);
+}
+
+.login-container {
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-container h2 {
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.input-group {
+    margin-bottom: var(--spacing-md);
+}
+
+.login-container button {
+    width: 100%;
+}
+
+.signup-link {
+    text-align: center;
+    margin-top: var(--spacing-md);
+}
