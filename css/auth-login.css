@@ -1,0 +1,104 @@
+/* Reset */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+/* Layout */
+.auth-layout {
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+}
+
+
+* ---------- AUTH / LOGIN PAGE ---------- */
+
+.auth-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-light);
+    padding: var(--spacing-lg);
+}
+
+.login-container {
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-container h2 {
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.input-group {
+    margin-bottom: var(--spacing-md);
+}
+
+.login-container button {
+    width: 100%;
+}
+
+.signup-link {
+    text-align: center;
+    margin-top: var(--spacing-md);
+>>>>>>> mrsn-auth
+}
+
+
+.auth-hero {
+    flex: 1;
+    background: linear-gradient(135deg, #1e40af, #2563eb);
+    color: white;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 30px;
+}
+
+.hero-content {
+    max-width: 450px;
+}
+
+.hero-content h1 {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.hero-content h2 {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.hero-content p {
+    margin-bottom: 20px;
+    opacity: 0.9;
+}
+
+.hero-content ul {
+    padding-left: 18px;
+}
+
+.hero-content li {
+    margin-bottom: 8px;
+}
+
+.auth-form-area {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f3f4f6;
+}
+
+.login-container {
+    width: 380px;
+    max-width: 90%;
+}
