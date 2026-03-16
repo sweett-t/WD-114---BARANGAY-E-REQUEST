@@ -57,6 +57,8 @@ body {
     align-items: flex-start;
     justify-content: center;
     padding: 30px;
+    overflow: hidden;
+    position: relative;
 }
 
 .hero-content {
@@ -85,6 +87,20 @@ body {
 
 .hero-content li {
     margin-bottom: 8px;
+}
+.hero-image {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.hero-image img {
+    width: 100%;
+    max-width: 800px;
+    object-fit: contain;
 }
 
 .auth-form-area {
