@@ -15,8 +15,6 @@ body {
     min-height: 100vh;
 }
 
-* ---------- AUTH / LOGIN PAGE ---------- */
-
 .auth-wrapper {
     min-height: 100vh;
     display: flex;
