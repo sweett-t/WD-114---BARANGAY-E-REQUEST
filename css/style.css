@@ -282,7 +282,7 @@ input:focus, select:focus, textarea:focus {
     h1 {
         font-size: clamp(1.75rem, 6vw, 2.5rem);
     }
-    
+
     /* Navbar mobile */
     .navbar {
         padding: 0 1rem;
