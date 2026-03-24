@@ -1,0 +1,527 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up | Barangay E-Request</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/auth-signup.css" />
+  </head>
+  <body>
+    <div class="signup-page">
+      <!-- MINI NAVBAR -->
+      <nav class="signup-nav">
+        <a href="../index.html" class="signup-nav-brand">Barangay E-Request</a>
+        <a href="../index.html">Return to Dashboard</a>
+      </nav>
+
+      <!-- MAIN -->
+      <main class="signup-main">
+        <div class="signup-container">
+          <!-- TITLE -->
+          <div class="signup-page-title">
+            <h1>Create your account</h1>
+            <p>
+              Fill in the details below to register as a resident of Barangay
+              E-Request.
+            </p>
+          </div>
+
+          <!-- PROGRESS -->
+          <div class="signup-progress" aria-label="Registration steps">
+            <div class="progress-step">
+              <div class="progress-step-inner">
+                <div class="progress-dot active">1</div>
+                <span class="progress-label active">Personal</span>
+              </div>
+            </div>
+            <div class="progress-line"></div>
+            <div class="progress-step">
+              <div class="progress-step-inner">
+                <div class="progress-dot">2</div>
+                <span class="progress-label">Address</span>
+              </div>
+            </div>
+            <div class="progress-line"></div>
+            <div class="progress-step">
+              <div class="progress-step-inner">
+                <div class="progress-dot">3</div>
+                <span class="progress-label">Contact</span>
+              </div>
+            </div>
+            <div class="progress-line"></div>
+            <div class="progress-step">
+              <div class="progress-step-inner">
+                <div class="progress-dot">4</div>
+                <span class="progress-label">ID</span>
+              </div>
+            </div>
+            <div class="progress-line"></div>
+            <div class="progress-step">
+              <div class="progress-step-inner">
+                <div class="progress-dot">5</div>
+                <span class="progress-label">Account</span>
+              </div>
+            </div>
+            <div class="progress-line"></div>
+            <div class="progress-step">
+              <div class="progress-step-inner">
+                <div class="progress-dot">6</div>
+                <span class="progress-label">Verify</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- FORM CARD -->
+          <form action="../user/user-dashboard.html" method="get" novalidate>
+            <div class="signup-card">
+              <!-- ① PERSONAL DETAILS -->
+              <div class="signup-section-header">
+                <div class="signup-section-icon">1</div>
+                <div>
+                  <h3>Personal Details</h3>
+                  <p>Your basic personal information</p>
+                </div>
+              </div>
+              <div class="signup-section-body">
+                <div class="field-row cols-3">
+                  <div class="signup-field">
+                    <label for="first-name"
+                      >First Name <span class="required">*</span></label
+                    >
+                    <input
+                      type="text"
+                      id="first-name"
+                      name="first_name"
+                      placeholder="e.g. Juan"
+                      required
+                    />
+                  </div>
+                  <div class="signup-field">
+                    <label for="middle-name">Middle Name</label>
+                    <input
+                      type="text"
+                      id="middle-name"
+                      name="middle_name"
+                      placeholder="e.g. Santos"
+                    />
+                  </div>
+                  <div class="signup-field">
+                    <label for="last-name"
+                      >Last Name <span class="required">*</span></label
+                    >
+                    <input
+                      type="text"
+                      id="last-name"
+                      name="last_name"
+                      placeholder="e.g. Dela Cruz"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="field-row cols-3">
+                  <div class="signup-field">
+                    <label for="birthdate"
+                      >Birthdate <span class="required">*</span></label
+                    >
+                    <input
+                      type="date"
+                      id="birthdate"
+                      name="birthdate"
+                      required
+                    />
+                  </div>
+                  <div class="signup-field">
+                    <label for="gender"
+                      >Gender <span class="required">*</span></label
+                    >
+                    <select id="gender" name="gender" required>
+                      <option value="" disabled selected>Select gender</option>
+                      <option>Male</option>
+                      <option>Female</option>
+                      <option>Prefer not to say</option>
+                    </select>
+                  </div>
+                  <div class="signup-field">
+                    <label for="civil-status"
+                      >Civil Status <span class="required">*</span></label
+                    >
+                    <select id="civil-status" name="civil_status" required>
+                      <option value="" disabled selected>Select status</option>
+                      <option>Single</option>
+                      <option>Married</option>
+                      <option>Widowed</option>
+                      <option>Separated</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="field-row cols-1">
+                  <div class="signup-field">
+                    <label for="occupation">Occupation</label>
+                    <input
+                      type="text"
+                      id="occupation"
+                      name="occupation"
+                      placeholder="e.g. Teacher, Student, Self-employed"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- ② ADDRESS DETAILS -->
+              <div class="signup-section-header">
+                <div class="signup-section-icon">2</div>
+                <div>
+                  <h3>Address Details</h3>
+                  <p>Your current residential address</p>
+                </div>
+              </div>
+              <div class="signup-section-body">
+                <div class="field-row cols-2">
+                  <div class="signup-field">
+                    <label for="house-street"
+                      >House Number / Street Address
+                      <span class="required">*</span></label
+                    >
+                    <input
+                      type="text"
+                      id="house-street"
+                      name="house_street"
+                      placeholder="e.g. 123 Rizal Street"
+                      required
+                    />
+                  </div>
+                  <div class="signup-field">
+                    <label for="purok"
+                      >Purok / Sitio <span class="required">*</span></label
+                    >
+                    <input
+                      type="text"
+                      id="purok"
+                      name="purok"
+                      placeholder="e.g. Purok 5"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="field-row cols-3">
+                  <div class="signup-field">
+                    <label for="barangay"
+                      >Barangay <span class="required">*</span></label
+                    >
+                    <input
+                      type="text"
+                      id="barangay"
+                      name="barangay"
+                      placeholder="e.g. Barangay Poblacion"
+                      required
+                    />
+                  </div>
+                  <div class="signup-field">
+                    <label for="city"
+                      >City / Municipality
+                      <span class="required">*</span></label
+                    >
+                    <input
+                      type="text"
+                      id="city"
+                      name="city"
+                      placeholder="e.g. Davao City"
+                      required
+                    />
+                  </div>
+                  <div class="signup-field">
+                    <label for="province"
+                      >Province <span class="required">*</span></label
+                    >
+                    <input
+                      type="text"
+                      id="province"
+                      name="province"
+                      placeholder="e.g. Davao del Sur"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- ③ CONTACT DETAILS -->
+              <div class="signup-section-header">
+                <div class="signup-section-icon">3</div>
+                <div>
+                  <h3>Contact Details</h3>
+                  <p>How we can reach you</p>
+                </div>
+              </div>
+              <div class="signup-section-body">
+                <div class="field-row cols-2">
+                  <div class="signup-field">
+                    <label for="email"
+                      >Email Address <span class="required">*</span></label
+                    >
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      placeholder="e.g. juan@example.com"
+                      required
+                    />
+                  </div>
+                  <div class="signup-field">
+                    <label for="mobile"
+                      >Mobile Number <span class="required">*</span></label
+                    >
+                    <input
+                      type="tel"
+                      id="mobile"
+                      name="mobile"
+                      placeholder="e.g. +63 912 345 6789"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- ④ IDENTIFICATION -->
+              <div class="signup-section-header">
+                <div class="signup-section-icon">4</div>
+                <div>
+                  <h3>Identification Details</h3>
+                  <p>A valid government-issued ID is required</p>
+                </div>
+              </div>
+              <div class="signup-section-body">
+                <div class="field-row cols-2">
+                  <div class="signup-field">
+                    <label for="id-type"
+                      >Valid ID Type <span class="required">*</span></label
+                    >
+                    <select id="id-type" name="id_type" required>
+                      <option value="" disabled selected>Select ID type</option>
+                      <option>National ID</option>
+                      <option>Driver's License</option>
+                      <option>Passport</option>
+                      <option>Voter's ID</option>
+                      <option>Postal ID</option>
+                      <option>Senior Citizen ID</option>
+                      <option>PWD ID</option>
+                      <option>Student ID</option>
+                      <option>Barangay ID</option>
+                      <option>Other Government-issued ID</option>
+                    </select>
+                  </div>
+                  <div class="signup-field">
+                    <label for="id-number"
+                      >Valid ID Number <span class="required">*</span></label
+                    >
+                    <input
+                      type="text"
+                      id="id-number"
+                      name="id_number"
+                      placeholder="Enter your ID number"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="field-row cols-1">
+                  <div class="signup-field">
+                    <label for="id-upload"
+                      >Upload Valid ID <span class="required">*</span></label
+                    >
+                    <input
+                      type="file"
+                      id="id-upload"
+                      name="id_upload"
+                      accept="image/*,.pdf"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- ⑤ ACCOUNT CREDENTIALS -->
+              <div class="signup-section-header">
+                <div class="signup-section-icon">5</div>
+                <div>
+                  <h3>Account Credentials</h3>
+                  <p>Set up your username and password</p>
+                </div>
+              </div>
+              <div class="signup-section-body">
+                <div class="field-row cols-2">
+                  <div class="signup-field">
+                    <label for="username"
+                      >Username <span class="required">*</span></label
+                    >
+                    <input
+                      type="text"
+                      id="username"
+                      name="username"
+                      placeholder="Choose a username"
+                      autocomplete="username"
+                      required
+                    />
+                  </div>
+                  <div class="signup-field">
+                    <!-- spacer -->
+                  </div>
+                </div>
+                <div class="field-row cols-2">
+                  <div class="signup-field">
+                    <label for="password"
+                      >Password <span class="required">*</span></label
+                    >
+                    <div class="password-wrapper">
+                      <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Create a strong password"
+                        autocomplete="new-password"
+                        required
+                        oninput="checkStrength(this.value)"
+                      />
+                      <button
+                        type="button"
+                        class="toggle-password"
+                        onclick="togglePassword('password', this)"
+                      >
+                        Show
+                      </button>
+                    </div>
+                    <div class="password-strength">
+                      <div class="strength-bar">
+                        <div class="strength-fill" id="strength-fill"></div>
+                      </div>
+                      <p class="strength-text" id="strength-text">
+                        Enter a password
+                      </p>
+                    </div>
+                  </div>
+                  <div class="signup-field">
+                    <label for="confirm-password"
+                      >Confirm Password <span class="required">*</span></label
+                    >
+                    <div class="password-wrapper">
+                      <input
+                        type="password"
+                        id="confirm-password"
+                        name="confirm_password"
+                        placeholder="Repeat your password"
+                        autocomplete="new-password"
+                        required
+                      />
+                      <button
+                        type="button"
+                        class="toggle-password"
+                        onclick="togglePassword('confirm-password', this)"
+                      >
+                        Show
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="field-row cols-2">
+                  <div class="signup-field">
+                    <label for="security-question"
+                      >Security Question <span class="required">*</span></label
+                    >
+                    <select
+                      id="security-question"
+                      name="security_question"
+                      required
+                    >
+                      <option value="" disabled selected>
+                        Select a question
+                      </option>
+                      <option>What is your mother's maiden name?</option>
+                      <option>What was your first school?</option>
+                      <option>What is your favorite food?</option>
+                    </select>
+                  </div>
+                  <div class="signup-field">
+                    <label for="security-answer"
+                      >Security Answer <span class="required">*</span></label
+                    >
+                    <input
+                      type="text"
+                      id="security-answer"
+                      name="security_answer"
+                      placeholder="Your answer"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- ⑥ VERIFICATION -->
+              <div class="signup-section-header">
+                <div class="signup-section-icon">6</div>
+                <div>
+                  <h3>Verification</h3>
+                  <p>Verify your email or mobile number via OTP</p>
+                </div>
+              </div>
+              <div class="signup-section-body">
+                <div class="field-row cols-2">
+                  <div class="signup-field">
+                    <label for="otp"
+                      >Verification Code (OTP)
+                      <span class="required">*</span></label
+                    >
+                    <input
+                      type="text"
+                      id="otp"
+                      name="otp"
+                      placeholder="Enter 6-digit OTP"
+                      maxlength="6"
+                      inputmode="numeric"
+                      required
+                    />
+                    <p class="otp-hint">
+                      Enter the code sent to your email or mobile number.
+                    </p>
+                    <button type="button" class="btn-send-otp">Send OTP</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- AGREEMENTS -->
+              <div class="agreements-block">
+                <label class="agreement-item">
+                  <input type="checkbox" name="agree_terms" required />
+                  <span
+                    >I have read and agree to the
+                    <a href="#">Terms and Conditions</a> of the Barangay
+                    E-Request System.</span
+                  >
+                </label>
+                <label class="agreement-item">
+                  <input type="checkbox" name="agree_privacy" required />
+                  <span
+                    >I accept the <a href="#">Privacy Policy</a> and consent to
+                    the collection and use of my personal data.</span
+                  >
+                </label>
+              </div>
+
+              <!-- FORM FOOTER -->
+              <div class="signup-form-footer">
+                <button type="submit" class="btn-signup-primary">
+                  Create Account
+                </button>
+                <p class="signup-login-link">
+                  Already have an account?
+                  <a href="../auth/login.html">Log in here</a>
+                </p>
+              </div>
+            </div>
+            <!-- end signup-card -->
+          </form>
+        </div>
+        <!-- end signup-container -->
+      </main>
+    </div>
+    <!-- end signup-page -->
+  </body>
+</html>
