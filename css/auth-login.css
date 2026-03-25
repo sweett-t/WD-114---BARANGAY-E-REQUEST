@@ -83,6 +83,7 @@
 
 .auth-left-content {
   position: relative;
+   margin-left: -3rem;
   z-index: 1;
 }
 
@@ -393,8 +394,20 @@
   }
 
   .auth-brand {
-    margin-bottom: 1.5rem;
+    margin-bottom: 3rem;
+    align-self: flex-start;
+    position: absolute;
+    top: clamp(1.5rem, 3vw, 2.5rem);
+    left: clamp(2.5rem, 6vw, 5rem);
   }
+
+  .auth-left-main {
+    flex-direction: column;
+}
+
+.hero-image {
+    display: none;
+} 
 
   .auth-left-content h2 {
     font-size: 1.6rem;
@@ -414,7 +427,7 @@
   }
 }
 
-.hero-image {
+ /* .hero-image {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -427,5 +440,33 @@
 .hero-image img {
     width: 100%;
     object-fit: contain;
+} */
+
+.auth-left-main {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    width: 100%;
 }
 
+.hero-image {
+    flex: 0 0 85%;
+    margin-left: -90px;  /* bleeds it to the left edge */
+}
+
+.hero-image img {
+    width: 100%;
+    object-fit: contain;
+}
+
+.auth-left-text {
+    flex: 1;
+    min-width: 0;
+    padding-top: 1rem;
+}
+
+.auth-left-text h2 {
+    font-size: clamp(1.4rem, 2.5vw, 2rem);
+    word-break: normal;
+    white-space: normal;
+}
