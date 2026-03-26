@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Barangay Clearance - Juan Dela Cruz</title>
+<style>
+    body {
+        font-family: 'Times New Roman', Times, serif;
+        background-color: #f0f0f0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+    }
+
+    /* Long bond paper */
+    .clearance-card {
+        background-color: white;
+        width: 8.5in;
+        height: 13in;
+        padding: 0.5in 0.75in;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        border: 2px solid #333;
+        box-sizing: border-box;
+        position: relative;
+    }
+
+    .header {
+        text-align: center;
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+    .logo {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 80px;
+        height: 80px;
+        border: 1px solid #ccc; 
+        border-radius: 50%;
+    }
+
+    .header-text p {
+        margin: 3px 0;
+        font-size: 14px;
+    }
+
+    .barangay-name {
+        font-style: italic;
+        font-size: 24px;
+        color: #1a237e;
+        margin-top: 10px;
+        font-weight: bold;
+    }
+
+    hr {
+        border: 0;
+        border-top: 2px solid #1a237e;
+        margin: 10px 0 40px 0;
+    }
+
+    .office-title {
+        text-align: center;
+        font-weight: bold;
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .document-title {
+        text-align: center;
+        font-size: 28px;
+        font-weight: bold;
+        letter-spacing: 2px;
+        margin-bottom: 50px;
+        color: #1a237e; /* Blue title */
+    }
+
+    .to-whom {
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .body-text {
+        text-align: justify;
+        line-height: 1.8;
+        font-size: 16px;
+    }
+
+    .input-line {
+        border-bottom: 1px solid black;
+        display: inline-block;
+        text-align: center;
+        padding: 0 5px;
+        vertical-align: bottom;
+        min-width: 50px;
+    }
+
+    .signature-section {
+        margin-top: 80px;
+        float: right;
+        text-align: center;
+        width: 250px;
+    }
+
+    .captain-name {
+        font-weight: bold;
+        text-transform: uppercase;
+        border-bottom: 1px solid black;
+        margin-bottom: 0;
+    }
+
+    .footer-info {
+        position: absolute;
+        bottom: 0.5in;
+        left: 0.75in;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    .no-print {
+        margin-top: 20px;
+        padding: 10px 20px;
+        background: #1a237e; /* Blue button */
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    @media print {
+        body { background: none; padding: 0; }
+        .clearance-card { box-shadow: none; border: 2px solid black; }
+        .no-print { display: none; }
+    }
+</style>
+</head>
+<body>
+
+<div class="clearance-card">
+    <div class="header">
+        <img src="https://via.placeholder.com/80" alt="Logo" class="logo">
+        <div class="header-text">
+            <p>Republic of the Philippines</p>
+            <p>Zamboanga City</p>
+            <div class="barangay-name">Barangay Lunzuran</div>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="office-title">OFFICE OF THE BARANGAY CAPTAIN</div>
+    <div class="document-title">BARANGAY CLEARANCE</div>
+
+    <div class="to-whom">TO WHOM IT MAY CONCERN:</div>
+
+    <div class="body-text">
+        This is to certify that 
+        <span class="input-line" style="width: 250px;">Juan Dela Cruz</span>, 
+        <span class="input-line" style="width: 50px;">35</span> years old, 
+        <span class="input-line" style="width: 80px;">Male</span>, and a resident of Barangay Lunzuran, Zamboanga City 7000, is known to be of good moral character and a law-abiding citizen in the community.
+        <br><br>
+        To certify further, that he has no derogatory and/or criminal records filed in this barangay.
+        <br><br>
+        <strong>ISSUED</strong> this 
+        <span class="input-line" style="width: 50px;">28th</span> day of 
+        <span class="input-line" style="width: 150px;">March</span>, 2026, at Barangay Lunzuran, Zamboanga City 7000, upon request of the interested party for employment purposes.
+    </div>
+
+    <div class="signature-section">
+        <p class="captain-name">JOEL B. LLORCA</p>
+        <p style="margin-top: 5px;">Barangay Captain</p>
+    </div>
+
+    <div class="footer-info">
+        O.R No. <span class="input-line" style="width: 150px;">BC-2026-001</span><br>
+        Date Issued: <span class="input-line" style="width: 150px;">Mar 28, 2026</span><br>
+        Doc. Stamp: Paid
+    </div>
+</div>
+
+<button class="no-print" onclick="window.print()">Print Clearance</button>
+
+</body>
+</html>

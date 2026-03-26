@@ -161,6 +161,27 @@
   border-color: #e5e7eb;
 }
 
+.current-logo {
+  margin-bottom: 1rem;
+}
+
+.current-logo img {
+  max-width: 120px;
+  max-height: 120px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  object-fit: cover;
+  display: block;
+  margin-top: 0.5rem;
+}
+
+.upload-hint {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-top: -0.5rem;
+  margin-bottom: 1rem;
+}
+
 .profile-form input,
 .profile-form select,
 .profile-form textarea {

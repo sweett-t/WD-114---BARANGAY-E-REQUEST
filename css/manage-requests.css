@@ -238,6 +238,22 @@
   background: #eff6ff;
 }
 
+.btn-print {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--color-light);
+  background: var(--color-primary);
+  border: 1px solid #bfdbfe;
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-print:hover {
+  background: var(--color-accent);
+  color: var(--color-light);
+}
+
 .btn-approve {
   font-size: 0.8rem;
   font-weight: 600;
