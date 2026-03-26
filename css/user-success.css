@@ -4,7 +4,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--spacing-lg) var(--spacing-md); 
+  padding: var(--spacing-lg) var(--spacing-md);
 }
 
 /*  CARD  */
@@ -21,8 +21,14 @@
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /*  SUCCESS ICON  */
@@ -39,8 +45,14 @@
 }
 
 @keyframes popIn {
-  from { opacity: 0; transform: scale(0.5); }
-  to   { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .success-icon-wrap svg {
@@ -128,7 +140,9 @@
   font-size: 0.9rem;
   gap: 1rem;
 }
-.detail-row:last-child { border-bottom: none; }
+.detail-row:last-child {
+  border-bottom: none;
+}
 
 .detail-row .dk {
   color: #6b7280;
@@ -178,7 +192,9 @@
   margin-bottom: 0;
   line-height: 1.55;
 }
-.notif-notice .notif-text strong { color: #78350f; }
+.notif-notice .notif-text strong {
+  color: #78350f;
+}
 .notif-notice .notif-text a {
   color: #92400e;
   font-weight: 600;
@@ -200,7 +216,10 @@
   margin-bottom: var(--spacing-md);
 }
 
-.steps-list { display: flex; flex-direction: column; }
+.steps-list {
+  display: flex;
+  flex-direction: column;
+}
 
 .step-item {
   display: flex;
@@ -235,10 +254,16 @@
   background-color: #e5e7eb;
   margin: 3px 0;
 }
-.step-item:last-child .step-connector { display: none; }
+.step-item:last-child .step-connector {
+  display: none;
+}
 
-.step-body { padding-bottom: 1.25rem; }
-.step-item:last-child .step-body { padding-bottom: 0; }
+.step-body {
+  padding-bottom: 1.25rem;
+}
+.step-item:last-child .step-body {
+  padding-bottom: 0;
+}
 
 .step-body h4 {
   font-size: 0.9rem;
@@ -280,7 +305,13 @@
 
 /*  RESPONSIVE  */
 @media (max-width: 480px) {
-  .success-card { padding: var(--spacing-lg) var(--spacing-md); }
-  .action-buttons { flex-direction: column; }
-  .action-buttons .btn { width: 100%; }
+  .success-card {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+  .action-buttons {
+    flex-direction: column;
+  }
+  .action-buttons .btn {
+    width: 100%;
+  }
 }

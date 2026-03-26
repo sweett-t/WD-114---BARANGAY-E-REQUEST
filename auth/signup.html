@@ -84,7 +84,8 @@
                 </div>
               </div>
               <div class="signup-section-body">
-                <div class="field-row cols-3">
+                <!-- Name row: First / Middle / Last / Suffix -->
+                <div class="field-row cols-4">
                   <div class="signup-field">
                     <label for="first-name"
                       >First Name <span class="required">*</span></label
@@ -117,6 +118,18 @@
                       placeholder="e.g. Dela Cruz"
                       required
                     />
+                  </div>
+                  <div class="signup-field">
+                    <label for="suffix">Suffix</label>
+                    <select id="suffix" name="suffix">
+                      <option value="" selected>None</option>
+                      <option>Jr.</option>
+                      <option>Sr.</option>
+                      <option>II</option>
+                      <option>III</option>
+                      <option>IV</option>
+                      <option>V</option>
+                    </select>
                   </div>
                 </div>
                 <div class="field-row cols-3">

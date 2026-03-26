@@ -534,6 +534,18 @@
   justify-content: center;
 }
 
+.footer {
+  background-color: var(--color-light);
+  padding: var(--spacing-md);
+  text-align: center;
+}
+
+.footer p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
 /* ── RESPONSIVE ── */
 @media (max-width: 768px) {
   .filter-bar {

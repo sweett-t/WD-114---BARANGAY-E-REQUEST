@@ -237,14 +237,17 @@
   margin-bottom: 0;
 }
 
+.field-row.cols-1 {
+  grid-template-columns: 1fr;
+}
 .field-row.cols-2 {
   grid-template-columns: 1fr 1fr;
 }
 .field-row.cols-3 {
   grid-template-columns: 1fr 1fr 1fr;
 }
-.field-row.cols-1 {
-  grid-template-columns: 1fr;
+.field-row.cols-4 {
+  grid-template-columns: 1fr 1fr 1fr 0.6fr;
 }
 
 /* INDIVIDUAL FIELD */
@@ -554,7 +557,8 @@
 /* RESPONSIVE */
 @media (max-width: 600px) {
   .field-row.cols-2,
-  .field-row.cols-3 {
+  .field-row.cols-3,
+  .field-row.cols-4 {
     grid-template-columns: 1fr;
   }
 
