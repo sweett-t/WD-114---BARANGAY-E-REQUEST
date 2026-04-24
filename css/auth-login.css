@@ -224,6 +224,13 @@
   color: #94a3b8;
 }
 
+.auth-field-hint {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  margin-top: 0.25rem;
+  line-height: 1.4;
+}
+
 /* PASSWORD WRAPPER */
 .password-wrapper {
   position: relative;

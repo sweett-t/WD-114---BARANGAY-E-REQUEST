@@ -45,17 +45,18 @@
 
           <!-- LOGIN FORM -->
           <form id="loginForm" novalidate>
-            <!-- Username -->
+            <!-- Login Identifier -->
             <div class="auth-field">
-              <label for="login-username">Username or Email Address</label>
+              <label for="login-identifier">Phone Number, Email, or Username</label>
               <input
                 type="text"
-                id="login-username"
-                name="username"
-                placeholder="Enter your username or email"
+                id="login-identifier"
+                name="identifier"
+                placeholder="Enter phone, email, or username"
                 autocomplete="username"
                 required
               />
+              <small class="auth-field-hint">You can log in using your phone number, email address, or username</small>
             </div>
 
             <!-- Password -->
@@ -110,46 +111,6 @@
       </div>
     </div>
 
-    <script>
-      function togglePassword(inputId, btn) {
-        const input = document.getElementById(inputId);
-
-        if (input.type === "password") {
-          input.type = "text";
-          btn.textContent = "Hide";
-        } else {
-          input.type = "password";
-          btn.textContent = "Show";
-        }
-      }
-
-      document
-        .getElementById("loginForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-
-          const username = document
-            .getElementById("login-username")
-            .value.trim();
-          const password = document
-            .getElementById("login-password")
-            .value.trim();
-
-          // USER LOGIN
-          if (username === "juandelacruz" && password === "12345") {
-            window.location.href = "../user/user-dashboard.html";
-          }
-
-          // ADMIN LOGIN
-          else if (username === "barangayadmin" && password === "12345") {
-            window.location.href = "../admin/admin-dashboard.html";
-          }
-
-          // INVALID LOGIN
-          else {
-            alert("Invalid username or password.");
-          }
-        });
-    </script>
+    <script src="../js/script.js"></script>
   </body>
 </html>
