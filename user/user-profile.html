@@ -402,6 +402,18 @@
       </div>
     </div>
 
+    <!-- Confirm Modal -->
+<div class="modal-overlay" id="confirm-modal">
+  <div class="modal">
+    <h3 id="confirm-title">Confirm</h3>
+    <p id="confirm-message">Are you sure?</p>
+    <div class="btn-row">
+      <button class="btn-cancel" onclick="closeConfirmModal()">Cancel</button>
+      <button class="btn-confirm" id="confirm-yes-btn">Yes</button>
+    </div>
+  </div>
+</div>
+
     <script src="../js/script.js"></script>
     <script>
       var originalCivilStatus = "";

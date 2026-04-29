@@ -423,7 +423,8 @@
             stroke="currentColor"
             stroke-width="2"
           >
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></svg>Barangay E-Request</a>
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></svg>Barangay E-Request</a
+>
         <div class="sb-user">
           <div class="sb-avatar" id="sb-avatar">SA</div>
           <div>
@@ -600,6 +601,10 @@
         </div>
       </div>
     </div>
+
+    <!-- Hidden dummy elements required by script.js notification helpers -->
+    <span id="user-nav-name" style="display: none"></span>
+    <div id="user-avatar" style="display: none"></div>
     <script src="../js/script.js"></script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
@@ -729,9 +734,9 @@
                     "')\">Release</button>";
                 if (r.status === "approved" || r.status === "released")
                   btns +=
-                    ' <button class="btn btn-print" onclick="printRequest(' +
+                    '<button class="btn btn-print" onclick="printRequest(\'' +
                     r.id +
-                    ')">Print</button>';
+                    "')\">Print</button> ";
                 btns +=
                   ' <button class="btn btn-view" onclick="viewRequest(\'' +
                   r.id +
@@ -899,8 +904,9 @@
           document.getElementById("viewModal").classList.add("open");
         };
         window.printRequest = function (id) {
-          alert(
-            "Print functionality - would open print window for request: " + id,
+          window.open(
+            "print-request.html?id=" + encodeURIComponent(id),
+            "_blank",
           );
         };
         applyFilters();

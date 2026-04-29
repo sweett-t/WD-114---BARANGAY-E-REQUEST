@@ -1032,6 +1032,14 @@
           .replace(/&/g, "&amp;")
           .replace(/</g, "&lt;")
           .replace(/>/g, "&gt;");
+
+          window.toggleSection = function(id) {
+  document.getElementById(id).classList.toggle('collapsed');
+};
+window.doLogout = function() {
+  setCurrentUser(null);
+  location.href = '../auth/login.html';
+};
       }
     </script>
   </body>

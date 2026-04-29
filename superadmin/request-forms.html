@@ -1,713 +1,675 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Request Forms | Super Admin</title>
-    <style>
-      :root {
-        --color-primary: #2563eb;
-        --color-secondary: #1e293b;
-        --color-white: #ffffff;
-        --color-light: #f8fafc;
-      }
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-      body {
-        font-family: "Segoe UI", sans-serif;
-        background: #f1f5f9;
-      }
-      .sa-layout {
-        display: flex;
-        min-height: 100vh;
-      }
-      .sa-sidebar {
-        width: 240px;
-        flex-shrink: 0;
-        background: #ffffff;
-        border-right: 1px solid #e5e7eb;
-        display: flex;
-        flex-direction: column;
-        position: sticky;
-        top: 0;
-        height: 100vh;
-        overflow-y: auto;
-      }
-      .sa-body {
-        flex: 1;
-        min-width: 0;
-        display: flex;
-        flex-direction: column;
-      }
-      .sa-main {
-        flex: 1;
-        padding: 2rem;
-        max-width: 1300px;
-        width: 100%;
-        margin: 0 auto;
-      }
-      .sa-footer {
-        background: #f8fafc;
-        border-top: 1px solid #e5e7eb;
-        padding: 1rem 2rem;
-        text-align: center;
-        font-size: 0.85rem;
-        color: #6b7280;
-      }
-      .sb-brand {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 1.25rem 1rem;
-        border-bottom: 1px solid #e5e7eb;
-        font-weight: 800;
-        font-size: 0.95rem;
-        color: #2563eb;
-        text-decoration: none;
-      }
-      .sb-user {
-        display: flex;
-        align-items: center;
-        gap: 0.65rem;
-        padding: 1rem;
-        border-bottom: 1px solid #f1f5f9;
-      }
-      .sb-avatar {
-        width: 38px;
-        height: 38px;
-        border-radius: 50%;
-        background: #2563eb;
-        color: #fff;
-        font-size: 0.8rem;
-        font-weight: 700;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .sb-name {
-        font-size: 0.85rem;
-        font-weight: 600;
-        color: #1e293b;
-      }
-      .sb-role {
-        font-size: 0.7rem;
-        color: #64748b;
-      }
-      .sb-section {
-        padding: 0 0.5rem;
-        margin-top: 0.5rem;
-      }
-      .sb-section-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0.35rem 0.5rem;
-        cursor: pointer;
-        user-select: none;
-        border-radius: 0.375rem;
-      }
-      .sb-section-header:hover {
-        background: #f8fafc;
-      }
-      .sb-label {
-        font-size: 0.68rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.8px;
-        color: #94a3b8;
-      }
-      .sb-chevron {
-        font-size: 0.6rem;
-        color: #94a3b8;
-        transition: transform 0.2s;
-      }
-      .sb-section.collapsed .sb-chevron {
-        transform: rotate(-90deg);
-      }
-      .sb-section.collapsed .sb-links {
-        display: none;
-      }
-      .sb-links {
-        display: flex;
-        flex-direction: column;
-        gap: 1px;
-        padding: 0.25rem 0;
-      }
-      .sb-link {
-        display: flex;
-        align-items: center;
-        gap: 0.6rem;
-        padding: 0.5rem 0.75rem;
-        border-radius: 0.5rem;
-        text-decoration: none;
-        font-size: 0.875rem;
-        color: #374151;
-        transition:
-          background 0.15s,
-          color 0.15s;
-      }
-      .sb-link:hover {
-        background: #f1f5f9;
-        color: #1e293b;
-      }
-      .sb-link.active {
-        background: #dbeafe;
-        color: #2563eb;
-        font-weight: 600;
-      }
-      .sb-link svg {
-        width: 15px;
-        height: 15px;
-        flex-shrink: 0;
-        opacity: 0.7;
-      }
-      .sb-divider {
-        border: none;
-        border-top: 1px solid #f1f5f9;
-        margin: 0.5rem 0.5rem;
-      }
-      .sb-logout {
-        margin-top: auto;
-        padding: 0.75rem 0.5rem;
-        border-top: 1px solid #e5e7eb;
-      }
-      .sb-logout-btn {
-        width: 100%;
-        padding: 0.5rem;
-        background: #fee2e2;
-        color: #991b1b;
-        border: 1px solid #fecaca;
-        border-radius: 0.5rem;
-        font-size: 0.85rem;
-        font-weight: 600;
-        cursor: pointer;
-      }
-      .sb-logout-btn:hover {
-        background: #fecaca;
-      }
-      .page-hdr {
-        margin-bottom: 1.75rem;
-      }
-      .page-hdr h1 {
-        font-size: clamp(1.5rem, 3vw, 2rem);
-        font-weight: 700;
-        color: #1e293b;
-        margin-bottom: 0.25rem;
-      }
-      .page-hdr p {
-        color: #64748b;
-        font-size: 0.95rem;
-      }
-      .form-card {
-        background: #fff;
-        border: 1px solid #e5e7eb;
-        border-radius: 0.5rem;
-        padding: 1.5rem;
-        margin-bottom: 1.5rem;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-      }
-      .form-field {
-        margin-bottom: 1rem;
-      }
-      .form-field label {
-        display: block;
-        font-size: 0.8rem;
-        font-weight: 700;
-        color: #374151;
-        margin-bottom: 0.3rem;
-      }
-      .form-field input,
-      .form-field select,
-      .form-field textarea {
-        width: 100%;
-        padding: 0.55rem;
-        border: 1.5px solid #d1d5db;
-        border-radius: 0.5rem;
-      }
-      .tbl-card {
-        background: #fff;
-        border: 1px solid #e5e7eb;
-        border-radius: 0.5rem;
-        overflow: hidden;
-        margin-bottom: 1.5rem;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-      }
-      .sa-table {
-        width: 100%;
-        border-collapse: collapse;
-      }
-      .sa-table thead tr {
-        background: #f8fafc;
-      }
-      .sa-table th {
-        padding: 0.75rem 1rem;
-        font-size: 0.72rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        color: #64748b;
-        border-bottom: 1px solid #e5e7eb;
-        text-align: left;
-      }
-      .sa-table td {
-        padding: 0.85rem 1rem;
-        font-size: 0.875rem;
-        color: #1e293b;
-        border-bottom: 1px solid #f1f5f9;
-      }
-      .btn {
-        padding: 0.35rem 0.75rem;
-        border-radius: 0.375rem;
-        font-size: 0.8rem;
-        font-weight: 600;
-        cursor: pointer;
-      }
-      .btn-add {
-        color: #065f46;
-        background: #d1fae5;
-        border: 1px solid #a7f3d0;
-      }
-      .btn-edit {
-        color: #374151;
-        background: #f3f4f6;
-        border: 1px solid #d1d5db;
-      }
-      .btn-delete {
-        color: #991b1b;
-        background: #fee2e2;
-        border: 1px solid #fecaca;
-      }
-      @media (max-width: 768px) {
-        .sa-layout {
-          flex-direction: column;
-        }
-        .sa-sidebar {
-          width: 100%;
-          height: auto;
-          position: relative;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div class="sa-layout">
-      <aside class="sa-sidebar">
-        <a href="superadmin-dashboard.html" class="sb-brand"
-          ><svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-            <polyline points="9 22 9 12 15 12 15 22" /></svg
-          >Barangay E-Request</a
-        >
-        <div class="sb-user">
-          <div class="sb-avatar" id="sb-avatar">SA</div>
-          <div>
-            <div class="sb-name" id="sb-name">Loading...</div>
-            <div class="sb-role">Super Admin</div>
-          </div>
-        </div>
-        <div class="sb-section" id="sec-sa">
-          <div class="sb-section-header" onclick="toggleSection('sec-sa')">
-            <span class="sb-label">Super Admin</span
-            ><span class="sb-chevron">▼</span>
-          </div>
-          <div class="sb-links">
-            <a href="superadmin-dashboard.html" class="sb-link"
-              ><svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <rect x="3" y="3" width="7" height="7" />
-                <rect x="14" y="3" width="7" height="7" />
-                <rect x="3" y="14" width="7" height="7" />
-                <rect x="14" y="14" width="7" height="7" /></svg
-              >Dashboard</a
-            >
-            <a href="superadmin-requests.html" class="sb-link"
-              ><svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path
-                  d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
-                />
-                <polyline points="14 2 14 8 20 8" /></svg
-              >Requests</a
-            >
-            <a href="superadmin-blotter.html" class="sb-link"
-              ><svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg
-              >Blotter & Complaints</a
-            >
-            <a href="superadmin-users.html" class="sb-link"
-              ><svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                <circle cx="9" cy="7" r="4" />
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                <path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg
-              >Users</a
-            >
-            <a href="manage-admins.html" class="sb-link"
-              ><svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <circle cx="12" cy="8" r="4" />
-                <path d="M20 21a8 8 0 1 0-16 0" />
-                <path d="M16 11l2 2 4-4" /></svg
-              >Manage Admins</a
-            >
-            <a href="request-forms.html" class="sb-link active"
-              ><svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <line x1="8" y1="6" x2="21" y2="6" />
-                <line x1="8" y1="12" x2="21" y2="12" />
-                <line x1="8" y1="18" x2="21" y2="18" /></svg
-              >Request Forms</a
-            >
-            <a href="system-logs.html" class="sb-link"
-              ><svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path
-                  d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
-                />
-                <polyline points="14 2 14 8 20 8" /></svg
-              >System Logs</a
-            >
-            <a href="superadmin-reports.html" class="sb-link"
-              ><svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <line x1="18" y1="20" x2="18" y2="10" />
-                <line x1="12" y1="20" x2="12" y2="4" />
-                <line x1="6" y1="20" x2="6" y2="14" /></svg
-              >Reports</a
-            >
-            <a href="superadmin-settings.html" class="sb-link"
-              ><svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <circle cx="12" cy="12" r="3" />
-                <path
-                  d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"
-                /></svg
-              >Settings</a
-            >
-          </div>
-        </div>
-        <hr class="sb-divider" />
-        <div class="sb-section" id="sec-user">
-          <div class="sb-section-header" onclick="toggleSection('sec-user')">
-            <span class="sb-label">My User Area</span
-            ><span class="sb-chevron">▼</span>
-          </div>
-          <div class="sb-links">
-            <a href="sa-dashboard.html" class="sb-link"
-              ><svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <rect x="3" y="3" width="7" height="7" />
-                <rect x="14" y="3" width="7" height="7" />
-                <rect x="3" y="14" width="7" height="7" />
-                <rect x="14" y="14" width="7" height="7" /></svg
-              >My Dashboard</a
-            >
-            <a href="sa-new-request.html" class="sb-link"
-              ><svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <line x1="12" y1="5" x2="12" y2="19" />
-                <line x1="5" y1="12" x2="19" y2="12" /></svg
-              >New Request</a
-            >
-            <a href="sa-my-requests.html" class="sb-link"
-              ><svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path
-                  d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
-                />
-                <polyline points="14 2 14 8 20 8" /></svg
-              >My Requests</a
-            >
-            <a href="superadmin-profile.html" class="sb-link"
-              ><svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                <circle cx="12" cy="7" r="4" /></svg
-              >My Profile</a
-            >
-          </div>
-        </div>
-        <div class="sb-logout">
-          <button class="sb-logout-btn" onclick="doLogout()">Logout</button>
-        </div>
-      </aside>
-      <div class="sa-body">
-        <main class="sa-main">
-          <div class="page-hdr">
-            <h1>Request Form Management</h1>
-            <p>Add, edit, enable or disable request types.</p>
-          </div>
-          <div class="form-card" id="addForm" style="display: none">
-            <h3 style="margin-bottom: 1rem">Add New Request Type</h3>
-            <div class="form-field">
-              <label>Name *</label
-              ><input
-                type="text"
-                id="newTypeName"
-                placeholder="e.g. Barangay Clearance"
-              />
-            </div>
-            <div class="form-field">
-              <label>Description</label
-              ><textarea
-                id="newTypeDesc"
-                placeholder="What is this request for?"
-              ></textarea>
-            </div>
-            <div class="form-field">
-              <label>Fee (PHP)</label
-              ><input type="number" id="newTypeFee" value="50" min="0" />
-            </div>
-            <div style="display: flex; gap: 0.5rem">
-              <button class="btn btn-add" onclick="saveNewType()">Save</button
-              ><button
-                class="btn btn-edit"
-                onclick="
-                  document.getElementById('addForm').style.display = 'none'
-                "
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-          <button
-            class="btn btn-add"
-            onclick="document.getElementById('addForm').style.display = 'block'"
-            style="margin-bottom: 1rem"
-          >
-            + Add New Request Type
-          </button>
-          <div class="tbl-card">
-            <table class="sa-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Description</th>
-                  <th>Fee</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="typesTable">
-                <tr>
-                  <td colspan="5">Loading...</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </main>
-        <footer class="sa-footer"><p id="footer-year"></p></footer>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Request Forms | Super Admin</title>
+  <style>
+    :root {
+      --primary: #2563eb; --primary-light: #dbeafe; --primary-dark: #1d4ed8;
+      --success: #065f46; --success-light: #d1fae5;
+      --danger: #991b1b; --danger-light: #fee2e2;
+      --warning: #92400e; --warning-light: #fef3c7;
+      --gray-50: #f8fafc; --gray-100: #f1f5f9; --gray-200: #e5e7eb;
+      --gray-400: #94a3b8; --gray-500: #64748b; --gray-700: #374151; --gray-900: #1e293b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Segoe UI", sans-serif; background: var(--gray-100); }
+    .sa-layout { display: flex; min-height: 100vh; }
+
+    /* Sidebar */
+    .sa-sidebar { width: 240px; flex-shrink: 0; background: #fff; border-right: 1px solid var(--gray-200); position: sticky; top: 0; height: 100vh; overflow-y: auto; display: flex; flex-direction: column; }
+    .sb-brand { display: flex; align-items: center; gap: 0.5rem; padding: 1.25rem 1rem; border-bottom: 1px solid var(--gray-200); font-weight: 800; font-size: 0.95rem; color: var(--primary); text-decoration: none; }
+    .sb-user { display: flex; align-items: center; gap: 0.65rem; padding: 1rem; border-bottom: 1px solid var(--gray-100); }
+    .sb-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--primary); color: #fff; font-size: 0.8rem; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+    .sb-name { font-size: 0.85rem; font-weight: 600; color: var(--gray-900); }
+    .sb-role { font-size: 0.7rem; color: var(--gray-500); }
+    .sb-section { padding: 0 0.5rem; margin-top: 0.5rem; }
+    .sb-section-header { display: flex; align-items: center; justify-content: space-between; padding: 0.35rem 0.5rem; cursor: pointer; user-select: none; border-radius: 0.375rem; }
+    .sb-section-header:hover { background: var(--gray-50); }
+    .sb-label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--gray-400); }
+    .sb-chevron { font-size: 0.6rem; color: var(--gray-400); transition: transform 0.2s; }
+    .sb-section.collapsed .sb-chevron { transform: rotate(-90deg); }
+    .sb-section.collapsed .sb-links { display: none; }
+    .sb-links { display: flex; flex-direction: column; gap: 1px; padding: 0.25rem 0; }
+    .sb-link { display: flex; align-items: center; gap: 0.6rem; padding: 0.5rem 0.75rem; border-radius: 0.5rem; text-decoration: none; font-size: 0.875rem; color: var(--gray-700); }
+    .sb-link:hover { background: var(--gray-100); }
+    .sb-link.active { background: var(--primary-light); color: var(--primary); font-weight: 600; }
+    .sb-link svg { width: 15px; height: 15px; opacity: 0.7; }
+    .sb-divider { border: none; border-top: 1px solid var(--gray-100); margin: 0.5rem; }
+    .sb-logout { margin-top: auto; padding: 0.75rem 0.5rem; border-top: 1px solid var(--gray-200); }
+    .sb-logout-btn { width: 100%; padding: 0.5rem; background: var(--danger-light); color: var(--danger); border: 1px solid #fecaca; border-radius: 0.5rem; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
+
+    /* Main */
+    .sa-body { flex: 1; display: flex; flex-direction: column; }
+    .sa-main { flex: 1; padding: 2rem; max-width: 1200px; width: 100%; margin: 0 auto; }
+    .sa-footer { background: var(--gray-50); border-top: 1px solid var(--gray-200); padding: 1rem; text-align: center; color: var(--gray-500); font-size: 0.85rem; }
+    .page-hdr { margin-bottom: 1.75rem; }
+    .page-hdr h1 { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700; color: var(--gray-900); }
+    .page-hdr p { color: var(--gray-500); font-size: 0.95rem; }
+
+    /* Buttons */
+    .btn { padding: 0.4rem 0.85rem; border-radius: 0.375rem; font-size: 0.82rem; font-weight: 600; cursor: pointer; border: 1.5px solid; display: inline-flex; align-items: center; gap: 0.35rem; }
+    .btn-primary { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-success { background: var(--success-light); color: var(--success); border-color: #a7f3d0; }
+    .btn-edit { background: #f3f4f6; color: var(--gray-700); border-color: var(--gray-200); }
+    .btn-danger { background: var(--danger-light); color: var(--danger); border-color: #fecaca; }
+    .btn-warning { background: var(--warning-light); color: var(--warning); border-color: #fde68a; }
+
+    /* Toolbar */
+    .toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem; }
+
+    /* Forms grid */
+    .forms-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1.25rem; }
+    .form-card {
+      background: #fff; border: 1px solid var(--gray-200); border-radius: 0.75rem;
+      overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+      transition: box-shadow 0.2s;
+    }
+    .form-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .form-card-header {
+      padding: 1rem 1.25rem 0.75rem;
+      border-bottom: 1px solid var(--gray-100);
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 0.5rem;
+    }
+    .form-card-title { font-size: 0.95rem; font-weight: 700; color: var(--gray-900); margin-bottom: 0.2rem; }
+    .form-card-sub { font-size: 0.78rem; color: var(--gray-500); }
+    .status-badge { display: inline-flex; padding: 0.15rem 0.55rem; border-radius: 9999px; font-size: 0.68rem; font-weight: 700; flex-shrink: 0; }
+    .badge-active { background: var(--success-light); color: var(--success); }
+    .badge-disabled { background: var(--danger-light); color: var(--danger); }
+    .form-card-body { padding: 0.75rem 1.25rem; }
+    .fee-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
+    .fee-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: var(--gray-400); }
+    .fee-value { font-size: 1rem; font-weight: 700; color: var(--gray-900); }
+    .fee-free { color: var(--success); }
+
+    /* Requirements list */
+    .req-section { margin-bottom: 0.75rem; }
+    .req-section-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: var(--gray-400); margin-bottom: 0.4rem; }
+    .req-list { display: flex; flex-direction: column; gap: 0.3rem; }
+    .req-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: var(--gray-700); }
+    .req-item input[type="checkbox"] { width: 14px; height: 14px; accent-color: var(--primary); cursor: default; }
+    .req-item.checked { color: var(--gray-900); font-weight: 500; }
+
+    /* Purpose tags */
+    .purpose-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.4rem; }
+    .purpose-tag { background: var(--primary-light); color: var(--primary); font-size: 0.7rem; font-weight: 600; padding: 0.15rem 0.5rem; border-radius: 9999px; }
+
+    .form-card-actions { padding: 0.75rem 1.25rem; border-top: 1px solid var(--gray-100); display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+    /* Modal */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 1000; align-items: center; justify-content: center; padding: 1rem; }
+    .modal-overlay.open { display: flex; }
+    .modal-box { background: #fff; border-radius: 0.75rem; box-shadow: 0 20px 60px rgba(0,0,0,0.2); width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; }
+    .modal-hdr { display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--gray-200); }
+    .modal-hdr h3 { font-size: 1.05rem; font-weight: 700; color: var(--gray-900); }
+    .modal-close { background: none; border: none; font-size: 1.4rem; color: var(--gray-400); cursor: pointer; line-height: 1; }
+    .modal-body { padding: 1.5rem; }
+    .modal-footer { padding: 1rem 1.5rem; border-top: 1px solid var(--gray-200); display: flex; gap: 0.75rem; justify-content: flex-end; }
+
+    /* Form fields in modal */
+    .field { margin-bottom: 1rem; }
+    .field label { display: block; font-size: 0.78rem; font-weight: 700; color: var(--gray-700); margin-bottom: 0.3rem; text-transform: uppercase; letter-spacing: 0.3px; }
+    .field input, .field select, .field textarea { width: 100%; padding: 0.5rem 0.65rem; border: 1.5px solid var(--gray-200); border-radius: 0.375rem; font-size: 0.875rem; font-family: inherit; }
+    .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--primary); }
+    .field textarea { height: 70px; resize: vertical; }
+    .field-hint { font-size: 0.72rem; color: var(--gray-400); margin-top: 0.25rem; }
+
+    /* Checkbox group in modal */
+    .checkbox-group { display: flex; flex-direction: column; gap: 0.5rem; max-height: 200px; overflow-y: auto; padding: 0.5rem; border: 1.5px solid var(--gray-200); border-radius: 0.375rem; }
+    .checkbox-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--gray-700); }
+    .checkbox-item input { width: 15px; height: 15px; accent-color: var(--primary); }
+
+    /* Add form */
+    .add-card { background: #fff; border: 2px dashed var(--gray-200); border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 1.5rem; display: none; }
+    .add-card.open { display: block; }
+    .add-card h3 { font-size: 1rem; font-weight: 700; color: var(--gray-900); margin-bottom: 1.25rem; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    @media (max-width: 768px) {
+      .sa-layout { flex-direction: column; }
+      .sa-sidebar { width: 100%; height: auto; position: relative; }
+      .forms-grid { grid-template-columns: 1fr; }
+      .field-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="sa-layout">
+  <aside class="sa-sidebar">
+    <a href="superadmin-dashboard.html" class="sb-brand">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+      Barangay E-Request
+    </a>
+    <div class="sb-user">
+      <div class="sb-avatar" id="sb-avatar">SA</div>
+      <div><div class="sb-name" id="sb-name">Loading...</div><div class="sb-role">Super Admin</div></div>
+    </div>
+    <div class="sb-section" id="sec-sa">
+      <div class="sb-section-header" onclick="toggleSection('sec-sa')"><span class="sb-label">Super Admin</span><span class="sb-chevron">▼</span></div>
+      <div class="sb-links">
+        <a href="superadmin-dashboard.html" class="sb-link">Dashboard</a>
+        <a href="superadmin-requests.html" class="sb-link">Requests</a>
+        <a href="superadmin-blotter.html" class="sb-link">Blotter & Complaints</a>
+        <a href="superadmin-users.html" class="sb-link">Users</a>
+        <a href="manage-admins.html" class="sb-link">Manage Admins</a>
+        <a href="request-forms.html" class="sb-link active">Request Forms</a>
+        <a href="system-logs.html" class="sb-link">System Logs</a>
+        <a href="superadmin-reports.html" class="sb-link">Reports</a>
+        <a href="superadmin-settings.html" class="sb-link">Settings</a>
       </div>
     </div>
-    <script src="../js/script.js"></script>
-    <script>
-      let settings = {};
-      document.addEventListener("DOMContentLoaded", function () {
-        const currentAdmin = getCurrentUser();
-        if (!currentAdmin || (currentAdmin.roles || [])[0] !== "super_admin") {
-          location.href = "../auth/login.html";
-          return;
-        }
-        document.getElementById("footer-year").textContent =
-          "© " + new Date().getFullYear() + " Barangay Records System.";
-        document.getElementById("sb-name").textContent =
-          currentAdmin.firstName || currentAdmin.fullName;
-        document.getElementById("sb-avatar").textContent = (
-          currentAdmin.firstName || "SA"
-        )
-          .split(" ")
-          .map((n) => n[0])
-          .join("")
-          .substring(0, 2)
-          .toUpperCase();
-        settings = getData(STORAGE_KEYS.SETTINGS) || {};
-        if (!settings.requestTypes) settings.requestTypes = [];
-        if (settings.requestTypes.length === 0) {
-          settings.requestTypes = [
-            {
-              id: "rt_1",
-              name: "Barangay Clearance",
-              description: "Official clearance certificate",
-              fee: 50,
-              enabled: true,
-            },
-            {
-              id: "rt_2",
-              name: "Certificate of Residency",
-              description: "Proof of residency",
-              fee: 50,
-              enabled: true,
-            },
-            {
-              id: "rt_3",
-              name: "Business Permit",
-              description: "Business registration",
-              fee: 100,
-              enabled: true,
-            },
-          ];
-          setData(STORAGE_KEYS.SETTINGS, settings);
-        }
-        renderTable();
-      });
-      function renderTable() {
-        const tbody = document.getElementById("typesTable");
-        tbody.innerHTML = settings.requestTypes.length
-          ? settings.requestTypes
-              .map(
-                (t) =>
-                  "<tr><td>" +
-                  t.name +
-                  "</td><td>" +
-                  (t.description || "-") +
-                  "</td><td>PHP " +
-                  (t.fee || 0) +
-                  "</td><td>" +
-                  (t.enabled
-                    ? '<span style="color:#065f46;font-weight:600">Active</span>'
-                    : '<span style="color:#991b1b;font-weight:600">Disabled</span>') +
-                  '</td><td><button class="btn btn-edit" onclick="editType(\'' +
-                  t.id +
-                  '\')">Edit</button> <button class="btn btn-' +
-                  (t.enabled ? "delete" : "add") +
-                  '" onclick="toggleType(\'' +
-                  t.id +
-                  "')\">" +
-                  (t.enabled ? "Disable" : "Enable") +
-                  '</button> <button class="btn btn-delete" onclick="deleteType(\'' +
-                  t.id +
-                  "')\">Delete</button></td></tr>",
-              )
-              .join("")
-          : '<tr><td colspan="5" style="text-align:center;color:#94a3b8;">No request types found</td></tr>';
-      }
-      window.toggleSection = function (id) {
-        document.getElementById(id).classList.toggle("collapsed");
-      };
-      window.doLogout = function () {
-        setCurrentUser(null);
-        location.href = "../auth/login.html";
-      };
-      window.saveNewType = function () {
-        const name = document.getElementById("newTypeName").value.trim();
-        if (!name) {
-          alert("Name is required");
-          return;
-        }
-        const newType = {
-          id: "rt_" + Date.now(),
-          name: name,
-          description: document.getElementById("newTypeDesc").value,
-          fee: parseFloat(document.getElementById("newTypeFee").value) || 0,
-          enabled: true,
-        };
-        settings.requestTypes.push(newType);
-        setData(STORAGE_KEYS.SETTINGS, settings);
-        logAction(
-          currentAdmin.id,
-          "super_admin",
-          "Added request type: " + name,
-        );
-        document.getElementById("addForm").style.display = "none";
-        document.getElementById("newTypeName").value = "";
-        document.getElementById("newTypeDesc").value = "";
-        renderTable();
-      };
-      window.toggleType = function (id) {
-        const type = settings.requestTypes.find((t) => t.id === id);
-        if (type) {
-          type.enabled = !type.enabled;
-          setData(STORAGE_KEYS.SETTINGS, settings);
-          logAction(
-            currentAdmin.id,
-            "super_admin",
-            (type.enabled ? "Enabled" : "Disabled") +
-              " request type: " +
-              type.name,
-          );
-          renderTable();
-        }
-      };
-      window.deleteType = function (id) {
-        if (!confirm("Delete this request type?")) return;
-        const type = settings.requestTypes.find((t) => t.id === id);
-        settings.requestTypes = settings.requestTypes.filter(
-          (t) => t.id !== id,
-        );
-        setData(STORAGE_KEYS.SETTINGS, settings);
-        logAction(
-          currentAdmin.id,
-          "super_admin",
-          "Deleted request type: " + (type ? type.name : id),
-        );
-        renderTable();
-      };
-      window.editType = function (id) {
-        alert("Edit functionality - would open edit form for: " + id);
-      };
-    </script>
-  </body>
+    <hr class="sb-divider" />
+    <div class="sb-section" id="sec-user">
+      <div class="sb-section-header" onclick="toggleSection('sec-user')"><span class="sb-label">My User Area</span><span class="sb-chevron">▼</span></div>
+      <div class="sb-links">
+        <a href="sa-dashboard.html" class="sb-link">My Dashboard</a>
+        <a href="sa-new-request.html" class="sb-link">New Request</a>
+        <a href="sa-my-requests.html" class="sb-link">My Requests</a>
+        <a href="sa-blotter.html" class="sb-link">Blotter & Complaint</a>
+        <a href="superadmin-profile.html" class="sb-link">My Profile</a>
+      </div>
+    </div>
+    <div class="sb-logout"><button class="sb-logout-btn" onclick="doLogout()">Logout</button></div>
+  </aside>
+
+  <div class="sa-body">
+    <main class="sa-main">
+      <div class="page-hdr">
+        <h1>Request Forms</h1>
+        <p>Manage all document request types, their requirements, fees, and availability.</p>
+      </div>
+
+      <div class="toolbar">
+        <span id="formCount" style="font-size:0.875rem;color:var(--gray-500);"></span>
+        <button class="btn btn-primary" onclick="openAddForm()">+ Add New Form</button>
+      </div>
+
+      <!-- Add new form card -->
+      <div class="add-card" id="addCard">
+        <h3>Add New Request Form</h3>
+        <div class="field-row">
+          <div class="field">
+            <label>Form Name *</label>
+            <input type="text" id="newName" placeholder="e.g. Barangay Clearance" />
+          </div>
+          <div class="field">
+            <label>Fee (PHP)</label>
+            <input type="number" id="newFee" value="50" min="0" />
+          </div>
+        </div>
+        <div class="field">
+          <label>Description</label>
+          <textarea id="newDesc" placeholder="What is this form for?"></textarea>
+        </div>
+        <div class="field">
+          <label>Purpose Options (comma-separated)</label>
+          <input type="text" id="newPurposes" placeholder="e.g. Employment, School, Government" />
+        </div>
+        <div class="field">
+          <label>Requirements (one per line — check the ones that are required)</label>
+          <div class="checkbox-group" id="newReqList">
+            <!-- will be populated -->
+          </div>
+          <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
+            <input type="text" id="newReqInput" placeholder="Add custom requirement..." style="flex:1;padding:0.4rem 0.6rem;border:1.5px solid var(--gray-200);border-radius:0.375rem;font-size:0.85rem;" />
+            <button class="btn btn-edit" onclick="addCustomReq()">Add</button>
+          </div>
+        </div>
+        <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
+          <button class="btn btn-success" onclick="saveNewForm()">Save Form</button>
+          <button class="btn btn-edit" onclick="closeAddForm()">Cancel</button>
+        </div>
+      </div>
+
+      <div class="forms-grid" id="formsGrid">
+        <div style="text-align:center;color:var(--gray-400);padding:2rem;grid-column:1/-1;">Loading...</div>
+      </div>
+    </main>
+    <footer class="sa-footer"><p id="footer-year"></p></footer>
+  </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal-box">
+    <div class="modal-hdr">
+      <h3>Edit Request Form</h3>
+      <button class="modal-close" onclick="closeModal('editModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="editId" />
+      <div class="field-row">
+        <div class="field">
+          <label>Form Name *</label>
+          <input type="text" id="editName" />
+        </div>
+        <div class="field">
+          <label>Fee (PHP)</label>
+          <input type="number" id="editFee" min="0" />
+        </div>
+      </div>
+      <div class="field">
+        <label>Description</label>
+        <textarea id="editDesc"></textarea>
+      </div>
+      <div class="field">
+        <label>Purpose Options (comma-separated)</label>
+        <input type="text" id="editPurposes" />
+      </div>
+      <div class="field">
+        <label>Requirements</label>
+        <div class="checkbox-group" id="editReqList"></div>
+        <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
+          <input type="text" id="editReqInput" placeholder="Add requirement..." style="flex:1;padding:0.4rem 0.6rem;border:1.5px solid var(--gray-200);border-radius:0.375rem;font-size:0.85rem;" />
+          <button class="btn btn-edit" onclick="addEditReq()">Add</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-edit" onclick="closeModal('editModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEdit()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<script src="../js/script.js"></script>
+<script>
+// ── All form definitions pulled from request.js SERVICE_TYPES + blotter/complaint ──
+const DEFAULT_FORMS = [
+  {
+    id: 'rf_clearance', name: 'Barangay Clearance', typeKey: 'clearance',
+    description: 'Official clearance for employment, permits, and legal transactions.',
+    fee: 50, enabled: true,
+    purposes: ['Employment', 'School', 'Business', 'Government', 'Travel', 'Banking', 'Other'],
+    requirements: [
+      { label: 'Valid Government ID', required: true },
+      { label: 'Proof of Residency', required: true },
+      { label: 'Completed Application Form', required: true },
+      { label: 'Purpose Letter / Certificate', required: false },
+      { label: '1x1 or 2x2 Photo', required: false },
+    ]
+  },
+  {
+    id: 'rf_id', name: 'Barangay ID', typeKey: 'id',
+    description: 'Official barangay identification card for residents.',
+    fee: 50, enabled: true,
+    purposes: [],
+    requirements: [
+      { label: '2x2 Profile Photo', required: true },
+      { label: 'Signature Upload', required: true },
+      { label: 'Valid Government ID', required: true },
+      { label: 'Emergency Contact Information', required: true },
+      { label: 'Blood Type (optional)', required: false },
+      { label: 'Years of Residency Declaration', required: true },
+      { label: 'Proof of Residency', required: true },
+      { label: 'Verified Profile Required', required: true },
+    ]
+  },
+  {
+    id: 'rf_residency', name: 'Certificate of Residency', typeKey: 'residency',
+    description: 'Proof that the applicant is a resident of the barangay.',
+    fee: 50, enabled: true,
+    purposes: ['Employment', 'School', 'Housing', 'Government', 'Bank', 'Other'],
+    requirements: [
+      { label: 'Valid Government ID', required: true },
+      { label: 'Proof of Residency (Utility Bill / Lease)', required: true },
+      { label: 'Completed Application Form', required: true },
+      { label: 'Length of Stay Declaration', required: true },
+    ]
+  },
+  {
+    id: 'rf_indigency', name: 'Certificate of Indigency', typeKey: 'indigency',
+    description: 'For financially disadvantaged residents seeking government assistance.',
+    fee: 0, enabled: true,
+    purposes: ['Medical Assistance', 'Scholarship', 'Government Aid', 'Housing', 'Financial', 'Other'],
+    requirements: [
+      { label: 'Valid Government ID', required: true },
+      { label: 'Proof of Low Income (DSWD / 4Ps / Utility Bill)', required: true },
+      { label: 'Number of Household Members', required: true },
+      { label: 'Employment Status Declaration', required: true },
+      { label: 'Occupation / Source of Income', required: true },
+    ]
+  },
+  {
+    id: 'rf_goodmoral', name: 'Certificate of Good Moral Character', typeKey: 'good-moral',
+    description: 'Character certification for employment, school, visa, or court use.',
+    fee: 50, enabled: true,
+    purposes: ['Employment', 'School', 'Travel', 'Visa Application', 'Court', 'Other'],
+    requirements: [
+      { label: 'Valid Government ID', required: true },
+      { label: 'No Pending Blotter / Complaint Records', required: true },
+      { label: 'Character Reference (optional)', required: false },
+      { label: 'Reference Contact Number (optional)', required: false },
+    ]
+  },
+  {
+    id: 'rf_business', name: 'Barangay Business Clearance', typeKey: 'business-clearance',
+    description: 'Business permit for new or renewal of business operations.',
+    fee: 30, enabled: true,
+    purposes: ['New Business', 'Renewal', 'Transfer', 'Other'],
+    requirements: [
+      { label: 'Valid Government ID of Owner', required: true },
+      { label: 'Business Name / Trade Name', required: true },
+      { label: 'Business Address', required: true },
+      { label: 'DTI / SEC Registration (for new)', required: false },
+      { label: 'Previous Permit Number (for renewal)', required: false },
+      { label: 'Lease Contract / Proof of Business Location', required: true },
+    ]
+  },
+  {
+    id: 'rf_soloparent', name: 'Certificate of Solo Parent', typeKey: 'solo-parent',
+    description: 'For solo parents seeking financial or government assistance. Requires interview.',
+    fee: 0, enabled: true,
+    purposes: ['Financial Assistance', 'Scholarship', 'Medical', 'Housing', 'Employment', 'Other'],
+    requirements: [
+      { label: 'Valid Government ID', required: true },
+      { label: 'Birth Certificate of Child/ren', required: true },
+      { label: 'Number of Dependents', required: true },
+      { label: 'Marital Status Documents', required: true },
+      { label: 'Reason / Situation Letter', required: true },
+      { label: 'Scheduled Interview with Barangay Official', required: true },
+    ]
+  },
+  {
+    id: 'rf_senior', name: 'Certificate of Senior Citizen', typeKey: 'senior-citizen',
+    description: 'For residents aged 60 and above for senior citizen benefits.',
+    fee: 0, enabled: true,
+    purposes: ['Senior Benefits', 'Medical Assistance', 'Government ID', 'Other'],
+    requirements: [
+      { label: 'Valid Government ID', required: true },
+      { label: 'Birth Certificate or PSA Document', required: true },
+      { label: 'Age Verification (60+ years old)', required: true },
+      { label: '1x1 or 2x2 Photo', required: false },
+    ]
+  },
+  {
+    id: 'rf_blotter', name: 'Blotter Form', typeKey: 'blotter',
+    description: 'Record an incident in the barangay blotter. No legal action required.',
+    fee: 0, enabled: true,
+    purposes: ['Incident Recording', 'Documentation'],
+    requirements: [
+      { label: 'Valid Government ID of Complainant', required: true },
+      { label: 'Incident Description / Narration', required: true },
+      { label: 'Date, Time, and Location of Incident', required: true },
+      { label: 'Names of Persons Involved (if known)', required: false },
+      { label: 'Witness Information (if any)', required: false },
+    ]
+  },
+  {
+    id: 'rf_complaint', name: 'Complaint Form', typeKey: 'complaint',
+    description: 'File a formal complaint to initiate barangay mediation proceedings.',
+    fee: 0, enabled: true,
+    purposes: ['Mediation', 'Dispute Resolution', 'Legal Action'],
+    requirements: [
+      { label: 'Valid Government ID of Complainant', required: true },
+      { label: 'Full Name of Respondent', required: true },
+      { label: 'Detailed Description of Complaint', required: true },
+      { label: 'Date, Time, and Location of Incident', required: true },
+      { label: 'Supporting Evidence / Documents (optional)', required: false },
+      { label: 'Witness Information (if any)', required: false },
+    ]
+  },
+];
+
+const ALL_POSSIBLE_REQUIREMENTS = [
+  'Valid Government ID',
+  'Proof of Residency',
+  'Completed Application Form',
+  '1x1 or 2x2 Photo',
+  '2x2 Profile Photo',
+  'Signature Upload',
+  'Emergency Contact Information',
+  'Blood Type',
+  'Years of Residency Declaration',
+  'Length of Stay Declaration',
+  'Proof of Low Income',
+  'Number of Household Members',
+  'Employment Status Declaration',
+  'Occupation / Source of Income',
+  'No Pending Blotter Records',
+  'Character Reference',
+  'Business Name / Trade Name',
+  'Business Address',
+  'DTI / SEC Registration',
+  'Previous Permit Number',
+  'Lease Contract',
+  'Birth Certificate',
+  'Number of Dependents',
+  'Marital Status Documents',
+  'Age Verification (60+)',
+  'Incident Description / Narration',
+  'Date, Time, and Location of Incident',
+  'Names of Persons Involved',
+  'Full Name of Respondent',
+  'Supporting Evidence / Documents',
+  'Witness Information',
+  'Purpose Letter / Certificate',
+  'Scheduled Interview',
+];
+
+let forms = [];
+let currentAdmin = null;
+
+window.toggleSection = function(id) { document.getElementById(id).classList.toggle('collapsed'); };
+window.doLogout = function() { setCurrentUser(null); location.href = '../auth/login.html'; };
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+document.addEventListener('DOMContentLoaded', function() {
+  currentAdmin = getCurrentUser();
+  if (!currentAdmin || (currentAdmin.roles || [])[0] !== 'super_admin') {
+    location.href = '../auth/login.html'; return;
+  }
+
+  document.getElementById('footer-year').textContent = '© ' + new Date().getFullYear() + ' Barangay Records System.';
+  document.getElementById('sb-name').textContent = currentAdmin.firstName || currentAdmin.fullName;
+  document.getElementById('sb-avatar').textContent = (currentAdmin.firstName || 'SA').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+
+  // Load or seed forms
+  const saved = getData('barangay_request_forms');
+  forms = (saved && saved.length) ? saved : DEFAULT_FORMS;
+  if (!saved || !saved.length) setData('barangay_request_forms', forms);
+
+  renderForms();
+  populateNewReqCheckboxes();
+});
+
+function populateNewReqCheckboxes() {
+  const list = document.getElementById('newReqList');
+  list.innerHTML = ALL_POSSIBLE_REQUIREMENTS.map(r => `
+    <label class="checkbox-item">
+      <input type="checkbox" value="${r}" /> ${r}
+    </label>
+  `).join('');
+}
+
+function addCustomReq() {
+  const input = document.getElementById('newReqInput');
+  const val = input.value.trim();
+  if (!val) return;
+  const list = document.getElementById('newReqList');
+  const item = document.createElement('label');
+  item.className = 'checkbox-item';
+  item.innerHTML = `<input type="checkbox" value="${val}" checked /> ${val}`;
+  list.appendChild(item);
+  input.value = '';
+}
+
+function addEditReq() {
+  const input = document.getElementById('editReqInput');
+  const val = input.value.trim();
+  if (!val) return;
+  const list = document.getElementById('editReqList');
+  const item = document.createElement('label');
+  item.className = 'checkbox-item';
+  item.innerHTML = `<input type="checkbox" value="${val}" checked /> ${val}`;
+  list.appendChild(item);
+  input.value = '';
+}
+
+function renderForms() {
+  const grid = document.getElementById('formsGrid');
+  document.getElementById('formCount').textContent = forms.length + ' form(s) total';
+
+  if (!forms.length) {
+    grid.innerHTML = '<div style="text-align:center;color:var(--gray-400);padding:3rem;grid-column:1/-1;">No forms yet. Click "+ Add New Form" to create one.</div>';
+    return;
+  }
+
+  grid.innerHTML = forms.map(f => {
+    const freeLabel = f.fee === 0 ? '<span class="fee-free">FREE</span>' : '₱' + f.fee.toFixed(2);
+    const reqHtml = (f.requirements || []).map(r => `
+      <div class="req-item ${r.required ? 'checked' : ''}">
+        <input type="checkbox" ${r.required ? 'checked' : ''} disabled />
+        ${r.label}
+      </div>
+    `).join('');
+    const purposeHtml = (f.purposes || []).length
+      ? '<div class="req-section"><div class="req-section-label">Accepted Purposes</div><div class="purpose-tags">' +
+        f.purposes.map(p => `<span class="purpose-tag">${p}</span>`).join('') +
+        '</div></div>'
+      : '';
+
+    return `
+      <div class="form-card" id="fcard_${f.id}">
+        <div class="form-card-header">
+          <div>
+            <div class="form-card-title">${f.name}</div>
+            <div class="form-card-sub">${f.description || ''}</div>
+          </div>
+          <span class="status-badge ${f.enabled ? 'badge-active' : 'badge-disabled'}">${f.enabled ? 'Active' : 'Disabled'}</span>
+        </div>
+        <div class="form-card-body">
+          <div class="fee-row">
+            <span class="fee-label">Service Fee</span>
+            <span class="fee-value">${freeLabel}</span>
+          </div>
+          ${purposeHtml}
+          <div class="req-section">
+            <div class="req-section-label">Requirements (✓ = required)</div>
+            <div class="req-list">${reqHtml || '<span style="color:var(--gray-400);font-size:0.8rem;">No requirements set</span>'}</div>
+          </div>
+        </div>
+        <div class="form-card-actions">
+          <button class="btn btn-edit" onclick="openEdit('${f.id}')">✏ Edit</button>
+          <button class="btn ${f.enabled ? 'btn-warning' : 'btn-success'}" onclick="toggleForm('${f.id}')">${f.enabled ? '⊘ Disable' : '✓ Enable'}</button>
+          <button class="btn btn-danger" onclick="deleteForm('${f.id}')">🗑 Delete</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function openAddForm() {
+  document.getElementById('addCard').classList.add('open');
+  document.getElementById('newName').focus();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function closeAddForm() {
+  document.getElementById('addCard').classList.remove('open');
+  document.getElementById('newName').value = '';
+  document.getElementById('newDesc').value = '';
+  document.getElementById('newFee').value = '50';
+  document.getElementById('newPurposes').value = '';
+  populateNewReqCheckboxes();
+}
+
+function saveNewForm() {
+  const name = document.getElementById('newName').value.trim();
+  if (!name) { alert('Form name is required.'); return; }
+
+  const checkedReqs = [...document.querySelectorAll('#newReqList input[type="checkbox"]:checked')];
+  const allReqs = [...document.querySelectorAll('#newReqList input[type="checkbox"]')];
+
+  const requirements = allReqs.map(cb => ({
+    label: cb.value,
+    required: cb.checked
+  })).filter((r, i, arr) => arr.findIndex(x => x.label === r.label) === i);
+
+  const purposes = document.getElementById('newPurposes').value
+    .split(',').map(s => s.trim()).filter(Boolean);
+
+  const newForm = {
+    id: 'rf_' + Date.now(),
+    name,
+    typeKey: name.toLowerCase().replace(/\s+/g, '-'),
+    description: document.getElementById('newDesc').value,
+    fee: parseFloat(document.getElementById('newFee').value) || 0,
+    enabled: true,
+    purposes,
+    requirements
+  };
+
+  forms.push(newForm);
+  setData('barangay_request_forms', forms);
+  logAction(currentAdmin.id, 'super_admin', 'Added request form: ' + name);
+  closeAddForm();
+  renderForms();
+}
+
+function openEdit(id) {
+  const f = forms.find(x => x.id === id);
+  if (!f) return;
+
+  document.getElementById('editId').value = id;
+  document.getElementById('editName').value = f.name;
+  document.getElementById('editFee').value = f.fee;
+  document.getElementById('editDesc').value = f.description || '';
+  document.getElementById('editPurposes').value = (f.purposes || []).join(', ');
+
+  // Build requirements checkboxes — merge all known + form's own
+  const allReqs = [...new Set([
+    ...ALL_POSSIBLE_REQUIREMENTS,
+    ...(f.requirements || []).map(r => r.label)
+  ])];
+
+  document.getElementById('editReqList').innerHTML = allReqs.map(r => {
+    const existing = (f.requirements || []).find(x => x.label === r);
+    const checked = existing ? existing.required : false;
+    return `<label class="checkbox-item"><input type="checkbox" value="${r}" ${checked ? 'checked' : ''} /> ${r}</label>`;
+  }).join('');
+
+  document.getElementById('editModal').classList.add('open');
+}
+
+function saveEdit() {
+  const id = document.getElementById('editId').value;
+  const f = forms.find(x => x.id === id);
+  if (!f) return;
+
+  f.name = document.getElementById('editName').value.trim();
+  f.fee = parseFloat(document.getElementById('editFee').value) || 0;
+  f.description = document.getElementById('editDesc').value;
+  f.purposes = document.getElementById('editPurposes').value.split(',').map(s => s.trim()).filter(Boolean);
+
+  const allCbs = document.querySelectorAll('#editReqList input[type="checkbox"]');
+  f.requirements = [...allCbs].map(cb => ({ label: cb.value, required: cb.checked }));
+
+  setData('barangay_request_forms', forms);
+  logAction(currentAdmin.id, 'super_admin', 'Edited request form: ' + f.name);
+  closeModal('editModal');
+  renderForms();
+}
+
+function toggleForm(id) {
+  const f = forms.find(x => x.id === id);
+  if (!f) return;
+  f.enabled = !f.enabled;
+  setData('barangay_request_forms', forms);
+  logAction(currentAdmin.id, 'super_admin', (f.enabled ? 'Enabled' : 'Disabled') + ' form: ' + f.name);
+  renderForms();
+}
+
+function deleteForm(id) {
+  const f = forms.find(x => x.id === id);
+  if (!confirm('Delete "' + (f ? f.name : id) + '"? This cannot be undone.')) return;
+  forms = forms.filter(x => x.id !== id);
+  setData('barangay_request_forms', forms);
+  logAction(currentAdmin.id, 'super_admin', 'Deleted request form: ' + (f ? f.name : id));
+  renderForms();
+}
+</script>
+</body>
 </html>

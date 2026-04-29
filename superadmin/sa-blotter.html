@@ -375,13 +375,16 @@
   <script src="../js/blotter-complaint.js"></script>
   <script>
     window.toggleSection = function(id) {
-      document.getElementById(id).classList.toggle('collapsed');
-    };
-
-    window.doLogout = function() {
-      setCurrentUser(null);
-      location.href = '../auth/login.html';
-    };
+  document.getElementById(id).classList.toggle("collapsed");
+};
+        function closeModal(id) {
+          document.getElementById(id).classList.remove("open");
+        }
+        window.doLogout = function() {
+  logAction(currentAdmin.id, "super_admin", "Logged out");
+  setCurrentUser(null);
+  location.href = "../auth/login.html";
+};
 
     document.addEventListener('DOMContentLoaded', function() {
       var user = getCurrentUser();
