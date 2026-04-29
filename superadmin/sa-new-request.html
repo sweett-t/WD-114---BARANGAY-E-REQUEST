@@ -1,0 +1,669 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Request | Super Admin</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/request.css" />
+  <link rel="stylesheet" href="../css/user-dashboard.css" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0 }
+    body { font-family: 'Segoe UI', sans-serif; background: #f1f5f9 }
+
+    /* ── Layout ── */
+    .layout { display: flex; min-height: 100vh }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: 240px;
+      flex-shrink: 0;
+      background: #fff;
+      border-right: 1px solid #e5e7eb;
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1.25rem 1rem;
+      border-bottom: 1px solid #e5e7eb;
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: #2563eb;
+      text-decoration: none;
+    }
+    .user {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      padding: 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #2563eb;
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .user-name { font-size: 0.85rem; font-weight: 600; color: #1e293b }
+    .user-role { font-size: 0.7rem; color: #64748b }
+    .section { padding: 0 0.5rem; margin-top: 0.5rem }
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.35rem 0.5rem;
+      cursor: pointer;
+      user-select: none;
+      border-radius: 0.375rem;
+    }
+    .section-header:hover { background: #f8fafc }
+    .label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #94a3b8;
+    }
+    .chevron { font-size: 0.6rem; color: #94a3b8; transition: transform 0.2s }
+    .collapsed .chevron { transform: rotate(-90deg) }
+    .collapsed .links { display: none }
+    .links { display: flex; flex-direction: column; gap: 1px; padding: 0.25rem 0 }
+    .link {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.5rem;
+      text-decoration: none;
+      font-size: 0.875rem;
+      color: #374151;
+      transition: background 0.15s, color 0.15s;
+    }
+    .link:hover { background: #f1f5f9; color: #1e293b }
+    .link.active { background: #dbeafe; color: #2563eb; font-weight: 600 }
+    .link svg { width: 15px; height: 15px; flex-shrink: 0; opacity: 0.7 }
+    .divider { border: none; border-top: 1px solid #f1f5f9; margin: 0.5rem }
+    .logout { margin-top: auto; padding: 0.75rem 0.5rem; border-top: 1px solid #e5e7eb }
+    .logout-btn {
+      width: 100%;
+      padding: 0.5rem;
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+      border-radius: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .logout-btn:hover { background: #fecaca }
+
+    /* ── Main area ── */
+    .main-area {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1.5rem;
+    }
+
+    /* ── Content wrapper (matches user page width) ── */
+    main {
+      width: 100%;
+      max-width: 720px;
+    }
+
+    /* ── Footer ── */
+    footer {
+      width: 100%;
+      max-width: 720px;
+      margin-top: 2rem;
+      padding-top: 1.25rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: #6b7280;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .layout { flex-direction: column }
+      .sidebar { width: 100%; height: auto; position: relative }
+      .main-area { padding: 1.25rem 1rem }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+
+    <!-- ── Sidebar ── -->
+    <aside class="sidebar">
+      <a href="superadmin-dashboard.html" class="brand">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        Barangay E-Request
+      </a>
+
+      <div class="user">
+        <div class="avatar" id="avatar">SA</div>
+        <div>
+          <div class="user-name" id="name">Loading...</div>
+          <div class="user-role">Super Admin</div>
+        </div>
+      </div>
+
+      <!-- Super Admin section -->
+      <div class="section" id="sec-sa">
+        <div class="section-header" onclick="toggleSection('sec-sa')">
+          <span class="label">Super Admin</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="links">
+          <a href="superadmin-dashboard.html" class="link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            Dashboard
+          </a>
+          <a href="superadmin-requests.html" class="link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            All Requests
+          </a>
+          <a href="superadmin-blotter.html" class="link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Blotter
+          </a>
+          <a href="superadmin-users.html" class="link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            Users
+          </a>
+          <a href="manage-admins.html" class="link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
+            Manage Admins
+          </a>
+          <a href="request-forms.html" class="link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/></svg>
+            Request Forms
+          </a>
+          <a href="system-logs.html" class="link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12"/></svg>
+            System Logs
+          </a>
+          <a href="superadmin-reports.html" class="link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/></svg>
+            Reports
+          </a>
+          <a href="superadmin-settings.html" class="link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg>
+            Settings
+          </a>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- My User Area section -->
+      <div class="section" id="sec-user">
+        <div class="section-header" onclick="toggleSection('sec-user')">
+          <span class="label">My User Area</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="links">
+          <a href="sa-dashboard.html" class="link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/></svg>
+            Dashboard
+          </a>
+          <a href="sa-new-request.html" class="link active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            New Request
+          </a>
+          <a href="sa-my-requests.html" class="link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12"/></svg>
+            My Requests
+          </a>
+          <a href="sa-blotter.html" class="link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Blotter
+          </a>
+          <a href="superadmin-profile.html" class="link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Profile
+          </a>
+        </div>
+      </div>
+
+      <div class="logout">
+        <button class="logout-btn" onclick="doLogout()">Logout</button>
+      </div>
+    </aside>
+
+    <!-- ── Right content area ── -->
+    <div class="main-area">
+      <main>
+<span id="user-nav-name" style="display:none"></span>
+<div id="user-avatar" style="display:none"></div>
+
+        <!-- STEP 1: SELECT SERVICES -->
+        <section id="step-1" class="request-step active">
+          <div class="page-header">
+            <h1>New Request</h1>
+            <p>Choose one or more services below. Each request will be processed separately.</p>
+            <p style="font-size: 0.85rem; color: #64748b; margin-top: 0.5rem">
+              <strong>Note:</strong> Solo Parent, Senior Citizen, and PWD services
+              require an interview. Business Clearance requires valid business permits.
+            </p>
+          </div>
+
+          <div class="selection-info">
+            <span id="selection-count">0</span> service(s) selected
+          </div>
+
+          <div class="services-grid selectable" id="services-grid">
+            <div class="service-card" data-type="clearance" data-multi="true" onclick="selectService(this, 'clearance', true)">
+              <span class="service-name">Barangay Clearance</span>
+              <span class="service-subtext">For employment, permits</span>
+              <span class="request-btn">Select</span>
+            </div>
+            <div class="service-card" data-type="id" data-multi="true" onclick="selectService(this, 'id', true)">
+              <span class="service-name">Barangay ID</span>
+              <span class="service-subtext">Official ID card</span>
+              <span class="request-btn">Select</span>
+            </div>
+            <div class="service-card" data-type="residency" data-multi="true" onclick="selectService(this, 'residency', true)">
+              <span class="service-name">Certificate of Residency</span>
+              <span class="service-subtext">Proof of residence</span>
+              <span class="request-btn">Select</span>
+            </div>
+            <div class="service-card" data-type="indigency" data-multi="true" onclick="selectService(this, 'indigency', true)">
+              <span class="service-name">Certificate of Indigency</span>
+              <span class="service-subtext">For financial assistance</span>
+              <span class="request-btn">Select</span>
+            </div>
+            <div class="service-card" data-type="good-moral" data-multi="true" onclick="selectService(this, 'good-moral', true)">
+              <span class="service-name">Certificate of Good Moral Character</span>
+              <span class="service-subtext">Character certification</span>
+              <span class="request-btn">Select</span>
+            </div>
+            <div class="service-card" data-type="business-clearance" data-multi="true" onclick="selectService(this, 'business-clearance', true)">
+              <span class="service-name">Barangay Business Clearance</span>
+              <span class="service-subtext">Business permit</span>
+              <span class="request-btn">Select</span>
+            </div>
+            <div class="service-card" data-type="solo-parent" data-multi="false" onclick="selectService(this, 'solo-parent', false)">
+              <span class="service-name">Certificate of Solo Parent</span>
+              <span class="service-subtext">With interview process</span>
+              <span class="request-btn">Select</span>
+            </div>
+            <div class="service-card" data-type="senior-citizen" data-multi="false" onclick="selectService(this, 'senior-citizen', false)">
+              <span class="service-name">Certificate of Senior Citizen</span>
+              <span class="service-subtext">For senior benefits</span>
+              <span class="request-btn">Select</span>
+            </div>
+          </div>
+
+          <div class="step-actions">
+            <button type="button" id="btn-continue-step1" class="btn btn-primary" disabled onclick="goToStep(2)">
+              Continue with <span id="selected-count">0</span> request(s)
+            </button>
+          </div>
+        </section>
+
+        <!-- STEP 2: CONFIRM INFORMATION -->
+        <section id="step-2" class="request-step hidden">
+          <div class="page-header">
+            <h1>Confirm Your Information</h1>
+            <p>Review and confirm your details for all selected requests.</p>
+          </div>
+
+          <div class="info-confirm-card">
+            <div class="toggle-switch">
+              <button type="button" id="btn-use-profile" class="toggle-btn active">Auto-fill from Profile</button>
+              <button type="button" id="btn-request-other" class="toggle-btn">Request for Other</button>
+            </div>
+
+            <form id="info-form" class="info-form">
+              <div class="field-row cols-2">
+                <div class="form-field">
+                  <label for="req-last-name">Last Name <span class="required">*</span></label>
+                  <input type="text" id="req-last-name" name="last_name" required />
+                </div>
+                <div class="form-field">
+                  <label for="req-first-name">First Name <span class="required">*</span></label>
+                  <input type="text" id="req-first-name" name="first_name" required />
+                </div>
+              </div>
+              <div class="field-row cols-2">
+                <div class="form-field">
+                  <label for="req-middle-name">Middle Name</label>
+                  <input type="text" id="req-middle-name" name="middle_name" />
+                </div>
+                <div class="form-field">
+                  <label for="req-suffix">Suffix</label>
+                  <select id="req-suffix" name="suffix">
+                    <option value="">None</option>
+                    <option>Jr.</option>
+                    <option>Sr.</option>
+                    <option>II</option>
+                    <option>III</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="address-section">
+                <h3>Address</h3>
+                <div class="field-row cols-2">
+                  <div class="form-field">
+                    <label>Country</label>
+                    <input type="text" value="Philippines" disabled />
+                  </div>
+                  <div class="form-field">
+                    <label>Region</label>
+                    <input type="text" value="Region IX - Zamboanga Region" disabled />
+                  </div>
+                </div>
+                <div class="field-row cols-2">
+                  <div class="form-field">
+                    <label>Province</label>
+                    <input type="text" value="Zamboanga del Sur" disabled />
+                  </div>
+                  <div class="form-field">
+                    <label>City</label>
+                    <input type="text" value="Zamboanga City" disabled />
+                  </div>
+                </div>
+                <div class="field-row cols-2">
+                  <div class="form-field">
+                    <label>Barangay</label>
+                    <input type="text" value="Lunzuran" disabled />
+                  </div>
+                  <div class="form-field">
+                    <label for="req-purok">Purok <span class="required">*</span></label>
+                    <input type="text" id="req-purok" name="purok" required />
+                  </div>
+                </div>
+                <div class="field-row cols-2">
+                  <div class="form-field">
+                    <label for="req-street">Street</label>
+                    <input type="text" id="req-street" name="street" />
+                  </div>
+                  <div class="form-field">
+                    <label for="req-house-number">House Number</label>
+                    <input type="text" id="req-house-number" name="house_number" />
+                  </div>
+                </div>
+                <div class="form-field">
+                  <label for="req-landmark">Landmark</label>
+                  <input type="text" id="req-landmark" name="landmark" placeholder="e.g. Near the church" />
+                </div>
+              </div>
+
+              <div class="field-row cols-2">
+                <div class="form-field">
+                  <label for="req-birthdate">Date of Birth <span class="required">*</span></label>
+                  <input type="date" id="req-birthdate" name="birthdate" required onchange="calcAgeFromDOB(this)" />
+                </div>
+                <div class="form-field">
+                  <label for="req-age">Age</label>
+                  <input type="text" id="req-age" name="age" readonly placeholder="Auto-calculated" />
+                </div>
+              </div>
+              <div class="field-row cols-2">
+                <div class="form-field">
+                  <label for="req-civil-status">Civil Status <span class="required">*</span></label>
+                  <select id="req-civil-status" name="civil_status" required>
+                    <option value="">Select status</option>
+                    <option value="Single">Single</option>
+                    <option value="Married">Married</option>
+                    <option value="Widowed">Widowed</option>
+                    <option value="Separated">Separated</option>
+                    <option value="Divorced">Divorced</option>
+                  </select>
+                </div>
+                <div class="form-field">
+                  <label for="req-gender">Sex / Gender <span class="required">*</span></label>
+                  <select id="req-gender" name="gender" required>
+                    <option value="">Select</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="field-row cols-2">
+                <div class="form-field">
+                  <label for="req-phone">Phone <span class="required">*</span></label>
+                  <input type="tel" id="req-phone" name="phone" required />
+                </div>
+                <div class="form-field">
+                  <label for="req-email">Email</label>
+                  <input type="email" id="req-email" name="email" />
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <div class="step-actions">
+            <button type="button" class="btn btn-secondary" onclick="goToStep(1)">Back</button>
+            <button type="button" class="btn btn-primary" onclick="goToStep(3)">Continue</button>
+          </div>
+        </section>
+
+        <!-- STEP 3: REQUEST DETAILS & PAYMENT -->
+        <section id="step-3" class="request-step hidden">
+          <div class="page-header">
+            <h1>Request Details & Payment</h1>
+            <p>Enter the purpose for each request and select your payment method.</p>
+          </div>
+
+          <div class="request-cards" id="request-cards"></div>
+
+          <!-- Payment Summary -->
+          <div class="payment-summary-section" id="payment-summary-section">
+            <h3>Payment Summary</h3>
+            <div id="payment-items"></div>
+            <div class="payment-total">
+              <span>Total:</span>
+              <span id="payment-total-display">₱0</span>
+            </div>
+          </div>
+
+          <!-- Payment Method -->
+          <div class="payment-method-section" id="payment-method-section" style="display: none">
+            <h3>Select Payment Method</h3>
+            <div class="form-field">
+              <select id="payment-method" onchange="handlePaymentMethodChange()">
+                <option value="">Choose payment method...</option>
+                <option value="cash">Cash (Pay at Barangay Hall)</option>
+                <option value="online">Online Payment (GCash, Maya, QR Ph, Bank Transfer)</option>
+              </select>
+            </div>
+
+            <!-- Online Payment Fields -->
+            <div class="online-payment-fields" id="online-fields" style="display: none">
+              <div class="qr-code-section">
+                <p class="qr-instructions">Scan the QR code below or use the account details to make your payment:</p>
+                <div class="qr-placeholder">
+                  <svg viewBox="0 0 100 100" width="120" height="120">
+                    <rect fill="#1a1a1a" width="100" height="100" />
+                    <rect fill="#fff" x="5" y="5" width="30" height="30" />
+                    <rect fill="#fff" x="65" y="5" width="30" height="30" />
+                    <rect fill="#fff" x="5" y="65" width="30" height="30" />
+                    <rect fill="#1a1a1a" x="10" y="10" width="20" height="20" />
+                    <rect fill="#1a1a1a" x="70" y="10" width="20" height="20" />
+                    <rect fill="#1a1a1a" x="10" y="70" width="20" height="20" />
+                    <rect fill="#fff" x="40" y="5" width="20" height="20" />
+                    <rect fill="#fff" x="40" y="30" width="20" height="20" />
+                    <rect fill="#1a1a1a" x="45" y="10" width="10" height="10" />
+                    <rect fill="#1a1a1a" x="45" y="35" width="10" height="10" />
+                    <rect fill="#fff" x="65" y="40" width="10" height="10" />
+                    <rect fill="#fff" x="80" y="40" width="15" height="15" />
+                    <rect fill="#1a1a1a" x="70" y="45" width="5" height="5" />
+                    <rect fill="#1a1a1a" x="70" y="55" width="5" height="5" />
+                    <rect fill="#fff" x="40" y="65" width="20" height="20" />
+                    <rect fill="#1a1a1a" x="45" y="70" width="10" height="10" />
+                    <rect fill="#fff" x="65" y="65" width="10" height="10" />
+                    <rect fill="#fff" x="80" y="80" width="15" height="15" />
+                    <rect fill="#1a1a1a" x="85" y="85" width="5" height="5" />
+                  </svg>
+                </div>
+                <p class="qr-account"><strong>GCash:</strong> 0912-345-6789</p>
+                <p class="qr-account"><strong>Maya:</strong> 0912-345-6789</p>
+                <p class="qr-account"><strong>BDO:</strong> 1234-5678-9012</p>
+              </div>
+              <div class="form-field">
+                <label>Reference Number <span class="required">*</span></label>
+                <input type="text" id="transaction-id" placeholder="Enter transaction reference number" />
+              </div>
+              <div class="form-field">
+                <label>Payment Screenshot <span class="required">*</span></label>
+                <input type="file" id="payment-screenshot" accept="image/*,.pdf" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Certification -->
+          <div class="certification-section">
+            <label class="checkbox-inline">
+              <input type="checkbox" id="certification-checkbox" />
+              <span>I hereby confirm that the information provided above is true and accurate to the best of my knowledge, and I understand that any false statement may be subject to legal consequences.</span>
+            </label>
+          </div>
+
+          <div class="step-actions">
+            <button type="button" class="btn btn-secondary" onclick="goToStep(2)">Back</button>
+            <button type="button" class="btn btn-primary" onclick="goToStep(4)">Continue to Review</button>
+          </div>
+        </section>
+
+        <!-- STEP 4: REVIEW & SUBMIT -->
+        <section id="step-4" class="request-step hidden">
+          <div class="page-header">
+            <h1>Review & Submit</h1>
+            <p>Review your requests before submitting.</p>
+          </div>
+
+          <div class="review-section">
+            <h3>Applicant Information</h3>
+            <div id="review-info"></div>
+          </div>
+
+          <div class="review-section">
+            <h3>Requested Documents</h3>
+            <div id="review-documents"></div>
+          </div>
+
+          <div class="review-section">
+            <h3>Payment Details</h3>
+            <div id="review-payment"></div>
+          </div>
+
+          <div class="step-actions">
+            <button type="button" class="btn btn-secondary" onclick="goToStep(3)">Back</button>
+            <button type="button" class="btn btn-primary" id="btn-submit-final" onclick="submitRequests()" disabled>
+              Submit Requests
+            </button>
+          </div>
+        </section>
+
+        <!-- SUCCESS -->
+        <section id="step-success" class="request-step hidden">
+          <div class="success-message">
+            <div class="success-icon">✓</div>
+            <h2>Requests Submitted!</h2>
+            <p>Your document requests have been submitted successfully.</p>
+            <p>You can track their status in My Requests.</p>
+            <div class="success-actions">
+              <a href="sa-my-requests.html" class="btn btn-primary">View My Requests</a>
+              <a href="sa-dashboard.html" class="btn btn-secondary">Back to Dashboard</a>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <footer>
+        <p>&copy; <span id="footer-year"></span> Barangay Records System. All rights reserved.</p>
+      </footer>
+    </div><!-- /main-area -->
+
+  </div><!-- /layout -->
+
+  <!-- Notification Modal -->
+  <div class="notification-modal" id="notification-modal" onclick="closeNotificationModal(event)">
+    <div class="notification-panel" onclick="event.stopPropagation()">
+      <div class="notification-panel-header">
+        <h3>Notifications</h3>
+        <div>
+          <button onclick="showMarkAllReadModal()">Mark all read</button>
+          <button onclick="showClearAllModal()" style="margin-left: 0.75rem">Clear all</button>
+        </div>
+      </div>
+      <div class="notification-list" id="notification-list"></div>
+    </div>
+  </div>
+
+  <script src="../js/script.js"></script>
+<script src="../js/request.js"></script>
+  <script>
+    window.toggleSection = function(id) {
+      document.getElementById(id).classList.toggle('collapsed');
+    };
+
+    window.doLogout = function() {
+      setCurrentUser(null);
+      location.href = '../auth/login.html';
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var user = getCurrentUser();
+      if (!user) { location.href = '../auth/login.html'; return; }
+
+      document.getElementById('name').textContent = user.firstName || user.fullName || 'Admin';
+      document.getElementById('avatar').textContent = (user.firstName || user.fullName || 'SA')
+        .split(' ').map(function(n) { return n[0]; }).join('').substring(0, 2).toUpperCase();
+      document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+      if (typeof loadNotificationBadge === 'function') loadNotificationBadge();
+    });
+
+    // Redirect success links to SA equivalents (request.js may set href to user pages)
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof loadNotificationBadge === 'function') loadNotificationBadge();
+    });
+
+    function closeNotificationModal(event) {
+      if (event && event.target !== event.currentTarget) return;
+      document.getElementById('notification-modal').classList.remove('show');
+    }
+
+    function showMarkAllReadModal() {
+      if (typeof markAllNotificationsRead === 'function') {
+        var user = getCurrentUser();
+        if (user) { markAllNotificationsRead(user.id); loadNotificationBadge(); }
+      }
+    }
+
+    function showClearAllModal() {
+      if (typeof clearNotifications === 'function') {
+        var user = getCurrentUser();
+        if (user) { clearNotifications(user.id); loadNotificationBadge(); }
+      }
+    }
+  </script>
+</body>
+</html>

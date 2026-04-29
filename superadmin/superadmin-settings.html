@@ -1,0 +1,748 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Settings | Super Admin</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background: #f1f5f9;
+      }
+      .sa-layout {
+        display: flex;
+        min-height: 100vh;
+      }
+      .sa-sidebar {
+        width: 240px;
+        flex-shrink: 0;
+        background: #ffffff;
+        border-right: 1px solid #e5e7eb;
+        display: flex;
+        flex-direction: column;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow-y: auto;
+      }
+      .sa-body {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+      }
+      .sa-main {
+        flex: 1;
+        padding: 2rem;
+        max-width: 1300px;
+        margin: 0 auto;
+      }
+      .sa-footer {
+        background: #f8fafc;
+        border-top: 1px solid #e5e7eb;
+        padding: 1rem 2rem;
+        text-align: center;
+        font-size: 0.85rem;
+        color: #6b7280;
+      }
+      .sb-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1.25rem 1rem;
+        border-bottom: 1px solid #e5e7eb;
+        font-weight: 800;
+        font-size: 0.95rem;
+        color: #2563eb;
+        text-decoration: none;
+      }
+      .sb-user {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        padding: 1rem;
+        border-bottom: 1px solid #f1f5f9;
+      }
+      .sb-avatar {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: #2563eb;
+        color: #fff;
+        font-size: 0.8rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .sb-name {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #1e293b;
+      }
+      .sb-role {
+        font-size: 0.7rem;
+        color: #64748b;
+      }
+      .sb-section {
+        padding: 0 0.5rem;
+        margin-top: 0.5rem;
+      }
+      .sb-section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.35rem 0.5rem;
+        cursor: pointer;
+        user-select: none;
+        border-radius: 0.375rem;
+      }
+      .sb-section-header:hover {
+        background: #f8fafc;
+      }
+      .sb-label {
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: #94a3b8;
+      }
+      .sb-chevron {
+        font-size: 0.6rem;
+        color: #94a3b8;
+        transition: transform 0.2s;
+      }
+      .sb-section.collapsed .sb-chevron {
+        transform: rotate(-90deg);
+      }
+      .sb-section.collapsed .sb-links {
+        display: none;
+      }
+      .sb-links {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+        padding: 0.25rem 0;
+      }
+      .sb-link {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.5rem;
+        text-decoration: none;
+        font-size: 0.875rem;
+        color: #374151;
+        transition:
+          background 0.15s,
+          color 0.15s;
+      }
+      .sb-link:hover {
+        background: #f1f5f9;
+        color: #1e293b;
+      }
+      .sb-link.active {
+        background: #dbeafe;
+        color: #2563eb;
+        font-weight: 600;
+      }
+      .sb-link svg {
+        width: 15px;
+        height: 15px;
+        flex-shrink: 0;
+        opacity: 0.7;
+      }
+      .sb-divider {
+        border: none;
+        border-top: 1px solid #f1f5f9;
+        margin: 0.5rem 0.5rem;
+      }
+      .sb-logout {
+        margin-top: auto;
+        padding: 0.75rem 0.5rem;
+        border-top: 1px solid #e5e7eb;
+      }
+      .sb-logout-btn {
+        width: 100%;
+        padding: 0.5rem;
+        background: #fee2e2;
+        color: #991b1b;
+        border: 1px solid #fecaca;
+        border-radius: 0.5rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .sb-logout-btn:hover {
+        background: #fecaca;
+      }
+      .page-hdr {
+        margin-bottom: 1.75rem;
+      }
+      .page-hdr h1 {
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 0.25rem;
+      }
+      .page-hdr p {
+        color: #64748b;
+        font-size: 0.95rem;
+      }
+      .settings-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 1.5rem;
+      }
+      .settings-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        padding: 1.5rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      }
+      .settings-card h3 {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #f1f5f9;
+      }
+      .form-group {
+        margin-bottom: 1rem;
+      }
+      .form-group label {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #374151;
+      }
+      .form-group label span {
+        font-weight: 400;
+        color: #64748b;
+        font-size: 0.75rem;
+      }
+      .form-group input[type="text"],
+      .form-group input[type="email"],
+      .form-group input[type="number"],
+      .form-group textarea {
+        width: 100%;
+        padding: 0.55rem;
+        border: 1.5px solid #d1d5db;
+        border-radius: 0.5rem;
+      }
+      .form-group textarea {
+        min-height: 80px;
+        resize: vertical;
+      }
+      .toggle-switch {
+        position: relative;
+        width: 44px;
+        height: 24px;
+      }
+      .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      .toggle-slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #cbd5e1;
+        border-radius: 24px;
+        transition: 0.3s;
+      }
+      .toggle-slider:before {
+        position: absolute;
+        content: "";
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background: #fff;
+        border-radius: 50%;
+        transition: 0.3s;
+      }
+      .toggle-switch input:checked + .toggle-slider {
+        background: #2563eb;
+      }
+      .toggle-switch input:checked + .toggle-slider:before {
+        transform: translateX(20px);
+      }
+      .btn {
+        padding: 0.5rem 1rem;
+        border-radius: 0.375rem;
+        font-size: 0.875rem;
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+      }
+      .btn-primary {
+        background: #2563eb;
+        color: #fff;
+      }
+      .btn-danger {
+        background: #fee2e2;
+        color: #991b1b;
+        border: 1px solid #fecaca;
+      }
+      @media (max-width: 768px) {
+        .sa-layout {
+          flex-direction: column;
+        }
+        .sa-sidebar {
+          width: 100%;
+          height: auto;
+          position: relative;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sa-layout">
+      <aside class="sa-sidebar">
+        <a href="superadmin-dashboard.html" class="sb-brand"
+          ><svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            <polyline points="9 22 9 12 15 12 15 22" /></svg
+          >Barangay E-Request</a
+        >
+        <div class="sb-user">
+          <div class="sb-avatar" id="sb-avatar">SA</div>
+          <div>
+            <div class="sb-name" id="sb-name">Loading...</div>
+            <div class="sb-role">Super Admin</div>
+          </div>
+        </div>
+        <div class="sb-section" id="sec-sa">
+          <div class="sb-section-header" onclick="toggleSection('sec-sa')">
+            <span class="sb-label">Super Admin</span
+            ><span class="sb-chevron">▼</span>
+          </div>
+          <div class="sb-links">
+            <a href="superadmin-dashboard.html" class="sb-link"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="3" y="3" width="7" height="7" />
+                <rect x="14" y="3" width="7" height="7" />
+                <rect x="3" y="14" width="7" height="7" />
+                <rect x="14" y="14" width="7" height="7" /></svg
+              >Dashboard</a
+            >
+            <a href="superadmin-requests.html" class="sb-link"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                /></svg
+              >Requests</a
+            >
+            <a href="superadmin-blotter.html" class="sb-link"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg
+              >Blotter & Complaints</a
+            >
+            <a href="superadmin-users.html" class="sb-link"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /></svg
+              >Users</a
+            >
+            <a href="manage-admins.html" class="sb-link"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="8" r="4" /></svg
+              >Manage Admins</a
+            >
+            <a href="request-forms.html" class="sb-link"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <line x1="8" y1="6" x2="21" y2="6" /></svg
+              >Request Forms</a
+            >
+            <a href="system-logs.html" class="sb-link"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12" /></svg
+              >System Logs</a
+            >
+            <a href="superadmin-reports.html" class="sb-link"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <line x1="18" y1="20" x2="18" y2="10" /></svg
+              >Reports</a
+            >
+            <a href="superadmin-settings.html" class="sb-link active"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="3" /></svg
+              >Settings</a
+            >
+          </div>
+        </div>
+        <hr class="sb-divider" />
+        <div class="sb-section" id="sec-user">
+          <div class="sb-section-header" onclick="toggleSection('sec-user')">
+            <span class="sb-label">My User Area</span
+            ><span class="sb-chevron">▼</span>
+          </div>
+          <div class="sb-links">
+            <a href="sa-dashboard.html" class="sb-link"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="3" y="3" width="7" height="7" /></svg
+              >My Dashboard</a
+            >
+            <a href="sa-new-request.html" class="sb-link"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <line x1="12" y1="5" x2="12" y2="19" /></svg
+              >New Request</a
+            >
+            <a href="sa-my-requests.html" class="sb-link"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12" /></svg
+              >My Requests</a
+            >
+            <a href="superadmin-profile.html" class="sb-link"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="7" r="4" /></svg
+              >My Profile</a
+            >
+          </div>
+        </div>
+        <div class="sb-logout">
+          <button class="sb-logout-btn" onclick="doLogout()">Logout</button>
+        </div>
+      </aside>
+      <div class="sa-body">
+        <main class="sa-main">
+          <div class="page-hdr">
+            <h1>System Settings</h1>
+            <p>Configure system preferences and options.</p>
+          </div>
+          <div class="settings-grid">
+            <div class="settings-card">
+              <h3>Barangay Information</h3>
+              <div class="form-group">
+                <label>Barangay Name</label
+                ><input
+                  type="text"
+                  id="barangayName"
+                  placeholder="Barangay E"
+                />
+              </div>
+              <div class="form-group">
+                <label>Municipality/City</label
+                ><input
+                  type="text"
+                  id="municipality"
+                  placeholder="Quezon City"
+                />
+              </div>
+              <div class="form-group">
+                <label>Province</label
+                ><input type="text" id="province" placeholder="Metro Manila" />
+              </div>
+              <div class="form-group">
+                <label>Contact Phone</label
+                ><input
+                  type="text"
+                  id="contactPhone"
+                  placeholder="+63 912 345 6789"
+                />
+              </div>
+              <div class="form-group">
+                <label>Contact Email</label
+                ><input
+                  type="email"
+                  id="contactEmail"
+                  placeholder="barangay@example.com"
+                />
+              </div>
+            </div>
+            <div class="settings-card">
+              <h3>Request Settings</h3>
+              <div class="form-group">
+                <label>Default Request Fee <span>PHP</span></label
+                ><input type="number" id="defaultFee" value="50" />
+              </div>
+              <div class="form-group">
+                <label>Enable Online Payments</label
+                ><label class="toggle-switch"
+                  ><input type="checkbox" id="enablePayments" /><span
+                    class="toggle-slider"
+                  ></span
+                ></label>
+              </div>
+              <div class="form-group">
+                <label>Auto-approve Low-risk Requests</label
+                ><label class="toggle-switch"
+                  ><input type="checkbox" id="autoApprove" /><span
+                    class="toggle-slider"
+                  ></span
+                ></label>
+              </div>
+              <div class="form-group">
+                <label>Require Document Upload</label
+                ><label class="toggle-switch"
+                  ><input type="checkbox" id="requireDocs" checked /><span
+                    class="toggle-slider"
+                  ></span
+                ></label>
+              </div>
+            </div>
+            <div class="settings-card">
+              <h3>System Options</h3>
+              <div class="form-group">
+                <label>Enable User Registration</label
+                ><label class="toggle-switch"
+                  ><input
+                    type="checkbox"
+                    id="enableRegistration"
+                    checked /><span class="toggle-slider"></span
+                ></label>
+              </div>
+              <div class="form-group">
+                <label>Enable Blotter System</label
+                ><label class="toggle-switch"
+                  ><input type="checkbox" id="enableBlotter" checked /><span
+                    class="toggle-slider"
+                  ></span
+                ></label>
+              </div>
+              <div class="form-group">
+                <label>Maintenance Mode</label
+                ><label class="toggle-switch"
+                  ><input type="checkbox" id="maintenanceMode" /><span
+                    class="toggle-slider"
+                  ></span
+                ></label>
+              </div>
+              <div class="form-group">
+                <label>Session Timeout (minutes)</label
+                ><input type="number" id="sessionTimeout" value="30" />
+              </div>
+            </div>
+            <div class="settings-card">
+              <h3>Notification Settings</h3>
+              <div class="form-group">
+                <label>Email Notifications</label
+                ><label class="toggle-switch"
+                  ><input type="checkbox" id="emailNotif" checked /><span
+                    class="toggle-slider"
+                  ></span
+                ></label>
+              </div>
+              <div class="form-group">
+                <label>SMS Notifications</label
+                ><label class="toggle-switch"
+                  ><input type="checkbox" id="smsNotif" /><span
+                    class="toggle-slider"
+                  ></span
+                ></label>
+              </div>
+              <div class="form-group">
+                <label>Notify on New Request</label
+                ><label class="toggle-switch"
+                  ><input type="checkbox" id="notifyNewReq" checked /><span
+                    class="toggle-slider"
+                  ></span
+                ></label>
+              </div>
+              <div class="form-group">
+                <label>Notify on Status Change</label
+                ><label class="toggle-switch"
+                  ><input type="checkbox" id="notifyStatus" checked /><span
+                    class="toggle-slider"
+                  ></span
+                ></label>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top: 1.5rem; display: flex; gap: 1rem">
+            <button class="btn btn-primary" onclick="saveSettings()">
+              Save Settings</button
+            ><button class="btn btn-danger" onclick="resetSettings()">
+              Reset to Defaults
+            </button>
+          </div>
+        </main>
+        <footer class="sa-footer"><p id="footer-year"></p></footer>
+      </div>
+    </div>
+    <script src="../js/script.js"></script>
+    <script>
+      const STORAGE_KEY = "barangay_settings";
+      document.addEventListener("DOMContentLoaded", function () {
+        const currentAdmin = getCurrentUser();
+        if (!currentAdmin || (currentAdmin.roles || [])[0] !== "super_admin") {
+          location.href = "../auth/login.html";
+          return;
+        }
+        document.getElementById("footer-year").textContent =
+          "© " + new Date().getFullYear() + " Barangay Records System.";
+        document.getElementById("sb-name").textContent =
+          currentAdmin.firstName || currentAdmin.fullName;
+        document.getElementById("sb-avatar").textContent = (
+          currentAdmin.firstName || "SA"
+        )
+          .split(" ")
+          .map((n) => n[0])
+          .join("")
+          .substring(0, 2)
+          .toUpperCase();
+        loadSettings();
+      });
+      function loadSettings() {
+        const settings = getData(STORAGE_KEY) || {};
+        document.getElementById("barangayName").value =
+          settings.barangayName || "";
+        document.getElementById("municipality").value =
+          settings.municipality || "";
+        document.getElementById("province").value = settings.province || "";
+        document.getElementById("contactPhone").value =
+          settings.contactPhone || "";
+        document.getElementById("contactEmail").value =
+          settings.contactEmail || "";
+        document.getElementById("defaultFee").value = settings.defaultFee || 50;
+        document.getElementById("enablePayments").checked =
+          settings.enablePayments;
+        document.getElementById("autoApprove").checked = settings.autoApprove;
+        document.getElementById("requireDocs").checked =
+          settings.requireDocs !== false;
+        document.getElementById("enableRegistration").checked =
+          settings.enableRegistration !== false;
+        document.getElementById("enableBlotter").checked =
+          settings.enableBlotter !== false;
+        document.getElementById("maintenanceMode").checked =
+          settings.maintenanceMode;
+        document.getElementById("sessionTimeout").value =
+          settings.sessionTimeout || 30;
+        document.getElementById("emailNotif").checked =
+          settings.emailNotif !== false;
+        document.getElementById("smsNotif").checked = settings.smsNotif;
+        document.getElementById("notifyNewReq").checked =
+          settings.notifyNewReq !== false;
+        document.getElementById("notifyStatus").checked =
+          settings.notifyStatus !== false;
+      }
+      window.saveSettings = function () {
+        const currentAdmin = getCurrentUser();
+        const settings = {
+          barangayName: document.getElementById("barangayName").value,
+          municipality: document.getElementById("municipality").value,
+          province: document.getElementById("province").value,
+          contactPhone: document.getElementById("contactPhone").value,
+          contactEmail: document.getElementById("contactEmail").value,
+          defaultFee:
+            parseFloat(document.getElementById("defaultFee").value) || 50,
+          enablePayments: document.getElementById("enablePayments").checked,
+          autoApprove: document.getElementById("autoApprove").checked,
+          requireDocs: document.getElementById("requireDocs").checked,
+          enableRegistration:
+            document.getElementById("enableRegistration").checked,
+          enableBlotter: document.getElementById("enableBlotter").checked,
+          maintenanceMode: document.getElementById("maintenanceMode").checked,
+          sessionTimeout:
+            parseInt(document.getElementById("sessionTimeout").value) || 30,
+          emailNotif: document.getElementById("emailNotif").checked,
+          smsNotif: document.getElementById("smsNotif").checked,
+          notifyNewReq: document.getElementById("notifyNewReq").checked,
+          notifyStatus: document.getElementById("notifyStatus").checked,
+          updatedAt: new Date().toISOString(),
+        };
+        setData(STORAGE_KEY, settings);
+        logAction(currentAdmin.id, "super_admin", "Updated system settings");
+        alert("Settings saved successfully!");
+      };
+      window.resetSettings = function () {
+        if (!confirm("Reset all settings to defaults?")) return;
+        setData(STORAGE_KEY, {});
+        loadSettings();
+        alert("Settings reset to defaults.");
+      };
+      window.toggleSection = function (id) {
+        document.getElementById(id).classList.toggle("collapsed");
+      };
+      window.doLogout = function () {
+        setCurrentUser(null);
+        location.href = "../auth/login.html";
+      };
+    </script>
+  </body>
+</html>

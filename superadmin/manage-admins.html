@@ -1,0 +1,916 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manage Admins | Super Admin</title>
+    <style>
+      :root {
+        --color-primary: #2563eb;
+        --color-secondary: #1e293b;
+        --color-white: #ffffff;
+        --color-light: #f8fafc;
+        --border-radius: 0.5rem;
+        --shadow-light:
+          0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.05);
+        --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.12);
+        --spacing-sm: 0.5rem;
+        --spacing-md: 1rem;
+        --spacing-lg: 1.5rem;
+        --spacing-xl: 2rem;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background: #f1f5f9;
+      }
+      .sa-layout {
+        display: flex;
+        min-height: 100vh;
+      }
+      .sa-sidebar {
+        width: 240px;
+        flex-shrink: 0;
+        background: #ffffff;
+        border-right: 1px solid #e5e7eb;
+        display: flex;
+        flex-direction: column;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow-y: auto;
+      }
+      .sa-body {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+      }
+      .sa-main {
+        flex: 1;
+        padding: 2rem;
+        max-width: 1300px;
+        width: 100%;
+        margin: 0 auto;
+      }
+      .sa-footer {
+        background: #f8fafc;
+        border-top: 1px solid #e5e7eb;
+        padding: 1rem 2rem;
+        text-align: center;
+        font-size: 0.85rem;
+        color: #6b7280;
+      }
+      .sb-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1.25rem 1rem;
+        border-bottom: 1px solid #e5e7eb;
+        font-weight: 800;
+        font-size: 0.95rem;
+        color: #2563eb;
+        text-decoration: none;
+      }
+      .sb-user {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        padding: 1rem;
+        border-bottom: 1px solid #f1f5f9;
+      }
+      .sb-avatar {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: #2563eb;
+        color: #fff;
+        font-size: 0.8rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .sb-name {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #1e293b;
+      }
+      .sb-role {
+        font-size: 0.7rem;
+        color: #64748b;
+      }
+      .sb-section {
+        padding: 0 0.5rem;
+        margin-top: 0.5rem;
+      }
+      .sb-section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.35rem 0.5rem;
+        cursor: pointer;
+        user-select: none;
+        border-radius: 0.375rem;
+      }
+      .sb-section-header:hover {
+        background: #f8fafc;
+      }
+      .sb-label {
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: #94a3b8;
+      }
+      .sb-chevron {
+        font-size: 0.6rem;
+        color: #94a3b8;
+        transition: transform 0.2s;
+      }
+      .sb-section.collapsed .sb-chevron {
+        transform: rotate(-90deg);
+      }
+      .sb-section.collapsed .sb-links {
+        display: none;
+      }
+      .sb-links {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+        padding: 0.25rem 0;
+      }
+      .sb-link {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.5rem;
+        text-decoration: none;
+        font-size: 0.875rem;
+        color: #374151;
+        transition:
+          background 0.15s,
+          color 0.15s;
+      }
+      .sb-link:hover {
+        background: #f1f5f9;
+        color: #1e293b;
+      }
+      .sb-link.active {
+        background: #dbeafe;
+        color: #2563eb;
+        font-weight: 600;
+      }
+      .sb-link svg {
+        width: 15px;
+        height: 15px;
+        flex-shrink: 0;
+        opacity: 0.7;
+      }
+      .sb-divider {
+        border: none;
+        border-top: 1px solid #f1f5f9;
+        margin: 0.5rem 0.5rem;
+      }
+      .sb-logout {
+        margin-top: auto;
+        padding: 0.75rem 0.5rem;
+        border-top: 1px solid #e5e7eb;
+      }
+      .sb-logout-btn {
+        width: 100%;
+        padding: 0.5rem;
+        background: #fee2e2;
+        color: #991b1b;
+        border: 1px solid #fecaca;
+        border-radius: 0.5rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .sb-logout-btn:hover {
+        background: #fecaca;
+      }
+      .page-hdr {
+        margin-bottom: 1.75rem;
+      }
+      .page-hdr h1 {
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 0.25rem;
+      }
+      .page-hdr p {
+        color: #64748b;
+        font-size: 0.95rem;
+      }
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+      }
+      .stat-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        padding: 1.25rem;
+        border-left: 5px solid #2563eb;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      }
+      .stat-card h4 {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #64748b;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+      }
+      .stat-num {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1e293b;
+      }
+      .tbl-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      }
+      .filter-bar {
+        display: flex;
+        gap: 0.75rem;
+        padding: 1rem 1.25rem;
+        background: #f8fafc;
+        border-bottom: 1px solid #e5e7eb;
+        flex-wrap: wrap;
+      }
+      .filter-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+      }
+      .filter-group label {
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #64748b;
+      }
+      .filter-group input,
+      .filter-group select {
+        padding: 0.45rem;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 0.375rem;
+      }
+      .sa-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .sa-table thead tr {
+        background: #f8fafc;
+      }
+      .sa-table th {
+        padding: 0.75rem 1rem;
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #64748b;
+        border-bottom: 1px solid #e5e7eb;
+        text-align: left;
+      }
+      .sa-table td {
+        padding: 0.85rem 1rem;
+        font-size: 0.875rem;
+        color: #1e293b;
+        border-bottom: 1px solid #f1f5f9;
+      }
+      .btn {
+        padding: 0.35rem 0.75rem;
+        border-radius: 0.375rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .btn-edit {
+        color: #374151;
+        background: #f3f4f6;
+        border: 1px solid #d1d5db;
+      }
+      .btn-delete {
+        color: #991b1b;
+        background: #fee2e2;
+        border: 1px solid #fecaca;
+      }
+      .btn-add {
+        color: #065f46;
+        background: #d1fae5;
+        border: 1px solid #a7f3d0;
+      }
+      .form-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      }
+      .form-field {
+        margin-bottom: 1rem;
+      }
+      .form-field label {
+        display: block;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: #374151;
+        margin-bottom: 0.3rem;
+      }
+      .form-field input,
+      .form-field select,
+      .form-field textarea {
+        width: 100%;
+        padding: 0.55rem;
+        border: 1.5px solid #d1d5db;
+        border-radius: 0.5rem;
+      }
+      .form-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+      }
+      .form-row .form-field {
+        margin-bottom: 0;
+      }
+      .badge {
+        padding: 0.2rem 0.5rem;
+        border-radius: 0.25rem;
+        font-size: 0.7rem;
+        font-weight: 700;
+      }
+      .badge-active {
+        background: #d1fae5;
+        color: #065f46;
+      }
+      .badge-inactive {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+      .badge-admin {
+        background: #dbeafe;
+        color: #1e40af;
+      }
+      @media (max-width: 768px) {
+        .sa-layout {
+          flex-direction: column;
+        }
+        .sa-sidebar {
+          width: 100%;
+          height: auto;
+          position: relative;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sa-layout">
+      <aside class="sa-sidebar">
+        <a href="superadmin-dashboard.html" class="sb-brand">
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            <polyline points="9 22 9 12 15 12 15 22" />
+          </svg>
+          Barangay E-Request
+        </a>
+        <div class="sb-user">
+          <div class="sb-avatar" id="sb-avatar">SA</div>
+          <div>
+            <div class="sb-name" id="sb-name">Loading...</div>
+            <div class="sb-role">Super Admin</div>
+          </div>
+        </div>
+        <div class="sb-section" id="sec-sa">
+          <div class="sb-section-header" onclick="toggleSection('sec-sa')">
+            <span class="sb-label">Super Admin</span
+            ><span class="sb-chevron">▼</span>
+          </div>
+          <div class="sb-links">
+            <a href="superadmin-dashboard.html" class="sb-link"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="3" y="3" width="7" height="7" />
+                <rect x="14" y="3" width="7" height="7" />
+                <rect x="3" y="14" width="7" height="7" />
+                <rect x="14" y="14" width="7" height="7" /></svg
+              >Dashboard</a
+            >
+            <a href="superadmin-requests.html" class="sb-link"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                />
+                <polyline points="14 2 14 8 20 8" /></svg
+              >Requests</a
+            >
+            <a href="superadmin-blotter.html" class="sb-link"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg
+              >Blotter & Complaints</a
+            >
+            <a href="superadmin-users.html" class="sb-link"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg
+              >Users</a
+            >
+            <a href="manage-admins.html" class="sb-link active"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="8" r="4" />
+                <path d="M20 21a8 8 0 1 0-16 0" />
+                <path d="M16 11l2 2 4-4" /></svg
+              >Manage Admins</a
+            >
+            <a href="request-forms.html" class="sb-link"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <line x1="8" y1="6" x2="21" y2="6" />
+                <line x1="8" y1="12" x2="21" y2="12" />
+                <line x1="8" y1="18" x2="21" y2="18" /></svg
+              >Request Forms</a
+            >
+            <a href="system-logs.html" class="sb-link"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                />
+                <polyline points="14 2 14 8 20 8" /></svg
+              >System Logs</a
+            >
+            <a href="superadmin-reports.html" class="sb-link"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <line x1="18" y1="20" x2="18" y2="10" />
+                <line x1="12" y1="20" x2="12" y2="4" />
+                <line x1="6" y1="20" x2="6" y2="14" /></svg
+              >Reports</a
+            >
+            <a href="superadmin-settings.html" class="sb-link"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="3" />
+                <path
+                  d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"
+                /></svg
+              >Settings</a
+            >
+          </div>
+        </div>
+        <hr class="sb-divider" />
+        <div class="sb-section" id="sec-user">
+          <div class="sb-section-header" onclick="toggleSection('sec-user')">
+            <span class="sb-label">My User Area</span
+            ><span class="sb-chevron">▼</span>
+          </div>
+          <div class="sb-links">
+            <a href="sa-dashboard.html" class="sb-link"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="3" y="3" width="7" height="7" />
+                <rect x="14" y="3" width="7" height="7" />
+                <rect x="3" y="14" width="7" height="7" />
+                <rect x="14" y="14" width="7" height="7" /></svg
+              >My Dashboard</a
+            >
+            <a href="sa-new-request.html" class="sb-link"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" /></svg
+              >New Request</a
+            >
+            <a href="sa-my-requests.html" class="sb-link"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                />
+                <polyline points="14 2 14 8 20 8" /></svg
+              >My Requests</a
+            >
+            <a href="superadmin-profile.html" class="sb-link"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" /></svg
+              >My Profile</a
+            >
+          </div>
+        </div>
+        <div class="sb-logout">
+          <button class="sb-logout-btn" onclick="doLogout()">Logout</button>
+        </div>
+      </aside>
+      <div class="sa-body">
+        <main class="sa-main">
+          <div class="page-hdr">
+            <h1>Manage Admins</h1>
+            <p>Add, edit, or manage barangay admin accounts.</p>
+          </div>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <h4>Total Admins</h4>
+              <div class="stat-num" id="stat-total">0</div>
+            </div>
+            <div class="stat-card" style="border-left-color: #16a34a">
+              <h4>Active</h4>
+              <div class="stat-num" id="stat-active">0</div>
+            </div>
+            <div class="stat-card" style="border-left-color: #d97706">
+              <h4>Pending</h4>
+              <div class="stat-num" id="stat-pending">0</div>
+            </div>
+          </div>
+          <div class="form-card" id="adminForm" style="display: none">
+            <h3 style="margin-bottom: 1rem" id="formTitle">Add New Admin</h3>
+            <input type="hidden" id="editAdminId" />
+            <div class="form-row">
+              <div class="form-field">
+                <label>First Name *</label
+                ><input type="text" id="adminFirstName" required />
+              </div>
+              <div class="form-field">
+                <label>Last Name *</label
+                ><input type="text" id="adminLastName" required />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-field">
+                <label>Email *</label
+                ><input type="email" id="adminEmail" required />
+              </div>
+              <div class="form-field">
+                <label>Phone</label><input type="text" id="adminPhone" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-field">
+                <label>Username *</label
+                ><input type="text" id="adminUsername" required />
+              </div>
+              <div class="form-field">
+                <label>Password <span id="pwHint">(required)</span></label
+                ><input type="password" id="adminPassword" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-field">
+                <label>Role *</label
+                ><select id="adminRole">
+                  <option value="admin">Admin</option>
+                  <option value="super_admin">Super Admin</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label>Status</label
+                ><select id="adminStatus">
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                  <option value="pending">Pending</option>
+                </select>
+              </div>
+            </div>
+            <div style="display: flex; gap: 0.5rem; margin-top: 1rem">
+              <button class="btn btn-add" onclick="saveAdmin()">
+                Save Admin
+              </button>
+              <button class="btn btn-edit" onclick="closeAdminForm()">
+                Cancel
+              </button>
+            </div>
+          </div>
+          <button
+            class="btn btn-add"
+            onclick="showAdminForm()"
+            style="margin-bottom: 1rem"
+          >
+            + Add New Admin
+          </button>
+          <div class="tbl-card">
+            <div class="filter-bar">
+              <div class="filter-group">
+                <label>Search</label
+                ><input
+                  type="text"
+                  id="searchInput"
+                  oninput="renderAdmins()"
+                  placeholder="Search..."
+                />
+              </div>
+              <div class="filter-group">
+                <label>Status</label
+                ><select id="statusFilter" onchange="renderAdmins()">
+                  <option value="">All</option>
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                  <option value="pending">Pending</option>
+                </select>
+              </div>
+            </div>
+            <table class="sa-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminsTable">
+                <tr>
+                  <td colspan="6">Loading...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </main>
+        <footer class="sa-footer"><p id="footer-year"></p></footer>
+      </div>
+    </div>
+    <script src="../js/script.js"></script>
+    <script>
+      let adminUsers = [];
+      const currentAdmin = getCurrentUser();
+      document.addEventListener("DOMContentLoaded", function () {
+        if (!currentAdmin || (currentAdmin.roles || [])[0] !== "super_admin") {
+          location.href = "../auth/login.html";
+          return;
+        }
+        document.getElementById("footer-year").textContent =
+          "© " + new Date().getFullYear() + " Barangay Records System.";
+        document.getElementById("sb-name").textContent =
+          currentAdmin.firstName || currentAdmin.fullName;
+        document.getElementById("sb-avatar").textContent = (
+          currentAdmin.firstName || "SA"
+        )
+          .split(" ")
+          .map((n) => n[0])
+          .join("")
+          .substring(0, 2)
+          .toUpperCase();
+        adminUsers = getData(STORAGE_KEYS.USERS) || [];
+        adminUsers = adminUsers.filter(
+          (u) =>
+            (u.roles || []).includes("admin") ||
+            (u.roles || []).includes("super_admin"),
+        );
+        renderStats();
+        renderAdmins();
+      });
+      function renderStats() {
+        document.getElementById("stat-total").textContent = adminUsers.length;
+        document.getElementById("stat-active").textContent = adminUsers.filter(
+          (u) => u.status === "active",
+        ).length;
+        document.getElementById("stat-pending").textContent = adminUsers.filter(
+          (u) => u.status === "pending",
+        ).length;
+      }
+      function renderAdmins() {
+        const search = document
+          .getElementById("searchInput")
+          .value.toLowerCase();
+        const status = document.getElementById("statusFilter").value;
+        let filtered = adminUsers.filter(
+          (u) =>
+            u.roles &&
+            (u.roles.includes("admin") || u.roles.includes("super_admin")),
+        );
+        if (search)
+          filtered = filtered.filter(
+            (u) =>
+              (u.fullName || "").toLowerCase().includes(search) ||
+              (u.username || "").toLowerCase().includes(search) ||
+              (u.email || "").toLowerCase().includes(search),
+          );
+        if (status) filtered = filtered.filter((u) => u.status === status);
+        const tbody = document.getElementById("adminsTable");
+        tbody.innerHTML = filtered.length
+          ? filtered
+              .map(
+                (a) =>
+                  "<tr><td>" +
+                  (a.fullName || a.firstName + " " + a.lastName) +
+                  "</td><td>" +
+                  a.username +
+                  "</td><td>" +
+                  (a.email || "-") +
+                  '</td><td><span class="badge badge-admin">' +
+                  (a.roles[0] || "admin") +
+                  '</span></td><td><span class="badge ' +
+                  (a.status === "active" ? "badge-active" : "badge-inactive") +
+                  '">' +
+                  a.status +
+                  '</span></td><td><button class="btn btn-edit" onclick="editAdmin(\'' +
+                  a.id +
+                  '\')">Edit</button> <button class="btn btn-delete" onclick="deleteAdmin(\'' +
+                  a.id +
+                  "')\">Delete</button></td></tr>",
+              )
+              .join("")
+          : '<tr><td colspan="6" style="text-align:center;color:#94a3b8;">No admins found</td></tr>';
+      }
+      window.toggleSection = function (id) {
+        document.getElementById(id).classList.toggle("collapsed");
+      };
+      window.showAdminForm = function () {
+        document.getElementById("adminForm").style.display = "block";
+        document.getElementById("formTitle").textContent = "Add New Admin";
+        document.getElementById("editAdminId").value = "";
+        document.getElementById("adminFirstName").value = "";
+        document.getElementById("adminLastName").value = "";
+        document.getElementById("adminEmail").value = "";
+        document.getElementById("adminPhone").value = "";
+        document.getElementById("adminUsername").value = "";
+        document.getElementById("adminPassword").value = "";
+        document.getElementById("adminPassword").required = true;
+        document.getElementById("pwHint").textContent = "(required)";
+      };
+      window.closeAdminForm = function () {
+        document.getElementById("adminForm").style.display = "none";
+      };
+      window.saveAdmin = function () {
+        const firstName = document
+          .getElementById("adminFirstName")
+          .value.trim();
+        const lastName = document.getElementById("adminLastName").value.trim();
+        const email = document.getElementById("adminEmail").value.trim();
+        const username = document.getElementById("adminUsername").value.trim();
+        const password = document.getElementById("adminPassword").value;
+        const role = document.getElementById("adminRole").value;
+        const status = document.getElementById("adminStatus").value;
+        const editId = document.getElementById("editAdminId").value;
+        if (!firstName || !lastName || !email || !username) {
+          alert("Please fill required fields");
+          return;
+        }
+        if (!editId && !password) {
+          alert("Password is required for new admin");
+          return;
+        }
+        const allUsers = getData(STORAGE_KEYS.USERS) || [];
+        if (
+          !editId &&
+          allUsers.find((u) => u.email === email || u.username === username)
+        ) {
+          alert("Admin with same email/username exists");
+          return;
+        }
+        const adminData = {
+          id: editId || "user_" + Date.now(),
+          firstName,
+          lastName,
+          fullName: firstName + " " + lastName,
+          email,
+          username,
+          phone: document.getElementById("adminPhone").value.trim(),
+          roles: [role],
+          status,
+          createdAt: editId
+            ? allUsers.find((u) => u.id === editId)?.createdAt
+            : new Date().toISOString(),
+        };
+        if (password) adminData.password = password;
+        if (editId) {
+          const idx = allUsers.findIndex((u) => u.id === editId);
+          if (idx >= 0) allUsers[idx] = { ...allUsers[idx], ...adminData };
+        } else {
+          allUsers.push(adminData);
+        }
+        setData(STORAGE_KEYS.USERS, allUsers);
+        logAction(
+          currentAdmin.id,
+          "super_admin",
+          editId ? "Updated admin: " + username : "Added admin: " + username,
+        );
+        adminUsers = allUsers.filter(
+          (u) =>
+            (u.roles || []).includes("admin") ||
+            (u.roles || []).includes("super_admin"),
+        );
+        closeAdminForm();
+        renderStats();
+        renderAdmins();
+      };
+      window.editAdmin = function (id) {
+        const admin = adminUsers.find((u) => u.id === id);
+        if (!admin) return;
+        document.getElementById("adminForm").style.display = "block";
+        document.getElementById("formTitle").textContent = "Edit Admin";
+        document.getElementById("editAdminId").value = admin.id;
+        document.getElementById("adminFirstName").value = admin.firstName || "";
+        document.getElementById("adminLastName").value = admin.lastName || "";
+        document.getElementById("adminEmail").value = admin.email || "";
+        document.getElementById("adminPhone").value = admin.phone || "";
+        document.getElementById("adminUsername").value = admin.username || "";
+        document.getElementById("adminPassword").value = "";
+        document.getElementById("adminPassword").required = false;
+        document.getElementById("pwHint").textContent = "(leave blank)";
+        document.getElementById("adminRole").value = admin.roles[0] || "admin";
+        document.getElementById("adminStatus").value = admin.status || "active";
+      };
+      window.deleteAdmin = function (id) {
+        if (!confirm("Delete this admin?")) return;
+        const admin = adminUsers.find((u) => u.id === id);
+        const allUsers = getData(STORAGE_KEYS.USERS) || [];
+        setData(
+          STORAGE_KEYS.USERS,
+          allUsers.filter((u) => u.id !== id),
+        );
+        logAction(
+          currentAdmin.id,
+          "super_admin",
+          "Deleted admin: " + (admin?.username || id),
+        );
+        adminUsers = adminUsers.filter((u) => u.id !== id);
+        renderStats();
+        renderAdmins();
+      };
+      window.doLogout = function () {
+        setCurrentUser(null);
+        location.href = "../auth/login.html";
+      };
+    </script>
+  </body>
+</html>

@@ -1,0 +1,712 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blotter & Complaints | Super Admin</title>
+    <style>
+      :root {
+        --color-primary: #2563eb;
+        --color-secondary: #1e293b;
+        --color-white: #ffffff;
+        --color-light: #f8fafc;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background: #f1f5f9;
+      }
+      .sa-layout {
+        display: flex;
+        min-height: 100vh;
+      }
+      .sa-sidebar {
+        width: 240px;
+        flex-shrink: 0;
+        background: #fff;
+        border-right: 1px solid #e5e7eb;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow-y: auto;
+      }
+      .sa-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+      .sa-main {
+        flex: 1;
+        padding: 2rem;
+        max-width: 1300px;
+        margin: 0 auto;
+      }
+      .sa-footer {
+        background: #f8fafc;
+        border-top: 1px solid #e5e7eb;
+        padding: 1rem;
+        text-align: center;
+        color: #6b7280;
+        font-size: 0.85rem;
+      }
+      .sb-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1.25rem 1rem;
+        border-bottom: 1px solid #e5e7eb;
+        font-weight: 800;
+        color: #2563eb;
+        text-decoration: none;
+      }
+      .sb-user {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        padding: 1rem;
+        border-bottom: 1px solid #f1f5f9;
+      }
+      .sb-avatar {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: #2563eb;
+        color: #fff;
+        font-size: 0.8rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .sb-name {
+        font-size: 0.85rem;
+        font-weight: 600;
+      }
+      .sb-role {
+        font-size: 0.7rem;
+        color: #64748b;
+      }
+      .sb-section {
+        padding: 0 0.5rem;
+        margin-top: 0.5rem;
+      }
+      .sb-section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.35rem 0.5rem;
+      }
+      .sb-label {
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: #94a3b8;
+      }
+      .sb-chevron {
+        font-size: 0.6rem;
+        color: #94a3b8;
+      }
+      .sb-section.collapsed .sb-links {
+        display: none;
+      }
+      .sb-links {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+        padding: 0.25rem 0;
+      }
+      .sb-link {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.5rem;
+        text-decoration: none;
+        font-size: 0.875rem;
+        color: #374151;
+      }
+      .sb-link:hover {
+        background: #f1f5f9;
+      }
+      .sb-link.active {
+        background: #dbeafe;
+        color: #2563eb;
+        font-weight: 600;
+      }
+      .sb-divider {
+        border: none;
+        border-top: 1px solid #f1f5f9;
+        margin: 0.5rem;
+      }
+      .sb-logout {
+        margin-top: auto;
+        padding: 0.75rem 0.5rem;
+        border-top: 1px solid #e5e7eb;
+      }
+      .sb-logout-btn {
+        width: 100%;
+        padding: 0.5rem;
+        background: #fee2e2;
+        color: #991b1b;
+        border: 1px solid #fecaca;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .page-hdr {
+        margin-bottom: 1.75rem;
+      }
+      .page-hdr h1 {
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        font-weight: 700;
+        color: #1e293b;
+      }
+      .page-hdr p {
+        color: #64748b;
+        font-size: 0.95rem;
+      }
+      .tbl-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+      }
+      .tbl-card-hdr {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid #e5e7eb;
+      }
+      .tbl-card-hdr h3 {
+        font-size: 1rem;
+        color: #1e293b;
+      }
+      .filter-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        padding: 1rem 1.25rem;
+        background: #f8fafc;
+        border-bottom: 1px solid #e5e7eb;
+      }
+      .filter-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        flex: 1 1 150px;
+        min-width: 130px;
+      }
+      .filter-group label {
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #64748b;
+      }
+      .filter-group input,
+      .filter-group select {
+        padding: 0.45rem 0.65rem;
+        font-size: 0.875rem;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 0.375rem;
+        background: #fff;
+      }
+      .sa-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .sa-table thead tr {
+        background: #f8fafc;
+      }
+      .sa-table th {
+        padding: 0.75rem 1rem;
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #64748b;
+        border-bottom: 1px solid #e5e7eb;
+        text-align: left;
+      }
+      .sa-table td {
+        padding: 0.85rem 1rem;
+        font-size: 0.875rem;
+        color: #1e293b;
+        border-bottom: 1px solid #f1f5f9;
+      }
+      .tbl-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.75rem 1.25rem;
+        border-top: 1px solid #e5e7eb;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+      .row-count {
+        font-size: 0.825rem;
+        color: #64748b;
+      }
+      .pag-btns {
+        display: flex;
+        gap: 0.4rem;
+      }
+      .pag-btns button {
+        padding: 0.35rem 0.8rem;
+        font-size: 0.825rem;
+        border: 1.5px solid #e5e7eb;
+        border-radius: 0.375rem;
+        background: #fff;
+        cursor: pointer;
+      }
+      .badge {
+        display: inline-flex;
+        padding: 0.2rem 0.6rem;
+        border-radius: 9999px;
+        font-size: 0.72rem;
+        font-weight: 600;
+      }
+      .badge-pending {
+        background: #fef3c7;
+        color: #92400e;
+      }
+      .badge-resolved {
+        background: #d1fae5;
+        color: #065f46;
+      }
+      .btn {
+        padding: 0.35rem 0.75rem;
+        border-radius: 0.375rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .btn-approve {
+        color: #065f46;
+        background: #d1fae5;
+        border: 1px solid #a7f3d0;
+      }
+      .btn-view {
+        color: #2563eb;
+        background: #fff;
+        border: 1px solid #bfdbfe;
+      }
+      .btn-print {
+        color: #fff;
+        background: #2563eb;
+        border: 1px solid #2563eb;
+      }
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+      }
+      .modal-overlay.open {
+        display: flex;
+      }
+      .modal-box {
+        background: #fff;
+        border-radius: 0.75rem;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        width: 100%;
+        max-width: 500px;
+        max-height: 90vh;
+        overflow-y: auto;
+        padding: 1.5rem;
+      }
+      .modal-hdr {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid #e5e7eb;
+      }
+      .modal-hdr h3 {
+        font-size: 1.1rem;
+        font-weight: 700;
+      }
+      .modal-close {
+        background: none;
+        border: none;
+        font-size: 1.4rem;
+        color: #94a3b8;
+        cursor: pointer;
+      }
+      .modal-row {
+        display: flex;
+        gap: 1rem;
+        padding: 0.55rem 0;
+        border-bottom: 1px solid #f1f5f9;
+      }
+      .modal-key {
+        flex: 0 0 140px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #64748b;
+      }
+      .modal-val {
+        color: #1e293b;
+      }
+      .modal-footer {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #e5e7eb;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sa-layout">
+      <aside class="sa-sidebar">
+        <a href="superadmin-dashboard.html" class="sb-brand"
+          ><svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></svg
+          >Barangay E-Request</a
+        >
+        <div class="sb-user">
+          <div class="sb-avatar" id="sb-avatar">SA</div>
+          <div>
+            <div class="sb-name" id="sb-name">Loading...</div>
+            <div class="sb-role">Super Admin</div>
+          </div>
+        </div>
+        <div class="sb-section" id="sec-sa">
+          <div class="sb-section-header" onclick="toggleSection('sec-sa')">
+            <span class="sb-label">Super Admin</span
+            ><span class="sb-chevron">▼</span>
+          </div>
+          <div class="sb-links">
+            <a href="superadmin-dashboard.html" class="sb-link">Dashboard</a>
+            <a href="superadmin-requests.html" class="sb-link">Requests</a>
+            <a href="superadmin-blotter.html" class="sb-link active"
+              >Blotter & Complaints</a
+            >
+            <a href="superadmin-users.html" class="sb-link">Users</a>
+            <a href="manage-admins.html" class="sb-link">Manage Admins</a>
+            <a href="request-forms.html" class="sb-link">Request Forms</a>
+            <a href="system-logs.html" class="sb-link">System Logs</a>
+            <a href="superadmin-reports.html" class="sb-link">Reports</a>
+            <a href="superadmin-settings.html" class="sb-link">Settings</a>
+          </div>
+        </div>
+        <hr class="sb-divider" />
+        <div class="sb-section" id="sec-user">
+          <div class="sb-section-header" onclick="toggleSection('sec-user')">
+            <span class="sb-label">My User Area</span
+            ><span class="sb-chevron">▼</span>
+          </div>
+          <div class="sb-links">
+            <a href="sa-dashboard.html" class="sb-link">My Dashboard</a>
+            <a href="sa-new-request.html" class="sb-link">New Request</a>
+            <a href="sa-blotter.html" class="sb-link">Blotter & Complaint</a>
+            <a href="sa-my-requests.html" class="sb-link">My Requests</a>
+            <a href="superadmin-profile.html" class="sb-link">My Profile</a>
+          </div>
+        </div>
+        <div class="sb-logout">
+          <button class="sb-logout-btn" onclick="doLogout()">Logout</button>
+        </div>
+      </aside>
+      <div class="sa-body">
+        <main class="sa-main">
+          <div class="page-hdr">
+            <h1>Blotter & Complaints</h1>
+            <p>View all filed blotters and complaints.</p>
+          </div>
+          <div class="tbl-card">
+            <div class="filter-bar">
+              <div class="filter-group">
+                <label>Search</label
+                ><input
+                  type="text"
+                  id="searchInput"
+                  placeholder="Tracking # only..."
+                />
+              </div>
+              <div class="filter-group">
+                <label>Type</label
+                ><select id="typeFilter">
+                  <option value="">All</option>
+                  <option value="Blotter">Blotter</option>
+                  <option value="Complaint">Complaint</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label>Status</label
+                ><select id="statusFilter">
+                  <option value="">All</option>
+                  <option value="pending">Pending</option>
+                  <option value="resolved">Resolved</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label>Date From</label><input type="date" id="dateFrom" />
+              </div>
+              <div class="filter-group">
+                <label>Date To</label><input type="date" id="dateTo" />
+              </div>
+            </div>
+            <table class="sa-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                  <th>Date Filed</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="blotter-table-body">
+                <tr>
+                  <td
+                    colspan="5"
+                    style="text-align: center; color: #94a3b8; padding: 2rem"
+                  >
+                    Loading...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="tbl-footer">
+              <span class="row-count" id="rowCount">Showing...</span>
+              <div class="pag-btns">
+                <button id="btnPrev" onclick="changePage(-1)">Prev</button
+                ><button id="btnNext" onclick="changePage(1)">Next</button>
+              </div>
+            </div>
+          </div>
+        </main>
+        <footer class="sa-footer"><p id="footer-year"></p></footer>
+      </div>
+    </div>
+    <div class="modal-overlay" id="viewModal">
+      <div class="modal-box">
+        <div class="modal-hdr">
+          <h3>Blotter Details</h3>
+          <button class="modal-close" onclick="closeModal('viewModal')">
+            &times;
+          </button>
+        </div>
+        <div id="viewContent"></div>
+      </div>
+    </div>
+    <script src="../js/script.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const currentAdmin = getCurrentUser();
+        if (!currentAdmin || (currentAdmin.roles || [])[0] !== "super_admin") {
+          location.href = "../auth/login.html";
+          return;
+        }
+        document.getElementById("footer-year").textContent =
+          "© " + new Date().getFullYear() + " Barangay Records System.";
+        document.getElementById("sb-avatar").textContent = (
+          currentAdmin.firstName || "SA"
+        )
+          .split(" ")
+          .map((n) => n[0])
+          .join("")
+          .substring(0, 2)
+          .toUpperCase();
+        document.getElementById("sb-name").textContent =
+          currentAdmin.firstName || currentAdmin.fullName;
+
+        let page = 1,
+          PER_PAGE = 10,
+          filtered = [];
+        const requests = getData(STORAGE_KEYS.REQUESTS).filter(
+          (r) => r.typeKey === "blotter" || r.typeKey === "complaint",
+        );
+
+        function toggleSection(id) {
+          document.getElementById(id).classList.toggle("collapsed");
+        }
+        function closeModal(id) {
+          document.getElementById(id).classList.remove("open");
+        }
+        function doLogout() {
+          logAction(currentAdmin.id, "super_admin", "Logged out");
+          setCurrentUser(null);
+          location.href = "../auth/login.html";
+        }
+
+        function applyFilters() {
+          const search = document
+            .getElementById("searchInput")
+            .value.toLowerCase();
+          const type = document.getElementById("typeFilter").value;
+          const status = document.getElementById("statusFilter").value;
+          const from = document.getElementById("dateFrom").value;
+          const to = document.getElementById("dateTo").value;
+
+          filtered = requests.filter((r) => {
+            return (
+              (!search || (r.id || "").toLowerCase().includes(search)) &&
+              (!type || r.type === type) &&
+              (!status || r.status === status) &&
+              (!from || new Date(r.createdAt) >= new Date(from)) &&
+              (!to || new Date(r.createdAt) <= new Date(to + "T23:59:59"))
+            );
+          });
+          filtered.sort(
+            (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+          );
+          page = 1;
+          renderTable();
+        }
+
+        function renderTable() {
+          const total = filtered.length,
+            start = (page - 1) * PER_PAGE,
+            end = Math.min(start + PER_PAGE, total);
+          const slice = filtered.slice(start, end);
+          const tbody = document.getElementById("blotter-table-body");
+
+          if (!slice.length) {
+            tbody.innerHTML =
+              '<tr><td colspan="5" style="text-align:center;color:#94a3b8;padding:2rem;">No results found.</td></tr>';
+          } else {
+            tbody.innerHTML = slice
+              .map((r, i) => {
+                let btns =
+                  '<button class="btn btn-view" onclick="viewBlotter(\'' +
+                  r.id +
+                  "')\">View</button>";
+                if (r.status !== "resolved")
+                  btns +=
+                    ' <button class="btn btn-approve" onclick="resolveBlotter(\'' +
+                    r.id +
+                    "')\">Mark Resolved</button>";
+                if (r.status === "resolved")
+                  btns +=
+                    ' <button class="btn btn-print" onclick="printBlotter(\'' +
+                    r.id +
+                    "')\">Print</button>";
+                return (
+                  "<tr><td>" +
+                  (start + i + 1) +
+                  "</td><td>" +
+                  r.type +
+                  '</td><td><span class="badge badge-' +
+                  r.status +
+                  '">' +
+                  r.status +
+                  "</span></td><td>" +
+                  (r.createdAt
+                    ? new Date(r.createdAt).toLocaleDateString()
+                    : "-") +
+                  "</td><td>" +
+                  btns +
+                  "</td></tr>"
+                );
+              })
+              .join("");
+          }
+          document.getElementById("rowCount").textContent =
+            total === 0
+              ? "No results"
+              : "Showing " + (start + 1) + "–" + end + " of " + total;
+          document.getElementById("btnPrev").disabled = page <= 1;
+          document.getElementById("btnNext").disabled = end >= total;
+        }
+
+        window.changePage = function (delta) {
+          page += delta;
+          renderTable();
+        };
+        window.viewBlotter = function (id) {
+          const r = requests.find((x) => x.id === id);
+          if (!r) return;
+          // PRIVACY: only show public-safe fields
+          const content = [
+            { k: "Type", v: r.type },
+            { k: "Status", v: r.status },
+            {
+              k: "Date Filed",
+              v: r.createdAt ? new Date(r.createdAt).toLocaleString() : "-",
+            },
+            { k: "Incident Type", v: r["incident-type"] || "-" },
+            { k: "Incident Date", v: r["incident-date"] || "-" },
+            { k: "Incident Location", v: r["incident-location"] || "-" },
+            {
+              k: "Description",
+              v: r["incident-description"] || r["complaint-description"] || "-",
+            },
+          ]
+            .map(
+              (f) =>
+                '<div class="modal-row"><span class="modal-key">' +
+                f.k +
+                '</span><span class="modal-val">' +
+                f.v +
+                "</span></div>",
+            )
+            .join("");
+          document.getElementById("viewContent").innerHTML = content;
+          document.getElementById("viewModal").classList.add("open");
+        };
+        window.resolveBlotter = function (id) {
+          if (!confirm("Mark this blotter as resolved?")) return;
+          const r = requests.find((x) => x.id === id);
+          if (r) {
+            r.status = "resolved";
+            updateItem(STORAGE_KEYS.REQUESTS, id, r);
+            addNotification(
+              r.userId,
+              "Blotter Update",
+              "Your " + r.type + " has been marked resolved.",
+              "info",
+            );
+            logAction(
+              currentAdmin.id,
+              "super_admin",
+              "Marked blotter resolved: " + id,
+              id,
+            );
+            applyFilters();
+          }
+        };
+        window.printBlotter = function (id) {
+          alert("Print blotter: " + id);
+        };
+
+        document
+          .getElementById("searchInput")
+          .addEventListener("input", applyFilters);
+        document
+          .getElementById("typeFilter")
+          .addEventListener("change", applyFilters);
+        document
+          .getElementById("statusFilter")
+          .addEventListener("change", applyFilters);
+        document
+          .getElementById("dateFrom")
+          .addEventListener("change", applyFilters);
+        document
+          .getElementById("dateTo")
+          .addEventListener("change", applyFilters);
+
+        applyFilters();
+      });
+    </script>
+  </body>
+</html>

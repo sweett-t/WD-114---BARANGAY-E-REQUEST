@@ -1,24 +1,24 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
- <head>
+<head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login | Barangay E-Request</title>
-<link rel="stylesheet" href="../css/style.css" />
-<link rel="stylesheet" href="../css/auth-login.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/auth-login.css" />
 </head>
 
-  <body>
-    <div class="auth-page">
-      <!-- LEFT PANEL -->
-      <div class="auth-panel-left">
-        <a href="../index.html" class="auth-brand">
-          <span class="auth-brand-name">Barangay E-Request</span>
-        </a>
-        <div class="auth-left-content">
-          <div class="auth-left-main">
-               <div class="hero-image">
-                <img src="images/paperss.png" alt="Hero Image" />
+<body>
+  <div class="auth-page">
+    <!-- LEFT PANEL -->
+    <div class="auth-panel-left">
+      <a href="../index.html" class="auth-brand">
+        <span class="auth-brand-name">Barangay E-Request</span>
+      </a>
+      <div class="auth-left-content">
+        <div class="auth-left-main">
+             <div class="hero-image">
+              <img src="images/paperss.png" alt="Hero Image" />
         </div>
           <div class="auth-left-text">
             <h2>Request documents <em>anytime,</em> anywhere.</h2>
@@ -30,87 +30,129 @@
               <div class="auth-feature-item">Secure and private document handling</div>
               <div class="auth-feature-item">Fast processing by barangay officials</div>
           </div>
-            </div>
+            </div>      
           </div>
         </div>
       </div>
 
-      <!-- RIGHT PANEL -->
-      <div class="auth-panel-right">
-        <div class="auth-form-box">
-          <div class="auth-form-header">
-            <h1>Welcome back</h1>
-            <p>Sign in to your account to continue.</p>
+    <!-- RIGHT PANEL -->
+    <div class="auth-panel-right">
+      <div class="auth-form-box">
+        <div class="auth-form-header">
+          <h1>Welcome back</h1>
+          <p>Sign in to your account to continue.</p>
+        </div>
+
+        <!-- LOGIN FORM -->
+        <form id="loginForm" novalidate>
+          <!-- Username -->
+          <div class="auth-field">
+            <label for="login-username">Username or Email Address</label>
+            <input
+              type="text"
+              id="login-username"
+              name="username"
+              placeholder="Enter your username or email"
+              autocomplete="username"
+              required
+            />
           </div>
 
-          <!-- LOGIN FORM -->
-          <form id="loginForm" novalidate>
-            <!-- Login Identifier -->
-            <div class="auth-field">
-              <label for="login-identifier">Phone Number, Email, or Username</label>
+          <!-- Password -->
+          <div class="auth-field">
+            <label for="login-password">Password</label>
+
+            <div class="password-wrapper">
               <input
-                type="text"
-                id="login-identifier"
-                name="identifier"
-                placeholder="Enter phone, email, or username"
-                autocomplete="username"
+                type="password"
+                id="login-password"
+                name="password"
+                placeholder="Enter your password"
+                autocomplete="current-password"
                 required
               />
-              <small class="auth-field-hint">You can log in using your phone number, email address, or username</small>
+
+              <button
+                type="button"
+                class="toggle-password"
+                onclick="togglePassword('login-password', this)"
+              >
+                Show
+              </button>
             </div>
-
-            <!-- Password -->
-            <div class="auth-field">
-              <label for="login-password">Password</label>
-
-              <div class="password-wrapper">
-                <input
-                  type="password"
-                  id="login-password"
-                  name="password"
-                  placeholder="Enter your password"
-                  autocomplete="current-password"
-                  required
-                />
-
-                <button
-                  type="button"
-                  class="toggle-password"
-                  onclick="togglePassword('login-password', this)"
-                >
-                  Show
-                </button>
-              </div>
-            </div>
-
-            <!-- Remember + Forgot -->
-            <div class="auth-options-row">
-              <label class="auth-checkbox-label">
-                <input type="checkbox" name="remember" />
-                Remember me
-              </label>
-
-              <a href="../auth/forgot-password.html" class="auth-forgot">
-                Forgot password?
-              </a>
-            </div>
-
-            <!-- Submit -->
-            <button type="submit" class="btn-auth-primary">Login</button>
-          </form>
-
-          <div class="auth-divider">
-            <span>Don't have an account?</span>
           </div>
 
-          <p class="auth-switch">
-            New resident?
-            <a href="../auth/signup.html">Create an account</a>
-          </p>
+          <!-- Remember + Forgot -->
+          <div class="auth-options-row">
+            <label class="auth-checkbox-label">
+              <input type="checkbox" name="remember" />
+              Remember me
+            </label>
+
+            <a href="../auth/forgot-password.html" class="auth-forgot">
+              Forgot password?
+            </a>
+          </div>
+
+          <!-- Submit -->
+          <button type="submit" class="btn-auth-primary">Login</button>
+        </form>
+
+        <div class="auth-divider">
+          <span>Don't have an account?</span>
         </div>
+
+        <p class="auth-switch">
+          New resident?
+          <a href="../auth/signup.html">Create an account</a>
+        </p>
+
       </div>
     </div>
+  </div>
 
-    <script src="../js/script.js"></script>
-  </body>
+  <script src="../js/script.js"></script>
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const identifier = document.getElementById('login-username').value.trim();
+      const password = document.getElementById('login-password').value;
+      
+      if (!identifier || !password) {
+        alert('Please enter username and password');
+        return;
+      }
+      
+      // Check by email directly
+      const users = JSON.parse(localStorage.getItem('barangay_users') || '[]');
+      const user = users.find(u => (u.email === identifier || u.username === identifier || u.phone === identifier) && u.password === password);
+      
+      if (user) {
+        if (user.status !== 'active') {
+          alert('Account is not active');
+          return;
+        }
+        // Set current user
+        localStorage.setItem('barangay_current_user', JSON.stringify(user));
+        localStorage.setItem('barangay_current_mode', user.roles[0] || 'user');
+        
+        // Log action
+        const logs = JSON.parse(localStorage.getItem('barangay_logs') || '[]');
+        logs.push({ id: 'log_' + Date.now(), userId: user.id, fullName: user.fullName, role: user.roles[0], action: 'Logged in', timestamp: new Date().toISOString() });
+        localStorage.setItem('barangay_logs', JSON.stringify(logs));
+        
+        const role = user.roles[0];
+        if (role === 'super_admin') {
+          window.location.href = '../superadmin/superadmin-dashboard.html';
+        } else if (role === 'admin') {
+          window.location.href = '../superadmin/superadmin-dashboard.html';
+        } else {
+          window.location.href = '../user/user-dashboard.html';
+        }
+      } else {
+        alert('Invalid credentials. Make sure you ran seed.html first!');
+      }
+    });
+  </script>
+</body>
 </html>

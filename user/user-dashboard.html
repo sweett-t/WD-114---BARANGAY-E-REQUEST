@@ -1,102 +1,104 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>User Dashboard</title>
-
+    <title>User Dashboard - Barangay E-Request</title>
     <link rel="stylesheet" href="../css/style.css" />
     <link rel="stylesheet" href="../css/navbar.css" />
     <link rel="stylesheet" href="../css/user-dashboard.css" />
   </head>
   <body>
-    <!-- NAVBAR -->
     <nav class="navbar">
-      <a href="index.html" class="navbar-brand">Barangay E-Request</a>
-
-      <!-- Hidden checkbox toggle (no JS) -->
+      <a href="user-dashboard.html" class="navbar-brand">Barangay E-Request</a>
       <input
         type="checkbox"
         id="nav-toggle"
         class="nav-toggle"
         aria-hidden="true"
       />
-
       <ul class="navbar-nav">
-        <li>
-          <a href="../user/user-dashboard.html" class="active">Dashboard</a>
-        </li>
-        <li><a href="../user/request.html">New Request</a></li>
-        <li><a href="../user/my-requests.html">My Requests</a></li>
-        <li><a href="../user/user-profile.html">Profile</a></li>
+        <li><a href="user-dashboard.html" class="active">Dashboard</a></li>
+        <li><a href="request.html">New Request</a></li>
+        <li><a href="blotter-complaint.html">Blotter & Complaint</a></li>
+        <li><a href="my-requests.html">My Requests</a></li>
+        <li><a href="user-profile.html">Profile</a></li>
       </ul>
-
       <div class="navbar-right">
+        <button
+          class="notification-bell"
+          id="notification-bell"
+          onclick="showNotifications()"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+          <span
+            class="notification-badge"
+            id="notification-badge"
+            style="display: none"
+            >0</span
+          >
+        </button>
         <div class="navbar-user">
-          <div class="avatar">JD</div>
-          <span class="navbar-username">Juan Dela Cruz</span>
+          <div class="avatar" id="user-avatar">JD</div>
+          <span class="navbar-username" id="user-name">Loading...</span>
         </div>
-        <!-- Hamburger label tied to checkbox -->
         <label for="nav-toggle" class="hamburger" aria-label="Toggle menu">
-          <span></span>
-          <span></span>
-          <span></span>
+          <span></span><span></span><span></span>
         </label>
       </div>
     </nav>
 
-    <!-- MAIN DASHBOARD CONTENT -->
     <main class="dashboard-content">
-      <!-- DASHBOARD HEADER -->
       <div class="dashboard-header">
         <div class="dashboard-header-top">
-          <h1>Welcome back, <span id="welcomeName">Juan</span>!</h1>
-          <a
-            href="../user/request.html"
-            class="btn btn-primary btn-new-request"
+          <h1>Welcome back, <span id="welcomeName">User</span>!</h1>
+          <a href="request.html" class="btn btn-primary btn-new-request"
+            >+ New Request</a
           >
-            + New Request
-          </a>
         </div>
         <p>
           Manage your document requests and stay updated with your barangay.
         </p>
       </div>
 
-      <!-- STAT CARDS -->
       <section class="stats-grid">
         <div class="card stat-card total">
           <h4>Total Requests</h4>
-          <p class="stat-number" id="totalReq">14</p>
-          <span class="stat-label">This month</span>
+          <p class="stat-number" id="totalReq">0</p>
+          <span class="stat-label">All time</span>
         </div>
-
         <div class="card stat-card pending">
-          <h4>Pending Approval</h4>
-          <p class="stat-number" id="pendingReq">3</p>
+          <h4>Pending</h4>
+          <p class="stat-number" id="pendingReq">0</p>
           <span class="stat-label">Awaiting verification</span>
         </div>
-
         <div class="card stat-card approved">
           <h4>Approved / Ready</h4>
-          <p class="stat-number" id="approvedReq">9</p>
+          <p class="stat-number" id="approvedReq">0</p>
           <span class="stat-label">Ready for pickup</span>
         </div>
-
-        <div class="card stat-card rejected">
-          <h4>Rejected</h4>
-          <p class="stat-number" id="rejectedReq">2</p>
-          <span class="stat-label">Needs attention</span>
+        <div class="card stat-card released">
+          <h4>Released</h4>
+          <p class="stat-number" id="releasedReq">0</p>
+          <span class="stat-label">Completed</span>
         </div>
       </section>
 
-      <!-- RECENT REQUESTS -->
       <div class="card requests-card">
         <div class="card-header">
           <h3>My Recent Requests</h3>
-          <a href="../user/my-requests.html">View All</a>
+          <a href="my-requests.html">View All</a>
         </div>
-
         <table>
           <thead>
             <tr>
@@ -107,48 +109,129 @@
               <th>Action</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody id="recent-requests-body">
             <tr>
-              <td>Barangay Clearance</td>
-              <td>2026-02-28</td>
-              <td>BC12345</td>
-              <td class="status-approved">Approved</td>
-              <td><a href="#">View</a></td>
-            </tr>
-            <tr>
-              <td>Certificate of Residency</td>
-              <td>2026-02-25</td>
-              <td>CR98765</td>
-              <td class="status-pending">Pending</td>
-              <td><a href="#">View</a></td>
-            </tr>
-            <tr>
-              <td>Certificate of Indigency</td>
-              <td>2026-02-20</td>
-              <td>IC54321</td>
-              <td class="status-approved">Approved</td>
-              <td><a href="#">View</a></td>
+              <td colspan="5" class="empty-state">Loading...</td>
             </tr>
           </tbody>
         </table>
       </div>
-
-      <!-- ANNOUNCEMENTS -->
-      <div class="card announcement">
-        <h4>Barangay Update: Office Schedule</h4>
-        <p>
-          Document pickups are available Monday to Friday, 8:00 AM to 5:00 PM.
-          Please bring your tracking ID and valid identification when claiming
-          requests.
-        </p>
-      </div>
     </main>
 
-    <!-- FOOTER -->
+    <!-- Notification Modal -->
+    <div
+      class="notification-modal"
+      id="notification-modal"
+      onclick="closeNotificationModal(event)"
+    >
+      <div class="notification-panel" onclick="event.stopPropagation()">
+        <div class="notification-panel-header">
+          <h3>Notifications</h3>
+          <div>
+            <button onclick="showMarkAllReadModal()">Mark all read</button>
+            <button onclick="showClearAllModal()" style="margin-left: 0.75rem">
+              Clear all
+            </button>
+          </div>
+        </div>
+        <div class="notification-list" id="notification-list"></div>
+      </div>
+    </div>
+
     <footer class="footer">
-      <p>&copy; 2026 Barangay Records System. All rights reserved.</p>
+      <p>
+        &copy; <span id="current-year"></span> Barangay Records System. All
+        rights reserved.
+      </p>
     </footer>
 
-    <script src="../js/user-dashboard.js"></script>
+    <script src="../js/script.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const user = getCurrentUser();
+        if (!user) {
+          window.location.href = "../auth/login.html";
+          return;
+        }
+
+        document.getElementById("current-year").textContent =
+          new Date().getFullYear();
+        document.getElementById("user-name").textContent =
+          user.fullName || user.name || "User";
+        document.getElementById("welcomeName").textContent = user.fullName
+          ? user.fullName.split(" ")[0]
+          : "User";
+        document.getElementById("user-avatar").textContent = getInitials(
+          user.fullName || user.name,
+        );
+
+        loadDashboardData();
+        renderNotifications();
+      });
+
+      function getInitials(name) {
+        if (!name) return "U";
+        return name
+          .split(" ")
+          .map((n) => n[0])
+          .join("")
+          .substring(0, 2)
+          .toUpperCase();
+      }
+
+      function loadDashboardData() {
+        const user = getCurrentUser();
+        if (!user) return;
+
+        const requests = getData(STORAGE_KEYS.REQUESTS) || [];
+        const userRequests = requests.filter((r) => r.userId === user.id);
+
+        document.getElementById("totalReq").textContent = userRequests.length;
+        document.getElementById("pendingReq").textContent = userRequests.filter(
+          (r) =>
+            r.status === "pending" ||
+            r.status === "pending-review" ||
+            r.status === "pending-approval",
+        ).length;
+        document.getElementById("approvedReq").textContent =
+          userRequests.filter(
+            (r) => r.status === "approved" || r.status === "ready",
+          ).length;
+        document.getElementById("releasedReq").textContent =
+          userRequests.filter((r) => r.status === "released").length;
+
+        const tbody = document.getElementById("recent-requests-body");
+        const recent = userRequests.slice(0, 5);
+
+        if (recent.length === 0) {
+          tbody.innerHTML =
+            '<tr><td colspan="5" class="empty-state">No requests yet. <a href="request.html">Create one</a></td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = recent
+          .map(
+            (r) => `
+        <tr>
+          <td>${r.type}</td>
+          <td>${formatDate(r.createdAt)}</td>
+          <td>${r.trackingNumber || r.id}</td>
+          <td class="status-${r.status}">${r.status}</td>
+          <td><a href="my-requests.html">View</a></td>
+        </tr>
+      `,
+          )
+          .join("");
+      }
+
+      function formatDate(dateStr) {
+        const date = new Date(dateStr);
+        return date.toLocaleDateString("en-PH", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        });
+      }
+    </script>
   </body>
 </html>

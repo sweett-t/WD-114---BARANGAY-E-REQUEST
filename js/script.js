@@ -11,6 +11,7 @@ const STORAGE_KEYS = {
   LOGS: 'barangay_logs',
   PAYMENTS: 'barangay_payments',
   SETTINGS: 'barangay_settings',
+  NOTIFICATIONS: 'barangay_notifications',
   CURRENT_USER: 'barangay_current_user',
   CURRENT_MODE: 'barangay_current_mode'
 };
@@ -38,13 +39,117 @@ const ROLES = {
 };
 
 // ============================================
+// DEMO ACCOUNTS SETUP
+// ============================================
+function setupDemoAccounts() {
+  const users = getData(STORAGE_KEYS.USERS) || [];
+  
+  // Check if accounts already exist
+  if (users.find(u => u.email === 'juan.delacruz@barangay.gov.ph')) {
+    return; // Already set up
+  }
+  
+  // Admin Account
+  const admin = {
+    id: 'admin_' + Date.now(),
+    fullName: 'Juan Dela Cruz',
+    name: 'Juan Dela Cruz',
+    email: 'juan.delacruz@barangay.gov.ph',
+    password: 'admin123',
+    phone: '09171234567',
+    roles: [ROLES.ADMIN],
+    position: 'Secretary',
+    termStart: '2026-01-01',
+    termEnd: '2026-12-31',
+    birthdate: '1988-06-15',
+    gender: 'Male',
+    civilStatus: 'Married',
+    address: {
+      country: 'Philippines',
+      region: 'Region IX - Zamboanga Peninsula',
+      province: 'Zamboanga del Sur',
+      city: 'Zamboanga City',
+      barangay: 'Lunzuran',
+      purok: 'Purok 2',
+      street: 'Rizal Street',
+      houseNumber: '45'
+    },
+    status: 'active',
+    verified: true,
+    createdAt: new Date().toISOString()
+  };
+  
+  // Super Admin Account
+  const superAdmin = {
+    id: 'superadmin_' + Date.now(),
+    fullName: 'Juana Santos',
+    name: 'Juana Santos',
+    email: 'juana.santos@barangay.gov.ph',
+    password: 'superadmin123',
+    phone: '09179876543',
+    roles: [ROLES.SUPER_ADMIN],
+    birthdate: '1985-11-02',
+    gender: 'Female',
+    civilStatus: 'Single',
+    address: {
+      country: 'Philippines',
+      region: 'Region IX - Zamboanga Peninsula',
+      province: 'Zamboanga del Sur',
+      city: 'Zamboanga City',
+      barangay: 'Lunzuran',
+      purok: 'Purok 1',
+      street: 'Mabini Street',
+      houseNumber: '12'
+    },
+    status: 'active',
+    verified: true,
+    createdAt: new Date().toISOString()
+  };
+  
+  users.push(admin);
+  users.push(superAdmin);
+  setData(STORAGE_KEYS.USERS, users);
+  
+  console.log('Demo accounts created!');
+  console.log('Admin - juan.delacruz@barangay.gov.ph / admin123');
+  console.log('Super Admin - juana.santos@barangay.gov.ph / superadmin123');
+}
+
+// Auto-run setup on first load
+setupDemoAccounts();
+
+// ============================================
+// SERVICE FEES (PAYMENT SYSTEM)
+// ============================================
+
+const SERVICE_FEES = {
+  'clearance': { name: 'Barangay Clearance', fee: 50 },
+  'id': { name: 'Barangay ID', fee: 50 },
+  'residency': { name: 'Certificate of Residency', fee: 50 },
+  'indigency': { name: 'Certificate of Indigency', fee: 0 },
+  'good-moral': { name: 'Certificate of Good Moral Character', fee: 50 },
+  'business-clearance': { name: 'Barangay Business Clearance', fee: 30 },
+  'solo-parent': { name: 'Certificate of Solo Parent', fee: 0 },
+  'senior-citizen': { name: 'Certificate of Senior Citizen', fee: 0 },
+  'travel': { name: 'Travel Certification', fee: 50 },
+  'blotter': { name: 'Blotter/Complaint', fee: 0 }
+};
+
+function getServiceFee(serviceType) {
+  return SERVICE_FEES[serviceType]?.fee || 0;
+}
+
+function isFreeService(serviceType) {
+  return getServiceFee(serviceType) === 0;
+}
+
+// ============================================
 // UTILITY FUNCTIONS
 // ============================================
 
 function generateId() {
   return 'id_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
 }
-
 function generateControlNumber() {
   return 'CN' + Date.now();
 }
@@ -95,6 +200,11 @@ function getData(key) {
 
 function setData(key, data) {
   localStorage.setItem(key, JSON.stringify(data));
+}
+
+// Alias for compatibility
+function saveData(key, data) {
+  setData(key, data);
 }
 
 function saveItem(key, item) {
@@ -172,14 +282,24 @@ function login(identifier, password) {
   return { success: false, message: 'Invalid credentials' };
 }
 
+function isAdmin() {
+  const user = getCurrentUser();
+  return user && user.roles && user.roles.includes(ROLES.ADMIN);
+}
+
 function logout() {
   const user = getCurrentUser();
+  const mode = getCurrentMode();
   if (user) {
-    logAction(user.id, getCurrentMode(), 'logout');
+    logAction(user.id, mode, 'logout');
   }
   setCurrentUser(null);
   localStorage.removeItem(STORAGE_KEYS.CURRENT_MODE);
-  window.location.href = '../index.html';
+  if (mode === ROLES.SUPER_ADMIN) {
+    window.location.href = 'login.html';
+  } else {
+    window.location.href = '../index.html';
+  }
 }
 
 function signup(userData) {
@@ -226,7 +346,18 @@ function signup(userData) {
     roles: roles,
     dependent: dependent,
     createdAt: getCurrentTimestamp(),
-    status: 'active'
+    status: 'active',
+    houseNumber: userData.house_number,
+    purok: userData.purok,
+    street: userData.street,
+    landmark: userData.landmark || '',
+    idInfo: {
+      type: userData.id_type || null,
+      number: userData.id_number || null,
+      front: userData.id_front || null,
+      back: userData.id_back || null
+    },
+    photo: userData.profile_pic || null
   };
   
   users.push(newUser);
@@ -234,10 +365,10 @@ function signup(userData) {
   
   const address = {
     country: 'Philippines',
-    region: 'Region XI - Davao Region',
-    province: 'Davao del Sur',
-    city: 'Davao City',
-    barangay: 'Obrero',
+    region: 'Region IX - Zamboanga Peninsula',
+    province: 'Zamboanga del Sur',
+    city: 'Zamboanga City',
+    barangay: 'Lunzuran',
     purok: userData.purok,
     street: userData.street,
     houseNumber: userData.house_number,
@@ -279,6 +410,7 @@ function signup(userData) {
   const resident = {
     id: generateId(),
     userId: newUser.id,
+    name: newUser.fullName,
     fullName: newUser.fullName,
     firstName: userData.first_name,
     middleName: userData.middle_name || null,
@@ -287,6 +419,10 @@ function signup(userData) {
     birthdate: userData.birthdate,
     sex: userData.sex,
     civilStatus: userData.civil_status,
+    houseNumber: userData.house_number,
+    purok: userData.purok,
+    street: userData.street,
+    landmark: userData.landmark || '',
     contact: {
       phone: userData.phone,
       email: userData.email || null,
@@ -451,6 +587,8 @@ function createRequest(userId, type, residentData) {
   saveItem(STORAGE_KEYS.REQUESTS, request);
   logAction(userId, getCurrentMode(), 'create_request', request.id);
   
+  addNotification(userId, 'Request Submitted', 'Your ' + type + ' request has been submitted. Tracking: ' + request.controlNumber, 'info');
+  
   return { success: true, request };
 }
 
@@ -477,6 +615,8 @@ function approveRequest(requestId) {
   
   updateItem(STORAGE_KEYS.REQUESTS, requestId, request);
   logAction(user.id, getCurrentMode(), 'approve_request', requestId);
+  
+  addNotification(request.userId, 'Request Approved', 'Your request (' + request.documentType + ') has been approved. Please proceed to the barangay office for pickup.', 'success');
   
   return { success: true, request };
 }
@@ -506,6 +646,8 @@ function rejectRequest(requestId, reason) {
   updateItem(STORAGE_KEYS.REQUESTS, requestId, request);
   logAction(user.id, getCurrentMode(), 'reject_request', requestId);
   
+  addNotification(request.userId, 'Request Rejected', 'Your request (' + request.documentType + ') has been rejected. Reason: ' + reason, 'error');
+  
   return { success: true, request };
 }
 
@@ -520,6 +662,8 @@ function releaseRequest(requestId) {
   request.releasedAt = getCurrentTimestamp();
   
   updateItem(STORAGE_KEYS.REQUESTS, requestId, request);
+  
+  addNotification(request.userId, 'Request Released', 'Your request (' + request.documentType + ') has been released. Thank you!', 'success');
   
   return { success: true, request };
 }
@@ -786,8 +930,8 @@ function togglePassword(inputId, button) {
 }
 
 let phoneVerified = false;
-let phoneVerificationCode = '12345';
 let phoneVerificationSent = false;
+const phoneVerificationCode = '12345';
 
 function verifyPhone() {
   const phone = document.getElementById('phone');
@@ -814,6 +958,8 @@ function verifyPhone() {
   phone.classList.remove('error');
   
   if (!phoneVerificationSent) {
+    btn.textContent = 'Verify';
+    codeInput.focus();
     showToast('Verification code sent to ' + phone.value, 'success');
     phoneVerificationSent = true;
     return;
@@ -841,8 +987,8 @@ function isPhoneVerified() {
 }
 
 let emailVerified = false;
-const emailVerificationCode = '12345';
 let emailVerificationSent = false;
+const emailVerificationCode = '12345';
 
 function verifyEmail() {
   const email = document.getElementById('email');
@@ -869,6 +1015,8 @@ function verifyEmail() {
   email.classList.remove('error');
   
   if (!emailVerificationSent) {
+    btn.textContent = 'Verify';
+    codeInput.focus();
     showToast('Verification code sent to ' + email.value, 'success');
     emailVerificationSent = true;
     return;
@@ -883,7 +1031,7 @@ function verifyEmail() {
   
   codeInput.classList.remove('error');
   emailVerified = true;
-  statusDiv.classList.remove('not-verified');
+statusDiv.classList.remove('not-verified');
   statusDiv.classList.add('verified');
   statusDiv.textContent = 'Verified';
   btn.textContent = 'Verified';
@@ -1231,6 +1379,11 @@ function requireAuth(roles = []) {
 // ============================================
 
 function initializeSystem() {
+  initializeStorage();
+  updateNavbarUserInfo();
+}
+
+function initializeStorage() {
   if (!localStorage.getItem(STORAGE_KEYS.USERS)) {
     setData(STORAGE_KEYS.USERS, []);
   }
@@ -1253,12 +1406,247 @@ function initializeSystem() {
     setData(STORAGE_KEYS.PAYMENTS, []);
   }
   if (!localStorage.getItem(STORAGE_KEYS.SETTINGS)) {
-    setData(STORAGE_KEYS.SETTINGS, {
-      barangayName: 'Barangay Lunzuran',
-      city: 'Zamboanga City',
-      province: 'Zamboanga del Sur',
-      logo: null
-    });
+    setData(STORAGE_KEYS.SETTINGS, {});
+  }
+  if (!localStorage.getItem(STORAGE_KEYS.NOTIFICATIONS)) {
+    setData(STORAGE_KEYS.NOTIFICATIONS, []);
+  }
+  
+  // Seed demo admin accounts if they don't exist
+  seedDemoAccounts();
+}
+
+function seedDemoAccounts() {
+  const users = getData(STORAGE_KEYS.USERS) || [];
+  
+  // Check if accounts already exist
+  if (users.find(u => u.username === 'superadmin')) return;
+  if (users.find(u => u.username === 'admin')) return;
+  
+  // Super Admin account
+  const superAdmin = {
+    id: 'superadmin_' + Date.now(),
+    username: 'superadmin',
+    password: 'superadmin123',
+    fullName: 'Super Admin',
+    role: 'super_admin',
+    status: 'active',
+    createdAt: new Date().toISOString()
+  };
+  
+  // Admin account
+  const admin = {
+    id: 'admin_' + Date.now(),
+    username: 'admin',
+    password: 'admin123',
+    fullName: 'Barangay Admin',
+    role: 'admin',
+    status: 'active',
+    position: 'Secretary',
+    termStart: '2024-01-01',
+    termEnd: '2026-12-31',
+    createdAt: new Date().toISOString()
+  };
+  
+  users.push(superAdmin);
+  users.push(admin);
+  setData(STORAGE_KEYS.USERS, users);
+}
+
+function addNotification(userId, title, message, type) {
+  var notifications = getData(STORAGE_KEYS.NOTIFICATIONS) || [];
+  notifications.push({
+    id: generateId(),
+    userId: userId,
+    title: title,
+    message: message,
+    type: type || 'info',
+    read: false,
+    createdAt: new Date().toISOString()
+  });
+  saveData(STORAGE_KEYS.NOTIFICATIONS, notifications);
+}
+
+function getUserNotifications(userId) {
+  var notifications = getData(STORAGE_KEYS.NOTIFICATIONS) || [];
+  return notifications.filter(function(n) { return n.userId === userId; })
+    .sort(function(a, b) { return new Date(b.createdAt) - new Date(a.createdAt); });
+}
+
+function getUnreadCount(userId) {
+  var notifications = getUserNotifications(userId);
+  return notifications.filter(function(n) { return !n.read; }).length;
+}
+
+function markNotificationRead(notificationId) {
+  var notifications = getData(STORAGE_KEYS.NOTIFICATIONS) || [];
+  var idx = notifications.findIndex(function(n) { return n.id === notificationId; });
+  if (idx !== -1) {
+    notifications[idx].read = true;
+    saveData(STORAGE_KEYS.NOTIFICATIONS, notifications);
+  }
+}
+
+function markAllNotificationsRead(userId) {
+  var notifications = getData(STORAGE_KEYS.NOTIFICATIONS) || [];
+  notifications.forEach(function(n) {
+    if (n.userId === userId) n.read = true;
+  });
+  saveData(STORAGE_KEYS.NOTIFICATIONS, notifications);
+}
+
+function clearNotifications(userId) {
+  var notifications = getData(STORAGE_KEYS.NOTIFICATIONS) || [];
+  notifications = notifications.filter(function(n) { return n.userId !== userId; });
+  saveData(STORAGE_KEYS.NOTIFICATIONS, notifications);
+}
+
+// ============================================
+// GLOBAL NOTIFICATION FUNCTIONS (ALL PAGES)
+// ============================================
+
+function getNotifications() {
+  return getData(STORAGE_KEYS.NOTIFICATIONS) || [];
+}
+
+function setNotifications(data) {
+  saveData(STORAGE_KEYS.NOTIFICATIONS, data);
+}
+
+function showNotifications() {
+  const modal = document.getElementById('notification-modal');
+  if (modal) {
+    modal.classList.add('show');
+    renderNotificationList();
+  }
+}
+
+function closeNotificationModal(event) {
+  if (event && event.target !== event.currentTarget) return;
+  const modal = document.getElementById('notification-modal');
+  if (modal) modal.classList.remove('show');
+}
+
+function renderNotificationList() {
+  const user = getCurrentUser();
+  if (!user) return;
+  
+  const notifications = getUserNotifications(user.id);
+  const list = document.getElementById('notification-list');
+  if (!list) return;
+  
+  if (notifications.length === 0) {
+    list.innerHTML = '<div class="notification-empty"><p>No notifications yet</p></div>';
+    return;
+  }
+  
+  list.innerHTML = notifications.map(n => `
+    <div class="notification-item ${n.read ? '' : 'unread'}">
+      <div class="notification-item-header">
+        <span class="notification-item-title">${n.title}</span>
+        <span class="notification-item-time">${formatDate(n.createdAt)}</span>
+      </div>
+      <p class="notification-item-message">${n.message}</p>
+    </div>
+  `).join('');
+  
+  // Update badge
+  const badge = document.getElementById('notification-badge');
+  if (badge) {
+    const count = getUnreadCount(user.id);
+    badge.textContent = count;
+    badge.style.display = count > 0 ? 'flex' : 'none';
+  }
+}
+
+function markAllRead() {
+  const user = getCurrentUser();
+  if (!user) return;
+  
+  markAllNotificationsRead(user.id);
+  renderNotificationList();
+  showToast('Notifications marked as read');
+}
+
+function clearAllNotifications() {
+  const user = getCurrentUser();
+  if (!user) return;
+  
+  clearNotifications(user.id);
+  renderNotificationList();
+  showToast('All notifications cleared');
+}
+
+// ============================================
+// CONFIRM MODAL FUNCTIONS
+// ============================================
+
+function showConfirmModal(title, message, onConfirm) {
+  const modal = document.getElementById('confirm-modal');
+  const titleEl = document.getElementById('confirm-title');
+  const messageEl = document.getElementById('confirm-message');
+  const yesBtn = document.getElementById('confirm-yes-btn');
+  
+  if (!modal) return;
+  
+  if (titleEl) titleEl.textContent = title || 'Confirm Action';
+  if (messageEl) messageEl.textContent = message || 'Are you sure?';
+  
+  if (yesBtn) {
+    yesBtn.onclick = function() {
+      if (onConfirm) onConfirm();
+      closeConfirmModal();
+    };
+  }
+  
+  modal.classList.add('active');
+}
+
+function closeConfirmModal() {
+  const modal = document.getElementById('confirm-modal');
+  if (modal) modal.classList.remove('active');
+}
+
+function showMarkAllReadModal() {
+  markAllRead();
+  renderNotificationList();
+}
+
+function showClearAllModal() {
+  clearAllNotifications();
+  renderNotificationList();
+}
+
+// ============================================
+// LOAD BADGE HELPER
+// ============================================
+
+function loadNotificationBadge() {
+  const user = getCurrentUser();
+  if (!user) return;
+  const unread = getUnreadCount(user.id);
+  const badge = document.getElementById('notification-badge');
+  if (badge) {
+    if (unread > 0) {
+      badge.textContent = unread > 9 ? '9+' : unread;
+      badge.style.display = 'flex';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+}
+
+function updateNavbarUserInfo() {
+  var user = getCurrentUser();
+  if (!user) return;
+  
+  var navName = document.getElementById('user-nav-name');
+  var avatar = document.getElementById('user-avatar');
+  
+  if (navName) navName.textContent = user.fullName || 'User';
+  if (avatar) {
+    var initials = (user.fullName || 'U').split(' ').map(function(n) { return n[0]; }).join('').substring(0, 2).toUpperCase();
+    avatar.textContent = initials;
   }
 }
 
@@ -1281,7 +1669,14 @@ if (typeof document !== 'undefined') {
         const result = login(identifier, password);
         if (result.success) {
           showToast('Login successful!');
-          window.location.href = '../user/user-dashboard.html';
+          var user = result.user;
+          if (user.roles && user.roles.includes(ROLES.SUPER_ADMIN)) {
+            window.location.href = '../superadmin/superadmin-dashboard.html';
+          } else if (user.roles && user.roles.includes(ROLES.ADMIN)) {
+            window.location.href = '../admin/admin-dashboard.html';
+          } else {
+            window.location.href = '../user/user-dashboard.html';
+          }
         } else {
           showToast(result.message, 'error');
         }
@@ -1304,6 +1699,7 @@ if (typeof document !== 'undefined') {
       }
       
       const emailVerificationWrapper = document.getElementById('email-verification-wrapper');
+      const emailInput = document.getElementById('email');
       
       if (emailInput && emailVerificationWrapper) {
         emailVerificationWrapper.style.display = 'none';
@@ -1347,6 +1743,24 @@ if (typeof document !== 'undefined') {
           });
         }
         
+        const readFileAsDataURL = function(file) {
+          return new Promise(function(resolve) {
+            if (!file) { resolve(null); return; }
+            const reader = new FileReader();
+            reader.onload = function(e) { resolve(e.target.result); };
+            reader.readAsDataURL(file);
+          });
+        };
+        
+        Promise.all([
+          readFileAsDataURL(document.getElementById('profile-pic')?.files?.[0]),
+          readFileAsDataURL(document.getElementById('id-front')?.files?.[0]),
+          readFileAsDataURL(document.getElementById('id-back')?.files?.[0])
+        ]).then(function(results) {
+          const profilePicData = results[0];
+          const idFrontData = results[1];
+          const idBackData = results[2];
+        
         const formData = {
           first_name: document.getElementById('first-name').value.trim(),
           middle_name: document.getElementById('middle-name').value.trim(),
@@ -1369,11 +1783,11 @@ if (typeof document !== 'undefined') {
           dependents: dependents,
           username: document.getElementById('username').value.trim(),
           password: document.getElementById('password').value,
-          profile_pic: document.getElementById('profile-pic')?.value,
+          profile_pic: profilePicData,
           id_type: document.getElementById('id-type')?.value,
           id_number: document.getElementById('id-number')?.value,
-          id_front: document.getElementById('id-front')?.value,
-          id_back: document.getElementById('id-back')?.value
+          id_front: idFrontData,
+          id_back: idBackData
         };
         
         const result = signup(formData);
@@ -1383,6 +1797,7 @@ if (typeof document !== 'undefined') {
         } else {
           showToast(result.message, 'error');
         }
+        });
       });
     }
     

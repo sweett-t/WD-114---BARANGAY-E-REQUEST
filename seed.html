@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seed Demo Data</title>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background: #f1f5f9; }
+    .card { background: #fff; padding: 1.5rem; border-radius: 0.5rem; max-width: 600px; margin: 0 auto; }
+    h1 { color: #1e293b; }
+    .btn { display: inline-block; padding: 0.75rem 1.5rem; background: #2563eb; color: #fff; border: none; border-radius: 0.5rem; font-size: 1rem; cursor: pointer; margin: 0.5rem 0; }
+    .btn:hover { background: #1d4ed8; }
+    .credentials { background: #f8fafc; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem; }
+    .cred-row { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #e5e7eb; }
+    .cred-row:last-child { border-bottom: none; }
+    .role { font-weight: 700; color: #2563eb; }
+    code { background: #e5e7eb; padding: 0.2rem 0.4rem; border-radius: 0.25rem; font-size: 0.9rem; }
+    .success { background: #d1fae5; color: #065f46; padding: 0.75rem; border-radius: 0.5rem; margin-top: 1rem; display: none; }
+    .success.show { display: block; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Barangay E-Request - Demo Seeder</h1>
+    <p>Click the button below to seed demo data into localStorage.</p>
+    <button class="btn" onclick="seedData()">Seed Demo Data</button>
+    
+    <div id="success" class="success">
+      ✓ Demo data seeded successfully!
+    </div>
+    
+    <div class="credentials">
+      <h3>Demo Credentials:</h3>
+      <div class="cred-row">
+        <span class="role">Super Admin:</span>
+        <code>ligaya.villanueva@barangay.gov.ph / superadmin123</code>
+      </div>
+      <div class="cred-row">
+        <span class="role">Admin:</span>
+        <code>carlos.reyes@barangay.gov.ph / admin123</code>
+      </div>
+      <div class="cred-row">
+        <span class="role">User (Maria):</span>
+        <code>maria.gonzales@gmail.com / user123</code>
+      </div>
+      <div class="cred-row">
+        <span class="role">User (Roberto):</span>
+        <code>roberto.santillan@gmail.com / user123</code>
+      </div>
+    </div>
+    
+    <p style="margin-top:1rem"><a href="auth/login.html">Go to Login →</a></p>
+  </div>
+
+  <script>
+    function seedData() {
+      const KEYS = {
+        USERS: 'barangay_users',
+        REQUESTS: 'barangay_requests',
+        BLOTTER: 'barangay_blotter',
+        NOTIFICATIONS: 'barangay_notifications',
+        LOGS: 'barangay_logs',
+      };
+
+      const existing = JSON.parse(localStorage.getItem(KEYS.USERS) || '[]');
+      const existingIds = existing.map(u => u.id);
+
+      const fakeUsers = [
+        { id: 'user_001', fullName: 'Maria Reyes Gonzales', name: 'Maria Reyes Gonzales', email: 'maria.gonzales@gmail.com', password: 'user123', phone: '09171234567', roles: ['user'], birthdate: '1995-03-12', gender: 'Female', civilStatus: 'Single', address: { country: 'Philippines', region: 'Region IX', province: 'Zamboanga del Sur', city: 'Zamboanga City', barangay: 'Lunzuran', purok: 'Purok 3', street: 'Rizal Street', houseNumber: '45' }, status: 'active', verified: true, createdAt: '2025-01-15T08:00:00.000Z' },
+        { id: 'user_002', fullName: 'Roberto Lim Santillan', name: 'Roberto Lim Santillan', email: 'roberto.santillan@gmail.com', password: 'user123', phone: '09281234567', roles: ['user'], birthdate: '1988-07-22', gender: 'Male', civilStatus: 'Married', address: { country: 'Philippines', region: 'Region IX', province: 'Zamboanga del Sur', city: 'Zamboanga City', barangay: 'Lunzuran', purok: 'Purok 5', street: 'Mabini Street', houseNumber: '12' }, status: 'active', verified: true, createdAt: '2025-02-20T10:30:00.000Z' },
+        { id: 'admin_001', fullName: 'Carlos Mendoza Reyes', name: 'Carlos Mendoza Reyes', email: 'carlos.reyes@barangay.gov.ph', password: 'admin123', phone: '09351234567', roles: ['admin'], position: 'Secretary', termStart: '2023-01-01', termEnd: '2026-12-31', birthdate: '1980-11-05', gender: 'Male', civilStatus: 'Married', address: { country: 'Philippines', region: 'Region IX', province: 'Zamboanga del Sur', city: 'Zamboanga City', barangay: 'Lunzuran', purok: 'Purok 1', street: 'Burgos Street', houseNumber: '88' }, status: 'active', verified: true, createdAt: '2023-01-01T08:00:00.000Z' },
+        { id: 'superadmin_001', fullName: 'Ligaya Torres Villanueva', name: 'Ligaya Torres Villanueva', email: 'ligaya.villanueva@barangay.gov.ph', password: 'superadmin123', phone: '09421234567', roles: ['super_admin'], position: 'Captain', termStart: '2023-01-01', termEnd: '2026-12-31', birthdate: '1975-06-18', gender: 'Female', civilStatus: 'Married', address: { country: 'Philippines', region: 'Region IX', province: 'Zamboanga del Sur', city: 'Zamboanga City', barangay: 'Lunzuran', purok: 'Purok 2', street: 'Quezon Avenue', houseNumber: '7' }, status: 'active', verified: true, createdAt: '2023-01-01T08:00:00.000Z' }
+      ];
+
+      fakeUsers.forEach(u => { if (!existingIds.includes(u.id)) existing.push(u); });
+      localStorage.setItem(KEYS.USERS, JSON.stringify(existing));
+
+      const existingReqs = JSON.parse(localStorage.getItem(KEYS.REQUESTS) || '[]');
+      const fakeRequests = [
+        { id: 'req_001', trackingNumber: 'req_001', userId: 'user_001', type: 'Barangay Clearance', typeKey: 'barangay_clearance', status: 'pending', purpose: 'Employment', requesterName: 'Maria Reyes Gonzales', requesterAddress: '45 Rizal Street, Purok 3', requesterPhone: '09171234567', fee: 50, createdAt: '2026-04-10T09:00:00.000Z' },
+        { id: 'req_002', trackingNumber: 'req_002', userId: 'user_001', type: 'Certificate of Indigency', typeKey: 'indigency', status: 'approved', purpose: 'Medical Assistance', requesterName: 'Maria Reyes Gonzales', requesterAddress: '45 Rizal Street', requesterPhone: '09171234567', approvedBy: 'Carlos Mendoza Reyes', createdAt: '2026-03-28T11:00:00.000Z' },
+        { id: 'req_003', trackingNumber: 'req_003', userId: 'user_002', type: 'Certificate of Residency', typeKey: 'residency', status: 'released', purpose: 'Bank Requirement', requesterName: 'Roberto Lim Santillan', requesterAddress: '12 Mabini Street', requesterPhone: '09281234567', approvedBy: 'Carlos Mendoza Reyes', releasedBy: 'Carlos Mendoza Reyes', createdAt: '2026-04-01T14:00:00.000Z' }
+      ];
+
+      const existingReqIds = existingReqs.map(r => r.id);
+      fakeRequests.forEach(r => { if (!existingReqIds.includes(r.id)) existingReqs.push(r); });
+      localStorage.setItem(KEYS.REQUESTS, JSON.stringify(existingReqs));
+
+      const existingBlotter = JSON.parse(localStorage.getItem(KEYS.BLOTTER) || '[]');
+      const fakeBlotter = [
+        { id: 'blotter_001', userId: 'user_002', type: 'Blotter', typeKey: 'blotter', status: 'pending', requesterName: 'Roberto Lim Santillan', createdAt: '2026-04-20T08:30:00.000Z' },
+        { id: 'blotter_002', userId: 'user_002', type: 'Complaint', typeKey: 'complaint', status: 'pending', requesterName: 'Roberto Lim Santillan', createdAt: '2026-04-22T10:00:00.000Z' }
+      ];
+
+      const existingBIds = existingBlotter.map(b => b.id);
+      fakeBlotter.forEach(b => { if (!existingBIds.includes(b.id)) existingBlotter.push(b); });
+      localStorage.setItem(KEYS.BLOTTER, JSON.stringify(existingBlotter));
+
+      const existingNotifs = JSON.parse(localStorage.getItem(KEYS.NOTIFICATIONS) || '[]');
+      const fakeNotifs = [
+        { id: 'notif_001', userId: 'user_001', title: 'Request Approved', message: 'Your Certificate of Indigency has been approved.', type: 'success', read: false, createdAt: '2026-03-29T09:00:00.000Z' }
+      ];
+      const existingNIds = existingNotifs.map(n => n.id);
+      fakeNotifs.forEach(n => { if (!existingNIds.includes(n.id)) existingNotifs.push(n); });
+      localStorage.setItem(KEYS.NOTIFICATIONS, JSON.stringify(existingNotifs));
+
+      const existingLogs = JSON.parse(localStorage.getItem(KEYS.LOGS) || '[]');
+      const fakeLogs = [
+        { id: 'log_001', userId: 'admin_001', fullName: 'Carlos Mendoza Reyes', role: 'admin', action: 'Approved request #req_002', timestamp: '2026-03-29T08:55:00.000Z' },
+        { id: 'log_002', userId: 'superadmin_001', fullName: 'Ligaya Torres Villanueva', role: 'super_admin', action: 'System initialized', timestamp: '2026-01-01T08:00:00.000Z' }
+      ];
+      const existingLIds = existingLogs.map(l => l.id);
+      fakeLogs.forEach(l => { if (!existingLIds.includes(l.id)) existingLogs.push(l); });
+      localStorage.setItem(KEYS.LOGS, JSON.stringify(existingLogs));
+
+      document.getElementById('success').classList.add('show');
+    }
+  </script>
+</body>
+</html>

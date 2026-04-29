@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blotter & Complaint - Barangay E-Request</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/navbar.css" />
+    <link rel="stylesheet" href="../css/request.css" />
+    <link rel="stylesheet" href="../css/user-dashboard.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <a href="user-dashboard.html" class="navbar-brand">Barangay E-Request</a>
+      <input
+        type="checkbox"
+        id="nav-toggle"
+        class="nav-toggle"
+        aria-hidden="true"
+      />
+      <ul class="navbar-nav">
+        <li><a href="user-dashboard.html">Dashboard</a></li>
+        <li><a href="request.html">New Request</a></li>
+        <li>
+          <a href="blotter-complaint.html" class="active"
+            >Blotter & Complaint</a
+          >
+        </li>
+        <li><a href="my-requests.html">My Requests</a></li>
+        <li><a href="user-profile.html">Profile</a></li>
+      </ul>
+      <div class="navbar-right">
+        <button
+          class="notification-bell"
+          id="notification-bell"
+          onclick="showNotifications()"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+          <span
+            class="notification-badge"
+            id="notification-badge"
+            style="display: none"
+            >0</span
+          >
+        </button>
+        <div class="navbar-user">
+          <div class="avatar" id="user-avatar">JD</div>
+          <span class="navbar-username" id="user-nav-name">Loading...</span>
+        </div>
+        <label for="nav-toggle" class="hamburger" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </label>
+      </div>
+    </nav>
+
+    <main>
+      <div class="page-header">
+        <h1>Blotter & Complaint</h1>
+        <p>Select one to file below</p>
+        <p style="font-size: 0.85rem; color: #6b7280; margin-top: 0.5rem">
+          <strong>Blotter:</strong> Record an incident. No legal action.<br />
+          <strong>Complaint:</strong> Start mediation process. Requires
+          respondent.
+        </p>
+      </div>
+
+      <div class="services-grid selectable two-cols" id="services-grid">
+        <div
+          class="service-card"
+          id="card-blotter"
+          onclick="BC.selectCard('blotter')"
+        >
+          <span class="service-name">Blotter Form</span>
+          <span class="service-subtext">Record an incident</span>
+          <span class="request-btn">Select</span>
+        </div>
+        <div
+          class="service-card"
+          id="card-complaint"
+          onclick="BC.selectCard('complaint')"
+        >
+          <span class="service-name">Complaint Form</span>
+          <span class="service-subtext">File for mediation</span>
+          <span class="request-btn">Select</span>
+        </div>
+      </div>
+
+      <div class="step-actions">
+        <button type="button" class="btn btn-primary" onclick="BC.doContinue()">
+          Continue
+        </button>
+      </div>
+    </main>
+
+    <!-- Notification Modal -->
+    <div
+      class="notification-modal"
+      id="notification-modal"
+      onclick="closeNotificationModal(event)"
+    >
+      <div class="notification-panel" onclick="event.stopPropagation()">
+        <div class="notification-panel-header">
+          <h3>Notifications</h3>
+          <div>
+            <button onclick="showMarkAllReadModal()">Mark all read</button>
+            <button onclick="showClearAllModal()" style="margin-left: 0.75rem">
+              Clear all
+            </button>
+          </div>
+        </div>
+        <div class="notification-list" id="notification-list"></div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <p>&copy; 2026 Barangay Records System. All rights reserved.</p>
+    </footer>
+
+
+    <script src="../js/script.js"></script>
+    <script src="../js/blotter-complaint.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var user = getCurrentUser();
+        if (!user) {
+          window.location.href = "../auth/login.html";
+          return;
+        }
+
+        document.getElementById("user-nav-name").textContent =
+          user.fullName || user.name || "User";
+        document.getElementById("user-avatar").textContent = (
+          user.fullName || "U"
+        )
+          .split(" ")
+          .map(function (n) {
+            return n[0];
+          })
+          .join("")
+          .substring(0, 2)
+          .toUpperCase();
+        document.getElementById("current-year").textContent =
+          new Date().getFullYear();
+
+        loadNotificationBadge();
+      });
+
+      // Use global confirm modal
+      document
+        .getElementById("confirm-modal")
+        .addEventListener("click", function (e) {
+          if (e.target === this) closeConfirmModal();
+        });
+    </script>
+  </body>
+</html>

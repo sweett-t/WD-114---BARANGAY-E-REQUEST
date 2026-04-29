@@ -1,12 +1,17 @@
 /*  DASHBOARD CONTENT  */
 .dashboard-content {
+  width: 100%;
   padding: var(--spacing-lg);
   max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 2rem 3rem;
+  box-sizing: border-box;
   margin: auto;
 }
 
 /*  DASHBOARD HEADER  */
 .dashboard-header {
+  margin-bottom: 2rem;
   margin-bottom: var(--spacing-lg);
 }
 
@@ -20,9 +25,12 @@
 }
 
 .dashboard-header h1 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
   margin: 0;
   font-size: clamp(1.75rem, 4vw, 2.5rem);
   color: var(--color-secondary);
+  margin-bottom: 0.25rem;
 }
 
 .dashboard-header h1 span {
@@ -32,7 +40,45 @@
 
 .dashboard-header > p {
   color: #64748b;
+  font-size: 0.95rem;
   margin-bottom: 0;
+}
+
+.dashboard-header .fiscal-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.dashboard-header .fiscal-year {
+  font-size: 0.875rem;
+  color: #fff;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  padding: 0.5rem 1.1rem;
+  border-radius: 9999px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* FIX nested elements */
+.dashboard-header .fiscal-year span,
+.dashboard-header .fiscal-year strong {
+  display: inline-block; /* prevents weird inline spacing */
+  line-height: 1; /* removes vertical misalignment */
+  margin: 0;
+  padding: 0;
+}
+
+.dashboard-header .current-date {
+  font-size: 0.875rem;
+  color: #64748b;
 }
 
 .btn-new-request {
@@ -257,4 +303,175 @@ tbody tr:hover {
     overflow-x: auto;
     white-space: nowrap;
   }
+}
+
+/* Notification Bell */
+.notification-bell {
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s;
+}
+
+.notification-bell:hover {
+  background-color: #f1f5f9;
+  color: var(--color-primary);
+}
+
+.notification-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: #dc2626;
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+}
+
+/* Notification Modal */
+.notification-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 1rem;
+  padding-top: 70px;
+}
+
+.notification-modal.show {
+  display: flex;
+}
+
+.notification-panel {
+  background: white;
+  width: 100%;
+  max-width: 380px;
+  max-height: calc(100vh - 80px);
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.notification-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #e5e7eb;
+  background: #f8fafc;
+}
+
+.notification-panel-header h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+.notification-panel-header button {
+  background: none;
+  border: none;
+  font-size: 0.8rem;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.notification-panel-header button:hover {
+  color: #2563eb;
+}
+
+.notification-list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.notification-item {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #f1f5f9;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.notification-item:hover {
+  background: #f8fafc;
+}
+
+.notification-item.unread {
+  background: #eff6ff;
+}
+
+.notification-item.unread:hover {
+  background: #dbeafe;
+}
+
+.notification-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.35rem;
+}
+
+.notification-item-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #1f2937;
+}
+
+.notification-item-time {
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+
+.notification-item-message {
+  font-size: 0.8rem;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+.notification-item.success .notification-item-title {
+  color: #059669;
+}
+.notification-item.error .notification-item-title {
+  color: #dc2626;
+}
+.notification-item.warning .notification-item-title {
+  color: #d97706;
+}
+.notification-item.info .notification-item-title {
+  color: #2563eb;
+}
+
+.notification-empty {
+  padding: 3rem 1rem;
+  text-align: center;
+  color: #94a3b8;
+}
+
+.notification-empty svg {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 1rem;
+  opacity: 0.5;
 }

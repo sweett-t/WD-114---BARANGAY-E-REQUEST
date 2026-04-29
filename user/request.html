@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -7,95 +7,744 @@
     <link rel="stylesheet" href="../css/style.css" />
     <link rel="stylesheet" href="../css/navbar.css" />
     <link rel="stylesheet" href="../css/request.css" />
+    <link rel="stylesheet" href="../css/user-dashboard.css" />
   </head>
   <body>
     <!-- NAVBAR -->
     <nav class="navbar">
-      <a href="index.html" class="navbar-brand">Barangay E-Request</a>
-
-      <!-- Hidden checkbox toggle (no JS) -->
+      <a href="user-dashboard.html" class="navbar-brand">Barangay E-Request</a>
       <input
         type="checkbox"
         id="nav-toggle"
         class="nav-toggle"
         aria-hidden="true"
       />
-
       <ul class="navbar-nav">
         <li><a href="user-dashboard.html">Dashboard</a></li>
-        <li><a href="#" class="active">New Request</a></li>
+        <li><a href="request.html" class="active">New Request</a></li>
+        <li><a href="blotter-complaint.html">Blotter & Complaint</a></li>
         <li><a href="my-requests.html">My Requests</a></li>
         <li><a href="user-profile.html">Profile</a></li>
       </ul>
-
       <div class="navbar-right">
+        <button
+          class="notification-bell"
+          id="notification-bell"
+          onclick="showNotifications()"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+          <span
+            class="notification-badge"
+            id="notification-badge"
+            style="display: none"
+            >0</span
+          >
+        </button>
         <div class="navbar-user">
-          <div class="avatar">JD</div>
-          <span class="navbar-username">Juan Dela Cruz</span>
+          <div class="avatar" id="user-avatar">JD</div>
+          <span class="navbar-username" id="user-nav-name">Loading...</span>
         </div>
-        <!-- Hamburger label tied to checkbox -->
         <label for="nav-toggle" class="hamburger" aria-label="Toggle menu">
-          <span></span>
-          <span></span>
-          <span></span>
+          <span></span><span></span><span></span>
         </label>
       </div>
     </nav>
 
     <!-- MAIN -->
     <main>
-      <div class="page-header">
-        <h1>Select a Service</h1>
-        <p>
-          Choose any service below to start your request quickly and
-          conveniently. We aim to make document requests seamless and easy to
-          track.
-        </p>
-      </div>
+      <!-- STEP 1: SELECT SERVICES -->
+      <section id="step-1" class="request-step active">
+        <div class="page-header">
+          <h1>New Request</h1>
+          <p>
+            Choose one or more services below. Each request will be processed
+            separately.
+          </p>
+          <p style="font-size: 0.85rem; color: #64748b; margin-top: 0.5rem">
+            <strong>Note:</strong> Solo Parent, Senior Citizen, and PWD services
+            require an interview. Business Clearance requires valid business
+            permits.
+          </p>
+        </div>
 
-      <div class="services-grid">
-        <a href="../services/affidavit-loss.html" class="service-card">
-          <span class="service-name">Affidavit of Loss</span>
-          <span class="request-btn">Request Now →</span>
-        </a>
-        <a href="../services/barangay-clearance.html" class="service-card">
-          <span class="service-name">Barangay Clearance</span>
-          <span class="request-btn">Request Now →</span>
-        </a>
-        <a href="../services/barangay-id.html" class="service-card">
-          <span class="service-name">Barangay ID</span>
-          <span class="request-btn">Request Now →</span>
-        </a>
-        <a href="../services/business-permit.html" class="service-card">
-          <span class="service-name">Business Permit</span>
-          <span class="request-btn">Request Now →</span>
-        </a>
-        <a href="../services/indigency.html" class="service-card">
-          <span class="service-name">Certificate of Indigency</span>
-          <span class="request-btn">Request Now →</span>
-        </a>
-        <a href="../services/residency.html" class="service-card">
-          <span class="service-name">Certificate of Residency</span>
-          <span class="request-btn">Request Now →</span>
-        </a>
-        <a href="../services/good-moral.html" class="service-card">
-          <span class="service-name">Good Moral Certificate</span>
-          <span class="request-btn">Request Now →</span>
-        </a>
-        <a href="../services/senior-citizen.html" class="service-card">
-          <span class="service-name">Senior Citizen Certificate</span>
-          <span class="request-btn">Request Now →</span>
-        </a>
-        <a href="../services/solo-parent.html" class="service-card">
-          <span class="service-name">Solo Parent Certification</span>
-          <span class="request-btn">Request Now →</span>
-        </a>
-      </div>
+        <div class="selection-info">
+          <span id="selection-count">0</span> service(s) selected
+        </div>
+
+        <div class="services-grid selectable" id="services-grid">
+          <!-- Documents -->
+          <div
+            class="service-card"
+            data-type="clearance"
+            data-multi="true"
+            onclick="selectService(this, 'clearance', true)"
+          >
+            <span class="service-name">Barangay Clearance</span>
+            <span class="service-subtext">For employment, permits</span>
+            <span class="request-btn">Select</span>
+          </div>
+          <div
+            class="service-card"
+            data-type="id"
+            data-multi="true"
+            onclick="selectService(this, 'id', true)"
+          >
+            <span class="service-name">Barangay ID</span>
+            <span class="service-subtext">Official ID card</span>
+            <span class="request-btn">Select</span>
+          </div>
+          <div
+            class="service-card"
+            data-type="residency"
+            data-multi="true"
+            onclick="selectService(this, 'residency', true)"
+          >
+            <span class="service-name">Certificate of Residency</span>
+            <span class="service-subtext">Proof of residence</span>
+            <span class="request-btn">Select</span>
+          </div>
+          <div
+            class="service-card"
+            data-type="indigency"
+            data-multi="true"
+            onclick="selectService(this, 'indigency', true)"
+          >
+            <span class="service-name">Certificate of Indigency</span>
+            <span class="service-subtext">For financial assistance</span>
+            <span class="request-btn">Select</span>
+          </div>
+          <div
+            class="service-card"
+            data-type="good-moral"
+            data-multi="true"
+            onclick="selectService(this, 'good-moral', true)"
+          >
+            <span class="service-name"
+              >Certificate of Good Moral Character</span
+            >
+            <span class="service-subtext">Character certification</span>
+            <span class="request-btn">Select</span>
+          </div>
+          <div
+            class="service-card"
+            data-type="business-clearance"
+            data-multi="true"
+            onclick="selectService(this, 'business-clearance', true)"
+          >
+            <span class="service-name">Barangay Business Clearance</span>
+            <span class="service-subtext">Business permit</span>
+            <span class="request-btn">Select</span>
+          </div>
+
+          <!-- Special -->
+          <div
+            class="service-card"
+            data-type="solo-parent"
+            data-multi="false"
+            onclick="selectService(this, 'solo-parent', false)"
+          >
+            <span class="service-name">Certificate of Solo Parent</span>
+            <span class="service-subtext">With interview process</span>
+            <span class="request-btn">Select</span>
+          </div>
+          <div
+            class="service-card"
+            data-type="senior-citizen"
+            data-multi="false"
+            onclick="selectService(this, 'senior-citizen', false)"
+          >
+            <span class="service-name">Certificate of Senior Citizen</span>
+            <span class="service-subtext">For senior benefits</span>
+            <span class="request-btn">Select</span>
+          </div>
+        </div>
+
+        <div class="step-actions">
+          <button
+            type="button"
+            id="btn-continue-step1"
+            class="btn btn-primary"
+            disabled
+            onclick="goToStep(2)"
+          >
+            Continue with <span id="selected-count">0</span> request(s)
+          </button>
+        </div>
+      </section>
+
+      <!-- STEP 2: CONFIRM INFORMATION -->
+      <section id="step-2" class="request-step hidden">
+        <div class="page-header">
+          <h1>Confirm Your Information</h1>
+          <p>Review and confirm your details for all selected requests.</p>
+        </div>
+
+        <div class="info-confirm-card">
+          <div class="toggle-switch">
+            <button
+              type="button"
+              id="btn-use-profile"
+              class="toggle-btn active"
+            >
+              Auto-fill from Profile
+            </button>
+            <button type="button" id="btn-request-other" class="toggle-btn">
+              Request for Other
+            </button>
+          </div>
+
+          <form id="info-form" class="info-form">
+            <div class="field-row cols-2">
+              <div class="form-field">
+                <label for="req-last-name"
+                  >Last Name <span class="required">*</span></label
+                >
+                <input
+                  type="text"
+                  id="req-last-name"
+                  name="last_name"
+                  required
+                />
+              </div>
+              <div class="form-field">
+                <label for="req-first-name"
+                  >First Name <span class="required">*</span></label
+                >
+                <input
+                  type="text"
+                  id="req-first-name"
+                  name="first_name"
+                  required
+                />
+              </div>
+            </div>
+            <div class="field-row cols-2">
+              <div class="form-field">
+                <label for="req-middle-name">Middle Name</label>
+                <input type="text" id="req-middle-name" name="middle_name" />
+              </div>
+              <div class="form-field">
+                <label for="req-suffix">Suffix</label>
+                <select id="req-suffix" name="suffix">
+                  <option value="">None</option>
+                  <option>Jr.</option>
+                  <option>Sr.</option>
+                  <option>II</option>
+                  <option>III</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="address-section">
+              <h3>Address</h3>
+              <div class="field-row cols-2">
+                <div class="form-field">
+                  <label>Country</label>
+                  <input type="text" value="Philippines" disabled />
+                </div>
+                <div class="form-field">
+                  <label>Region</label>
+                  <input
+                    type="text"
+                    value="Region IX - Zamboanga Region"
+                    disabled
+                  />
+                </div>
+              </div>
+              <div class="field-row cols-2">
+                <div class="form-field">
+                  <label>Province</label>
+                  <input type="text" value="Zamboanga del Sur" disabled />
+                </div>
+                <div class="form-field">
+                  <label>City</label>
+                  <input type="text" value="Zamboanga City" disabled />
+                </div>
+              </div>
+              <div class="field-row cols-2">
+                <div class="form-field">
+                  <label>Barangay</label>
+                  <input type="text" value="Lunzuran" disabled />
+                </div>
+                <div class="form-field">
+                  <label for="req-purok"
+                    >Purok <span class="required">*</span></label
+                  >
+                  <input type="text" id="req-purok" name="purok" required />
+                </div>
+              </div>
+              <div class="field-row cols-2">
+                <div class="form-field">
+                  <label for="req-street">Street</label>
+                  <input type="text" id="req-street" name="street" />
+                </div>
+                <div class="form-field">
+                  <label for="req-house-number">House Number</label>
+                  <input
+                    type="text"
+                    id="req-house-number"
+                    name="house_number"
+                  />
+                </div>
+              </div>
+              <div class="form-field">
+                <label for="req-landmark">Landmark</label>
+                <input
+                  type="text"
+                  id="req-landmark"
+                  name="landmark"
+                  placeholder="e.g. Near the church"
+                />
+              </div>
+            </div>
+
+            <div class="field-row cols-2">
+              <div class="form-field">
+                <label for="req-birthdate"
+                  >Date of Birth <span class="required">*</span></label
+                >
+                <input
+                  type="date"
+                  id="req-birthdate"
+                  name="birthdate"
+                  required
+                  onchange="calcAgeFromDOB(this)"
+                />
+              </div>
+              <div class="form-field">
+                <label for="req-age">Age</label>
+                <input
+                  type="text"
+                  id="req-age"
+                  name="age"
+                  readonly
+                  placeholder="Auto-calculated"
+                />
+              </div>
+            </div>
+            <div class="field-row cols-2">
+              <div class="form-field">
+                <label for="req-civil-status"
+                  >Civil Status <span class="required">*</span></label
+                >
+                <select id="req-civil-status" name="civil_status" required>
+                  <option value="">Select status</option>
+                  <option value="Single">Single</option>
+                  <option value="Married">Married</option>
+                  <option value="Widowed">Widowed</option>
+                  <option value="Separated">Separated</option>
+                  <option value="Divorced">Divorced</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="req-gender"
+                  >Sex / Gender <span class="required">*</span></label
+                >
+                <select id="req-gender" name="gender" required>
+                  <option value="">Select</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field-row cols-2">
+              <div class="form-field">
+                <label for="req-phone"
+                  >Phone <span class="required">*</span></label
+                >
+                <input type="tel" id="req-phone" name="phone" required />
+              </div>
+              <div class="form-field">
+                <label for="req-email">Email</label>
+                <input type="email" id="req-email" name="email" />
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="step-actions">
+          <button type="button" class="btn btn-secondary" onclick="goToStep(1)">
+            Back
+          </button>
+          <button type="button" class="btn btn-primary" onclick="goToStep(3)">
+            Continue
+          </button>
+        </div>
+      </section>
+
+      <!-- STEP 3: REQUEST DETAILS & PAYMENT -->
+      <section id="step-3" class="request-step hidden">
+        <div class="page-header">
+          <h1>Request Details & Payment</h1>
+          <p>
+            Enter the purpose for each request and select your payment method.
+          </p>
+        </div>
+
+        <div class="request-cards" id="request-cards"></div>
+
+        <!-- Payment Summary -->
+        <div class="payment-summary-section" id="payment-summary-section">
+          <h3>Payment Summary</h3>
+          <div id="payment-items"></div>
+          <div class="payment-total">
+            <span>Total:</span>
+            <span id="payment-total-display">₱0</span>
+          </div>
+        </div>
+
+        <!-- Payment Method -->
+        <div
+          class="payment-method-section"
+          id="payment-method-section"
+          style="display: none"
+        >
+          <h3>Select Payment Method</h3>
+          <div class="form-field">
+            <select id="payment-method" onchange="handlePaymentMethodChange()">
+              <option value="">Choose payment method...</option>
+              <option value="cash">Cash (Pay at Barangay Hall)</option>
+              <option value="online">
+                Online Payment (GCash, Maya, QR Ph, Bank Transfer)
+              </option>
+            </select>
+          </div>
+
+          <!-- Online Payment Fields -->
+          <div
+            class="online-payment-fields"
+            id="online-fields"
+            style="display: none"
+          >
+            <div class="qr-code-section">
+              <p class="qr-instructions">
+                Scan the QR code below or use the account details to make your
+                payment:
+              </p>
+              <div class="qr-placeholder">
+                <svg viewBox="0 0 100 100" width="120" height="120">
+                  <rect fill="#1a1a1a" width="100" height="100" />
+                  <rect fill="#fff" x="5" y="5" width="30" height="30" />
+                  <rect fill="#fff" x="65" y="5" width="30" height="30" />
+                  <rect fill="#fff" x="5" y="65" width="30" height="30" />
+                  <rect fill="#1a1a1a" x="10" y="10" width="20" height="20" />
+                  <rect fill="#1a1a1a" x="70" y="10" width="20" height="20" />
+                  <rect fill="#1a1a1a" x="10" y="70" width="20" height="20" />
+                  <rect fill="#fff" x="40" y="5" width="20" height="20" />
+                  <rect fill="#fff" x="40" y="30" width="20" height="20" />
+                  <rect fill="#1a1a1a" x="45" y="10" width="10" height="10" />
+                  <rect fill="#1a1a1a" x="45" y="35" width="10" height="10" />
+                  <rect fill="#fff" x="65" y="40" width="10" height="10" />
+                  <rect fill="#fff" x="80" y="40" width="15" height="15" />
+                  <rect fill="#1a1a1a" x="70" y="45" width="5" height="5" />
+                  <rect fill="#1a1a1a" x="70" y="55" width="5" height="5" />
+                  <rect fill="#fff" x="40" y="65" width="20" height="20" />
+                  <rect fill="#1a1a1a" x="45" y="70" width="10" height="10" />
+                  <rect fill="#fff" x="65" y="65" width="10" height="10" />
+                  <rect fill="#fff" x="80" y="80" width="15" height="15" />
+                  <rect fill="#1a1a1a" x="85" y="85" width="5" height="5" />
+                </svg>
+              </div>
+              <p class="qr-account"><strong>GCash:</strong> 0912-345-6789</p>
+              <p class="qr-account"><strong>Maya:</strong> 0912-345-6789</p>
+              <p class="qr-account"><strong>BDO:</strong> 1234-5678-9012</p>
+            </div>
+            <div class="form-field">
+              <label>Reference Number <span class="required">*</span></label>
+              <input
+                type="text"
+                id="transaction-id"
+                placeholder="Enter transaction reference number"
+              />
+            </div>
+            <div class="form-field">
+              <label>Payment Screenshot <span class="required">*</span></label>
+              <input
+                type="file"
+                id="payment-screenshot"
+                accept="image/*,.pdf"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Certification -->
+        <div class="certification-section">
+          <label class="checkbox-inline">
+            <input type="checkbox" id="certification-checkbox" />
+            <span
+              >I hereby confirm that the information provided above is true and
+              accurate to the best of my knowledge, and I understand that any
+              false statement may be subject to legal consequences.</span
+            >
+          </label>
+        </div>
+
+        <div class="step-actions">
+          <button type="button" class="btn btn-secondary" onclick="goToStep(2)">
+            Back
+          </button>
+          <button type="button" class="btn btn-primary" onclick="goToStep(4)">
+            Continue to Review
+          </button>
+        </div>
+      </section>
+
+      <!-- STEP 4: REVIEW & SUBMIT -->
+      <section id="step-4" class="request-step hidden">
+        <div class="page-header">
+          <h1>Review & Submit</h1>
+          <p>Review your requests before submitting.</p>
+        </div>
+
+        <div class="review-section">
+          <h3>Applicant Information</h3>
+          <div id="review-info"></div>
+        </div>
+
+        <div class="review-section">
+          <h3>Requested Documents</h3>
+          <div id="review-documents"></div>
+        </div>
+
+        <div class="review-section">
+          <h3>Payment Details</h3>
+          <div id="review-payment"></div>
+        </div>
+
+        <div class="step-actions">
+          <button type="button" class="btn btn-secondary" onclick="goToStep(3)">
+            Back
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            id="btn-submit-final"
+            onclick="submitRequests()"
+            disabled
+          >
+            Submit Requests
+          </button>
+        </div>
+      </section>
+
+      <!-- SUCCESS -->
+      <section id="step-success" class="request-step hidden">
+        <div class="success-message">
+          <div class="success-icon">✓</div>
+          <h2>Requests Submitted!</h2>
+          <p>Your document requests have been submitted successfully.</p>
+          <p>You can track their status in My Requests.</p>
+          <div class="success-actions">
+            <a href="my-requests.html" class="btn btn-primary"
+              >View My Requests</a
+            >
+            <a href="user-dashboard.html" class="btn btn-secondary"
+              >Back to Dashboard</a
+            >
+          </div>
+        </div>
+      </section>
     </main>
 
-    <!-- FOOTER -->
+    <!-- Notification Modal -->
+    <div
+      class="notification-modal"
+      id="notification-modal"
+      onclick="closeNotificationModal(event)"
+    >
+      <div class="notification-panel" onclick="event.stopPropagation()">
+        <div class="notification-panel-header">
+          <h3>Notifications</h3>
+          <div>
+            <button onclick="showMarkAllReadModal()">Mark all read</button>
+            <button onclick="showClearAllModal()" style="margin-left: 0.75rem">
+              Clear all
+            </button>
+          </div>
+        </div>
+        <div class="notification-list" id="notification-list"></div>
+      </div>
+    </div>
+
     <footer class="footer">
       <p>&copy; 2026 Barangay Records System. All rights reserved.</p>
     </footer>
+
+   
+
+    <script src="../js/request.js"></script>
+    <script src="../js/script.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var notificationBell = document.getElementById("notification-bell");
+        if (notificationBell) {
+          loadNotificationBadge();
+        }
+      });
+
+      document
+        .getElementById("confirm-modal")
+        .addEventListener("click", function (e) {
+          if (e.target === this) closeConfirmModal();
+        });
+
+      function loadNotificationBadge() {
+        var user = getCurrentUser();
+        if (!user) return;
+        var unread = getUnreadCount(user.id);
+        var badge = document.getElementById("notification-badge");
+        if (badge) {
+          if (unread > 0) {
+            badge.textContent = unread > 9 ? "9+" : unread;
+            badge.style.display = "flex";
+          } else {
+            badge.style.display = "none";
+          }
+        }
+      }
+
+      function showNotifications() {
+        var user = getCurrentUser();
+        if (!user) return;
+
+        var notifications = getUserNotifications(user.id);
+        var listEl = document.getElementById("notification-list");
+
+        if (notifications.length === 0) {
+          listEl.innerHTML =
+            '<div class="notification-empty">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">' +
+            '<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>' +
+            '<path d="M13.73 21a2 2 0 0 1-3.46 0"></path>' +
+            "</svg>" +
+            "<p>No notifications yet</p></div>";
+        } else {
+          var html = "";
+          notifications.forEach(function (n) {
+            var timeAgo = getTimeAgo(n.createdAt);
+            html +=
+              '<div class="notification-item ' +
+              n.type +
+              " " +
+              (n.read ? "" : "unread") +
+              '" ' +
+              "onclick=\"viewNotification('" +
+              n.id +
+              "')\">" +
+              '<div class="notification-item-header">' +
+              '<span class="notification-item-title">' +
+              escapeHtml(n.title) +
+              "</span>" +
+              '<span class="notification-item-time">' +
+              timeAgo +
+              "</span>" +
+              "</div>" +
+              '<div class="notification-item-message">' +
+              escapeHtml(n.message) +
+              "</div>" +
+              "</div>";
+          });
+          listEl.innerHTML = html;
+        }
+
+        document.getElementById("notification-modal").classList.add("show");
+        loadNotificationBadge();
+      }
+
+      function viewNotification(id) {
+        markNotificationRead(id);
+        loadNotificationBadge();
+        showNotifications();
+      }
+
+      function closeNotificationModal(event) {
+        if (event && event.target !== event.currentTarget) return;
+        document.getElementById("notification-modal").classList.remove("show");
+      }
+
+      function markAllRead() {
+        var user = getCurrentUser();
+        if (user) {
+          markAllNotificationsRead(user.id);
+          loadNotificationBadge();
+          showNotifications();
+        }
+      }
+
+      function showMarkAllReadModal() {
+        document.getElementById("confirm-title").textContent =
+          "Mark All as Read";
+        document.getElementById("confirm-message").textContent =
+          "Are you sure you want to mark all notifications as read?";
+        document.getElementById("confirm-yes-btn").onclick = function () {
+          markAllNotificationsRead(getCurrentUser().id);
+          loadNotificationBadge();
+          showNotifications();
+          closeConfirmModal();
+        };
+        document.getElementById("confirm-modal").classList.add("active");
+      }
+
+      function showClearAllModal() {
+        document.getElementById("confirm-title").textContent =
+          "Clear All Notifications";
+        document.getElementById("confirm-message").textContent =
+          "Are you sure you want to clear all notifications? This action cannot be undone.";
+        document.getElementById("confirm-yes-btn").onclick = function () {
+          clearNotifications(getCurrentUser().id);
+          loadNotificationBadge();
+          showNotifications();
+          closeConfirmModal();
+        };
+        document.getElementById("confirm-modal").classList.add("active");
+      }
+
+      function closeConfirmModal() {
+        document.getElementById("confirm-modal").classList.remove("active");
+      }
+
+      document
+        .getElementById("confirm-modal")
+        .addEventListener("click", function (e) {
+          if (e.target === this) closeConfirmModal();
+        });
+
+      function getTimeAgo(timestamp) {
+        var now = new Date();
+        var then = new Date(timestamp);
+        var diff = Math.floor((now - then) / 1000);
+
+        if (diff < 60) return "Just now";
+        if (diff < 3600) return Math.floor(diff / 60) + "m ago";
+        if (diff < 86400) return Math.floor(diff / 3600) + "h ago";
+        if (diff < 604800) return Math.floor(diff / 86400) + "d ago";
+        return then.toLocaleDateString("en-PH", {
+          month: "short",
+          day: "numeric",
+        });
+      }
+
+      function escapeHtml(str) {
+        if (!str) return "";
+        return str
+          .toString()
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+      }
+    </script>
   </body>
 </html>
