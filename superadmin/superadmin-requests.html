@@ -132,6 +132,7 @@
         text-decoration: none;
         font-size: 0.875rem;
         color: #374151;
+        white-space: nowrap;
       }
       .sb-link:hover {
         background: #f1f5f9;
@@ -144,6 +145,7 @@
       .sb-link svg {
         width: 15px;
         height: 15px;
+        flex-shrink: 0;
         opacity: 0.7;
       }
       .sb-divider {
@@ -438,19 +440,15 @@
             ><span class="sb-chevron">▼</span>
           </div>
           <div class="sb-links">
-            <a href="superadmin-dashboard.html" class="sb-link">Dashboard</a>
-            <a href="superadmin-requests.html" class="sb-link active"
-              >Requests</a
-            >
-            <a href="superadmin-blotter.html" class="sb-link"
-              >Blotter & Complaints</a
-            >
-            <a href="superadmin-users.html" class="sb-link">Users</a>
-            <a href="manage-admins.html" class="sb-link">Manage Admins</a>
-            <a href="request-forms.html" class="sb-link">Request Forms</a>
-            <a href="system-logs.html" class="sb-link">System Logs</a>
-            <a href="superadmin-reports.html" class="sb-link">Reports</a>
-            <a href="superadmin-settings.html" class="sb-link">Settings</a>
+            <a href="superadmin-dashboard.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</a>
+            <a href="superadmin-requests.html" class="sb-link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Requests</a>
+            <a href="superadmin-blotter.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Blotter & Complaints</a>
+            <a href="superadmin-users.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Users</a>
+            <a href="manage-admins.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>Manage Admins</a>
+            <a href="request-forms.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/></svg>Request Forms</a>
+            <a href="system-logs.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12"/></svg>System Logs</a>
+            <a href="superadmin-reports.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Reports</a>
+            <a href="superadmin-settings.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><circle cx="12" cy="12" r="3"/></svg>Settings</a>
           </div>
         </div>
         <hr class="sb-divider" />
@@ -460,11 +458,11 @@
             ><span class="sb-chevron">▼</span>
           </div>
           <div class="sb-links">
-            <a href="sa-dashboard.html" class="sb-link">My Dashboard</a>
-            <a href="sa-new-request.html" class="sb-link">New Request</a>
-            <a href="sa-blotter.html" class="sb-link">Blotter & Complaint</a>
-            <a href="sa-my-requests.html" class="sb-link">My Requests</a>
-            <a href="superadmin-profile.html" class="sb-link">My Profile</a>
+            <a href="sa-dashboard.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>My Dashboard</a>
+            <a href="sa-new-request.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>New Request</a>
+            <a href="sa-blotter.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Blotter & Complaint</a>
+            <a href="sa-my-requests.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12"/></svg>My Requests</a>
+            <a href="superadmin-profile.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>My Profile</a>
           </div>
         </div>
         <div class="sb-logout">

@@ -1,219 +1,805 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Dashboard | Barangay E-Request</title>
-    <link rel="stylesheet" href="../css/style.css" />
-    <link rel="stylesheet" href="../css/navbar.css" />
-    <link rel="stylesheet" href="../css/admin-dashboard.css" />
+    <style>
+      :root {
+        --color-primary: #2563eb;
+        --color-secondary: #1e293b;
+        --color-white: #ffffff;
+        --color-light: #f8fafc;
+        --border-radius: 0.5rem;
+        --shadow-light:
+          0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.05);
+        --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.12);
+        --spacing-sm: 0.5rem;
+        --spacing-md: 1rem;
+        --spacing-lg: 1.5rem;
+        --spacing-xl: 2rem;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background: #f1f5f9;
+      }
+
+      .sa-layout {
+        display: flex;
+        min-height: 100vh;
+      }
+      .sa-sidebar {
+        width: 240px;
+        flex-shrink: 0;
+        background: #ffffff;
+        border-right: 1px solid #e5e7eb;
+        display: flex;
+        flex-direction: column;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow-y: auto;
+      }
+      .sa-body {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+      }
+      .sa-main {
+        flex: 1;
+        padding: 2rem;
+        max-width: 1300px;
+        width: 100%;
+        margin: 0 auto;
+      }
+      .sa-footer {
+        background: #f8fafc;
+        border-top: 1px solid #e5e7eb;
+        padding: 1rem 2rem;
+        text-align: center;
+        font-size: 0.85rem;
+        color: #6b7280;
+      }
+
+      .sb-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1.25rem 1rem;
+        border-bottom: 1px solid #e5e7eb;
+        font-weight: 800;
+        font-size: 0.95rem;
+        color: #2563eb;
+        text-decoration: none;
+      }
+      .sb-user {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        padding: 1rem;
+        border-bottom: 1px solid #f1f5f9;
+      }
+      .sb-avatar {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: #2563eb;
+        color: #fff;
+        font-size: 0.8rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .sb-name {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #1e293b;
+      }
+      .sb-role {
+        font-size: 0.7rem;
+        color: #64748b;
+      }
+      .sb-section {
+        padding: 0 0.5rem;
+        margin-top: 0.5rem;
+      }
+      .sb-section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.35rem 0.5rem;
+        cursor: pointer;
+        user-select: none;
+        border-radius: 0.375rem;
+      }
+      .sb-section-header:hover {
+        background: #f8fafc;
+      }
+      .sb-label {
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: #94a3b8;
+      }
+      .sb-chevron {
+        font-size: 0.6rem;
+        color: #94a3b8;
+        transition: transform 0.2s;
+      }
+      .sb-section.collapsed .sb-chevron {
+        transform: rotate(-90deg);
+      }
+      .sb-section.collapsed .sb-links {
+        display: none;
+      }
+      .sb-links {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+        padding: 0.25rem 0;
+      }
+      .sb-link {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.5rem;
+        text-decoration: none;
+        font-size: 0.875rem;
+        color: #374151;
+        transition:
+          background 0.15s,
+          color 0.15s;
+      }
+      .sb-link:hover {
+        background: #f1f5f9;
+        color: #1e293b;
+      }
+      .sb-link.active {
+        background: #dbeafe;
+        color: #2563eb;
+        font-weight: 600;
+      }
+      .sb-link svg {
+        width: 15px;
+        height: 15px;
+        flex-shrink: 0;
+        opacity: 0.7;
+      }
+      .sb-divider {
+        border: none;
+        border-top: 1px solid #f1f5f9;
+        margin: 0.5rem 0.5rem;
+      }
+      .sb-logout {
+        margin-top: auto;
+        padding: 0.75rem 0.5rem;
+        border-top: 1px solid #e5e7eb;
+      }
+      .sb-logout-btn {
+        width: 100%;
+        padding: 0.5rem;
+        background: #fee2e2;
+        color: #991b1b;
+        border: 1px solid #fecaca;
+        border-radius: 0.5rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .sb-logout-btn:hover {
+        background: #fecaca;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+      }
+      .stat-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        padding: 1.25rem;
+        border-left: 5px solid transparent;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      }
+      .stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+      }
+      .stat-card h4 {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #64748b;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .stat-num {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1e293b;
+        line-height: 1;
+        margin-bottom: 0.25rem;
+      }
+      .stat-sub {
+        font-size: 0.8rem;
+        color: #94a3b8;
+      }
+      .stat-blue {
+        border-left-color: #2563eb;
+      }
+      .stat-orange {
+        border-left-color: #d97706;
+      }
+      .stat-green {
+        border-left-color: #16a34a;
+      }
+      .stat-red {
+        border-left-color: #dc2626;
+      }
+      .stat-purple {
+        border-left-color: #7c3aed;
+      }
+      .stat-indigo {
+        border-left-color: #4f46e5;
+      }
+      .stat-gray {
+        border-left-color: #6b7280;
+      }
+
+      .chart-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        padding: 1.25rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        margin-bottom: 1.5rem;
+      }
+      .chart-title {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #dbeafe;
+      }
+      .bar-row {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.6rem;
+      }
+      .bar-row-label {
+        flex: 0 0 140px;
+        font-size: 0.8rem;
+        color: #374151;
+        text-align: right;
+      }
+      .bar-track {
+        flex: 1;
+        background: #f1f5f9;
+        border-radius: 999px;
+        height: 22px;
+        overflow: hidden;
+      }
+      .bar-fill {
+        height: 100%;
+        border-radius: 999px;
+        display: flex;
+        align-items: center;
+        padding-left: 0.5rem;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: #fff;
+      }
+      .bar-count {
+        flex: 0 0 40px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: #374151;
+        text-align: right;
+      }
+
+      .tbl-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+      }
+      .tbl-card-hdr {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid #e5e7eb;
+      }
+      .tbl-card-hdr h3 {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #1e293b;
+      }
+      .sa-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .sa-table thead tr {
+        background: #f8fafc;
+      }
+      .sa-table th {
+        padding: 0.75rem 1rem;
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        color: #64748b;
+        border-bottom: 1px solid #e5e7eb;
+        text-align: left;
+      }
+      .sa-table td {
+        padding: 0.85rem 1rem;
+        font-size: 0.875rem;
+        color: #1e293b;
+        border-bottom: 1px solid #f1f5f9;
+      }
+      .sa-table tbody tr:last-child td {
+        border-bottom: none;
+      }
+      .sa-table tbody tr:hover td {
+        background: #f8fafc;
+      }
+
+      .page-hdr {
+        margin-bottom: 1.75rem;
+      }
+      .page-hdr h1 {
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 0.25rem;
+      }
+      .page-hdr p {
+        color: #64748b;
+        font-size: 0.95rem;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 0.2rem 0.6rem;
+        border-radius: 9999px;
+        font-size: 0.72rem;
+        font-weight: 600;
+      }
+      .badge::before {
+        content: "";
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: currentColor;
+        opacity: 0.7;
+      }
+      .badge-pending {
+        background: #fef3c7;
+        color: #92400e;
+      }
+      .badge-approved {
+        background: #d1fae5;
+        color: #065f46;
+      }
+      .badge-rejected {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+      .badge-released {
+        background: #dbeafe;
+        color: #1e40af;
+      }
+      .badge-admin {
+        background: #dbeafe;
+        color: #1e40af;
+      }
+      .badge-super {
+        background: #f5f3ff;
+        color: #6d28d9;
+      }
+
+      @media (max-width: 768px) {
+        .sa-layout {
+          flex-direction: column;
+        }
+        .sa-sidebar {
+          width: 100%;
+          height: auto;
+          position: relative;
+        }
+      }
+    </style>
   </head>
   <body>
-    <nav class="navbar">
-      <a href="../admin/admin-dashboard.html" class="navbar-brand"
-        >Barangay E-Request</a
-      >
-      <input
-        type="checkbox"
-        id="nav-toggle"
-        class="nav-toggle"
-        aria-hidden="true"
-      />
-      <ul class="navbar-nav">
-        <li>
-          <a href="../admin/admin-dashboard.html" class="active">Dashboard</a>
-        </li>
-        <li><a href="../admin/manage-requests.html">Requests</a></li>
-        <li><a href="../admin/manage-users.html">Users</a></li>
-        <li><a href="../admin/report.html">Reports</a></li>
-        <li><a href="../admin/admin-profile.html">Profile</a></li>
-      </ul>
-      <div class="navbar-right">
-        <div class="navbar-user">
-          <div class="avatar">AD</div>
-          <span class="navbar-username">Admin</span>
-        </div>
-        <label for="nav-toggle" class="hamburger" aria-label="Toggle menu">
-          <span></span><span></span><span></span>
-        </label>
-      </div>
-    </nav>
-
-    <main class="dashboard-content">
-      <div class="dashboard-header">
-        <div class="dashboard-header-top">
-          <h1>Welcome back, <span>Admin</span>!</h1>
-          <a
-            href="../admin/manage-requests.html"
-            class="btn btn-primary btn-new-request"
-            >View All Requests</a
+    <div class="sa-layout">
+      <aside class="sa-sidebar">
+        <a href="admin-dashboard.html" class="sb-brand">
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
           >
-        </div>
-        <p>Overview of all barangay document requests and activity.</p>
-      </div>
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            <polyline points="9 22 9 12 15 12 15 22" />
+          </svg>
+          Barangay E-Request
+        </a>
 
-      <!-- STAT CARDS -->
-      <section class="stats-grid">
-        <div class="card stat-card total">
-          <h4>Total Requests</h4>
-          <p class="stat-number">42</p>
-          <span class="stat-label">All time</span>
-        </div>
-        <div class="card stat-card pending">
-          <h4>Pending Approval</h4>
-          <p class="stat-number">11</p>
-          <span class="stat-label">Awaiting review</span>
-        </div>
-        <div class="card stat-card approved">
-          <h4>Approved</h4>
-          <p class="stat-number">27</p>
-          <span class="stat-label">Ready for pickup</span>
-        </div>
-        <div class="card stat-card rejected">
-          <h4>Rejected</h4>
-          <p class="stat-number">4</p>
-          <span class="stat-label">Needs attention</span>
-        </div>
-      </section>
-
-      <!-- CHARTS ROW -->
-      <div class="charts-row">
-        <div class="card chart-card">
-          <div class="card-header"><h3>Requests Overview</h3></div>
-          <div class="bar-chart">
-            <div class="bar-group">
-              <div class="bar approved-bar" style="height: 64%">
-                <span>27</span>
-              </div>
-              <span class="bar-label">Approved</span>
-            </div>
-            <div class="bar-group">
-              <div class="bar pending-bar" style="height: 26%">
-                <span>11</span>
-              </div>
-              <span class="bar-label">Pending</span>
-            </div>
-            <div class="bar-group">
-              <div class="bar rejected-bar" style="height: 10%">
-                <span>4</span>
-              </div>
-              <span class="bar-label">Rejected</span>
-            </div>
+        <div class="sb-user">
+          <div class="sb-avatar" id="sb-avatar">SA</div>
+          <div>
+            <div class="sb-name" id="sb-name">Loading...</div>
+            <div class="sb-role">Admin</div>
           </div>
         </div>
-        <div class="card chart-card">
-          <div class="card-header"><h3>By Document Type</h3></div>
-          <div class="donut-legend">
-            <div class="legend-item">
-              <div class="legend-dot" style="background: #2563eb"></div>
-              <span class="legend-label">Barangay Clearance</span
-              ><span class="legend-val">10</span>
-            </div>
-            <div class="legend-item">
-              <div class="legend-dot" style="background: #059669"></div>
-              <span class="legend-label">Certificate of Residency</span
-              ><span class="legend-val">8</span>
-            </div>
-            <div class="legend-item">
-              <div class="legend-dot" style="background: #d97706"></div>
-              <span class="legend-label">Certificate of Indigency</span
-              ><span class="legend-val">6</span>
-            </div>
-            <div class="legend-item">
-              <div class="legend-dot" style="background: #7c3aed"></div>
-              <span class="legend-label">Business Permit</span
-              ><span class="legend-val">5</span>
-            </div>
-            <div class="legend-item">
-              <div class="legend-dot" style="background: #db2777"></div>
-              <span class="legend-label">Barangay ID</span
-              ><span class="legend-val">7</span>
-            </div>
-            <div class="legend-item">
-              <div class="legend-dot" style="background: #0891b2"></div>
-              <span class="legend-label">Others</span
-              ><span class="legend-val">6</span>
-            </div>
+
+        <div class="sb-section" id="sec-sa">
+          <div class="sb-section-header" onclick="toggleSection('sec-sa')">
+            <span class="sb-label">Admin</span>
+            <span class="sb-chevron">▼</span>
+          </div>
+          <div class="sb-links">
+            <a href="admin-dashboard.html" class="sb-link active">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="3" y="3" width="7" height="7" />
+                <rect x="14" y="3" width="7" height="7" />
+                <rect x="3" y="14" width="7" height="7" />
+                <rect x="14" y="14" width="7" height="7" />
+              </svg>
+              Dashboard
+            </a>
+            <a href="admin-requests.html" class="sb-link">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                />
+                <polyline points="14 2 14 8 20 8" />
+              </svg>
+              Requests
+            </a>
+            <a href="admin-blotter.html" class="sb-link">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+              Blotter & Complaints
+            </a>
+            <a href="admin-reports.html" class="sb-link">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <line x1="18" y1="20" x2="18" y2="10" />
+                <line x1="12" y1="20" x2="12" y2="4" />
+                <line x1="6" y1="20" x2="6" y2="14" />
+              </svg>
+              Reports
+            </a>
           </div>
         </div>
-      </div>
 
-      <!-- RECENT REQUESTS -->
-      <div class="card requests-card">
-        <div class="card-header">
-          <h3>Recent Requests</h3>
-          <a href="../admin/manage-requests.html">View All</a>
+        <hr class="sb-divider" />
+
+        <div class="sb-section" id="sec-user">
+          <div class="sb-section-header" onclick="toggleSection('sec-user')">
+            <span class="sb-label">My User Area</span>
+            <span class="sb-chevron">▼</span>
+          </div>
+          <div class="sb-links">
+            <a href="sa-dashboard.html" class="sb-link">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="3" y="3" width="7" height="7" />
+                <rect x="14" y="3" width="7" height="7" />
+                <rect x="3" y="14" width="7" height="7" />
+                <rect x="14" y="14" width="7" height="7" />
+              </svg>
+              My Dashboard
+            </a>
+            <a href="sa-new-request.html" class="sb-link">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              New Request
+            </a>
+            <a href="sa-blotter.html" class="sb-link">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+              Blotter & Complaint
+            </a>
+            <a href="sa-my-requests.html" class="sb-link">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M9 11l3 3L22 4" />
+                <path
+                  d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"
+                />
+              </svg>
+              My Requests
+            </a>
+            <a href="admin-profile.html" class="sb-link">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+              My Profile
+            </a>
+          </div>
         </div>
-        <div style="overflow-x: auto">
-          <table>
-            <thead>
-              <tr>
-                <th>Tracking #</th>
-                <th>Resident</th>
-                <th>Document Type</th>
-                <th>Date</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>BC-2026-001</td>
-                <td>Juan Dela Cruz</td>
-                <td>Barangay Clearance</td>
-                <td>Feb 28, 2026</td>
-                <td class="status-approved">Approved</td>
-                <td><a href="../admin/manage-requests.html">View</a></td>
-              </tr>
-              <tr>
-                <td>BC-2026-010</td>
-                <td>Maria Santos</td>
-                <td>Barangay Clearance</td>
-                <td>Feb 27, 2026</td>
-                <td class="status-pending">Pending</td>
-                <td><a href="../admin/manage-requests.html">View</a></td>
-              </tr>
-              <tr>
-                <td>GM-2026-011</td>
-                <td>Jose Reyes</td>
-                <td>Good Moral Certificate</td>
-                <td>Feb 24, 2026</td>
-                <td class="status-pending">Pending</td>
-                <td><a href="../admin/manage-requests.html">View</a></td>
-              </tr>
-              <tr>
-                <td>AL-2026-013</td>
-                <td>Ana Lim</td>
-                <td>Affidavit of Loss</td>
-                <td>Feb 15, 2026</td>
-                <td class="status-rejected">Rejected</td>
-                <td><a href="../admin/manage-requests.html">View</a></td>
-              </tr>
-              <tr>
-                <td>CR-2026-003</td>
-                <td>Rosa Cruz</td>
-                <td>Certificate of Residency</td>
-                <td>Feb 20, 2026</td>
-                <td class="status-approved">Approved</td>
-                <td><a href="../admin/manage-requests.html">View</a></td>
-              </tr>
-            </tbody>
-          </table>
+
+        <div class="sb-logout">
+          <button class="sb-logout-btn" onclick="doLogout()">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            Logout
+          </button>
         </div>
-      </div>
+      </aside>
 
-      <!-- ANNOUNCEMENT -->
-      <div class="card announcement">
-        <h4>Admin Notice: Document Processing</h4>
-        <p>
-          All pending requests older than 5 business days require immediate
-          review. Please ensure timely processing of resident document requests.
-        </p>
-      </div>
-    </main>
+      <div class="sa-body">
+        <main class="sa-main">
+          <div class="page-hdr">
+            <h1>Welcome back, <span id="welcomeName">Admin</span>!</h1>
+            <p>Full system overview and recent activity.</p>
+          </div>
 
-    <footer class="footer">
-      <p>&copy; 2026 Barangay Records System. All rights reserved.</p>
-    </footer>
+          <section class="stats-grid">
+            <div class="stat-card stat-blue">
+              <h4>Total Requests</h4>
+              <p class="stat-num" id="stat-total">0</p>
+              <p class="stat-sub">All time</p>
+            </div>
+            <div class="stat-card stat-orange">
+              <h4>Pending</h4>
+              <p class="stat-num" id="stat-pending">0</p>
+              <p class="stat-sub">Awaiting review</p>
+            </div>
+            <div class="stat-card stat-green">
+              <h4>Approved</h4>
+              <p class="stat-num" id="stat-approved">0</p>
+              <p class="stat-sub">Ready for pickup</p>
+            </div>
+            <div class="stat-card stat-gray">
+              <h4>Released</h4>
+              <p class="stat-num" id="stat-released">0</p>
+              <p class="stat-sub">Completed</p>
+            </div>
+          </section>
+
+          <section class="stats-grid">
+            <div class="stat-card stat-red">
+              <h4>Blotter Cases</h4>
+              <p class="stat-num" id="stat-blotter">0</p>
+              <p class="stat-sub">Complaints</p>
+            </div>
+          </section>
+
+          <div class="chart-card">
+            <h3 class="chart-title">Requests by Status</h3>
+            <div id="statusChart"></div>
+          </div>
+
+          <div class="table-card tbl-card">
+            <div class="tbl-card-hdr">
+              <h3>Recent Requests</h3>
+              <a
+                href="admin-requests.html"
+                style="font-size: 0.85rem; color: #2563eb"
+                >View All</a
+              >
+            </div>
+            <div class="tbl-wrap">
+              <table class="sa-table">
+                <thead>
+                  <tr>
+                    <th>Tracking #</th>
+                    <th>Resident</th>
+                    <th>Type</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="recent-requests-body">
+                  <tr>
+                    <td
+                      colspan="6"
+                      style="text-align: center; color: #94a3b8; padding: 2rem"
+                    >
+                      Loading...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </main>
+
+        <footer class="sa-footer">
+          <p id="footer-year"></p>
+        </footer>
+      </div>
+    </div>
+
+    <script src="../js/script.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const currentAdmin = getCurrentUser();
+        if (!currentAdmin || (!currentAdmin.roles || (!currentAdmin.roles.includes("admin") && !currentAdmin.roles.includes("super_admin")))) {
+          location.href = "../auth/login.html";
+          return;
+        }
+
+        document.getElementById("footer-year").textContent =
+          "© " +
+          new Date().getFullYear() +
+          " Barangay Records System. All rights reserved.";
+        initSidebar();
+
+        function displayName(u) {
+          if (u.lastName && u.firstName) {
+            return [u.lastName + ",", u.firstName, u.middleName, u.suffix]
+              .filter(Boolean)
+              .join(" ");
+          }
+          return u.fullName || u.name || "Unknown";
+        }
+
+       window.toggleSection = function(id) {
+  document.getElementById(id).classList.toggle("collapsed");
+};
+        function closeModal(id) {
+          document.getElementById(id).classList.remove("open");
+        }
+        window.doLogout = function() {
+  logAction(currentAdmin.id, "admin", "Logged out");
+  setCurrentUser(null);
+  location.href = "../auth/login.html";
+};
+
+        function initSidebar() {
+          const initials = displayName(currentAdmin)
+            .split(" ")
+            .map((n) => n[0])
+            .join("")
+            .substring(0, 2)
+            .toUpperCase();
+          document.getElementById("sb-avatar").textContent = initials;
+          document.getElementById("sb-name").textContent =
+            currentAdmin.firstName || currentAdmin.fullName || "Admin";
+          document.getElementById("welcomeName").textContent =
+            currentAdmin.firstName || currentAdmin.fullName || "Admin";
+        }
+
+        const requests = getData(STORAGE_KEYS.REQUESTS) || [];
+        const users = getData(STORAGE_KEYS.USERS) || [];
+
+        const total = requests.length;
+        const pending = requests.filter((r) => r.status === "pending").length;
+        const approved = requests.filter((r) => r.status === "approved").length;
+        const released = requests.filter((r) => r.status === "released").length;
+        const rejected = requests.filter((r) => r.status === "rejected").length;
+        const blotters = requests.filter(
+          (r) => r.typeKey === "blotter" || r.typeKey === "complaint",
+        ).length;
+
+        document.getElementById("stat-total").textContent = total;
+        document.getElementById("stat-pending").textContent = pending;
+        document.getElementById("stat-approved").textContent = approved;
+        document.getElementById("stat-released").textContent = released;
+        document.getElementById("stat-blotter").textContent = blotters;
+
+        const max = Math.max(pending, approved, rejected, released, 1);
+        document.getElementById("statusChart").innerHTML = [
+          { label: "Pending", count: pending, color: "#d97706" },
+          { label: "Approved", count: approved, color: "#16a34a" },
+          { label: "Rejected", count: rejected, color: "#dc2626" },
+          { label: "Released", count: released, color: "#6b7280" },
+        ]
+          .map(
+            (item) => `
+        <div class="bar-row">
+          <span class="bar-row-label">${item.label}</span>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:${(item.count / max) * 100}%;background:${item.color}">${item.count > 0 ? Math.round((item.count / total) * 100) + "%" : ""}</div>
+          </div>
+          <span class="bar-count">${item.count}</span>
+        </div>
+      `,
+          )
+          .join("");
+
+        const recentReqs = requests.slice(-10).reverse();
+        document.getElementById("recent-requests-body").innerHTML =
+          recentReqs.length
+            ? recentReqs
+                .map((r) => {
+                  const reqUser = users.find((u) => u.id === r.userId) || {};
+                  return `<tr>
+          <td>${(r.id || "").substring(0, 8).toUpperCase()}</td>
+          <td>${displayName(reqUser) || r.requesterName || "-"}</td>
+          <td>${r.type || "-"}</td>
+          <td>${r.createdAt ? new Date(r.createdAt).toLocaleDateString() : "-"}</td>
+          <td><span class="badge badge-${r.status}">${r.status}</span></td>
+          <td><a href="admin-requests.html?view=${r.id}" style="color:#2563eb;font-size:0.8rem;">View</a></td>
+        </tr>`;
+                })
+                .join("")
+            : '<tr><td colspan="6" style="text-align:center;color:#94a3b8;padding:2rem;">No requests yet</td></tr>';
+      });
+    </script>
   </body>
 </html>

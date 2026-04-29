@@ -32,10 +32,10 @@
     .sb-section.collapsed .sb-chevron { transform: rotate(-90deg); }
     .sb-section.collapsed .sb-links { display: none; }
     .sb-links { display: flex; flex-direction: column; gap: 1px; padding: 0.25rem 0; }
-    .sb-link { display: flex; align-items: center; gap: 0.6rem; padding: 0.5rem 0.75rem; border-radius: 0.5rem; text-decoration: none; font-size: 0.875rem; color: var(--gray-700); }
+    .sb-link { display: flex; align-items: center; gap: 0.6rem; padding: 0.5rem 0.75rem; border-radius: 0.5rem; text-decoration: none; font-size: 0.875rem; color: var(--gray-700); white-space: nowrap; }
     .sb-link:hover { background: var(--gray-100); }
     .sb-link.active { background: var(--primary-light); color: var(--primary); font-weight: 600; }
-    .sb-link svg { width: 15px; height: 15px; opacity: 0.7; }
+    .sb-link svg { width: 15px; height: 15px; flex-shrink: 0; opacity: 0.7; }
     .sb-divider { border: none; border-top: 1px solid var(--gray-100); margin: 0.5rem; }
     .sb-logout { margin-top: auto; padding: 0.75rem 0.5rem; border-top: 1px solid var(--gray-200); }
     .sb-logout-btn { width: 100%; padding: 0.5rem; background: var(--danger-light); color: var(--danger); border: 1px solid #fecaca; border-radius: 0.5rem; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
@@ -149,26 +149,26 @@
     <div class="sb-section" id="sec-sa">
       <div class="sb-section-header" onclick="toggleSection('sec-sa')"><span class="sb-label">Super Admin</span><span class="sb-chevron">▼</span></div>
       <div class="sb-links">
-        <a href="superadmin-dashboard.html" class="sb-link">Dashboard</a>
-        <a href="superadmin-requests.html" class="sb-link">Requests</a>
-        <a href="superadmin-blotter.html" class="sb-link">Blotter & Complaints</a>
-        <a href="superadmin-users.html" class="sb-link">Users</a>
-        <a href="manage-admins.html" class="sb-link">Manage Admins</a>
-        <a href="request-forms.html" class="sb-link active">Request Forms</a>
-        <a href="system-logs.html" class="sb-link">System Logs</a>
-        <a href="superadmin-reports.html" class="sb-link">Reports</a>
-        <a href="superadmin-settings.html" class="sb-link">Settings</a>
+        <a href="superadmin-dashboard.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</a>
+        <a href="superadmin-requests.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Requests</a>
+        <a href="superadmin-blotter.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Blotter & Complaints</a>
+        <a href="superadmin-users.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Users</a>
+        <a href="manage-admins.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>Manage Admins</a>
+        <a href="request-forms.html" class="sb-link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/></svg>Request Forms</a>
+        <a href="system-logs.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12"/></svg>System Logs</a>
+        <a href="superadmin-reports.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Reports</a>
+        <a href="superadmin-settings.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><circle cx="12" cy="12" r="3"/></svg>Settings</a>
       </div>
     </div>
     <hr class="sb-divider" />
     <div class="sb-section" id="sec-user">
       <div class="sb-section-header" onclick="toggleSection('sec-user')"><span class="sb-label">My User Area</span><span class="sb-chevron">▼</span></div>
       <div class="sb-links">
-        <a href="sa-dashboard.html" class="sb-link">My Dashboard</a>
-        <a href="sa-new-request.html" class="sb-link">New Request</a>
-        <a href="sa-my-requests.html" class="sb-link">My Requests</a>
-        <a href="sa-blotter.html" class="sb-link">Blotter & Complaint</a>
-        <a href="superadmin-profile.html" class="sb-link">My Profile</a>
+        <a href="sa-dashboard.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>My Dashboard</a>
+        <a href="sa-new-request.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>New Request</a>
+        <a href="sa-my-requests.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12"/></svg>My Requests</a>
+        <a href="sa-blotter.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Blotter & Complaint</a>
+        <a href="superadmin-profile.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>My Profile</a>
       </div>
     </div>
     <div class="sb-logout"><button class="sb-logout-btn" onclick="doLogout()">Logout</button></div>

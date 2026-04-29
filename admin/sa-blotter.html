@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blotter & Complaint | Super Admin</title>
+  <title>Blotter & Complaint | Admin</title>
   <link rel="stylesheet" href="../css/style.css" />
   <link rel="stylesheet" href="../css/request.css" />
   <link rel="stylesheet" href="../css/user-dashboard.css" />
@@ -12,9 +12,9 @@
     body { font-family: 'Segoe UI', sans-serif; background: #f1f5f9 }
 
     /* ── Layout ── */
-    .sa-layout { display:flex;min-height:100vh }
+    .layout { display:flex;min-height:100vh }
     /* ── Sidebar ── */
-    .sa-sidebar {
+    .sidebar {
       width:240px;
       flex-shrink:0;
       background:#fff;
@@ -26,7 +26,7 @@
       height:100vh;
       overflow-y:auto;
     }
-    .sb-brand {
+    .brand {
       display: flex;
       align-items: center;
       gap: 0.5rem;
@@ -199,7 +199,7 @@
 
     <!-- ── Sidebar ── -->
     <aside class="sidebar">
-      <a href="superadmin-dashboard.html" class="brand">
+      <a href="admin-dashboard.html" class="brand">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
           <polyline points="9 22 9 12 15 12 15 22"/>
@@ -211,52 +211,32 @@
         <div class="avatar" id="avatar">SA</div>
         <div>
           <div class="user-name" id="name">Loading...</div>
-          <div class="user-role">Super Admin</div>
+          <div class="user-role">Admin</div>
         </div>
       </div>
 
-      <!-- Super Admin section -->
+      <!-- Admin section -->
       <div class="section" id="sec-sa">
         <div class="section-header" onclick="toggleSection('sec-sa')">
-          <span class="label">Super Admin</span>
+          <span class="label">Admin</span>
           <span class="chevron">▼</span>
         </div>
         <div class="links">
-          <a href="superadmin-dashboard.html" class="link">
+          <a href="admin-dashboard.html" class="link">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
             Dashboard
           </a>
-          <a href="superadmin-requests.html" class="link">
+          <a href="admin-requests.html" class="link">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
             All Requests
           </a>
-          <a href="superadmin-blotter.html" class="link">
+          <a href="admin-blotter.html" class="link">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             Blotter
           </a>
-          <a href="superadmin-users.html" class="link">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-            Users
-          </a>
-          <a href="manage-admins.html" class="link">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
-            Manage Admins
-          </a>
-          <a href="request-forms.html" class="link">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/></svg>
-            Request Forms
-          </a>
-          <a href="system-logs.html" class="link">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12"/></svg>
-            System Logs
-          </a>
-          <a href="superadmin-reports.html" class="link">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/></svg>
+          <a href="admin-reports.html" class="link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
             Reports
-          </a>
-          <a href="superadmin-settings.html" class="link">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg>
-            Settings
           </a>
         </div>
       </div>
@@ -271,7 +251,7 @@
         </div>
         <div class="links">
           <a href="sa-dashboard.html" class="link">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
             Dashboard
           </a>
           <a href="sa-new-request.html" class="link">
@@ -286,7 +266,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             Blotter
           </a>
-          <a href="superadmin-profile.html" class="link">
+          <a href="admin-profile.html" class="link">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
             Profile
           </a>
@@ -352,7 +332,7 @@
         <p>&copy; <span id="footer-year"></span> Barangay Records System. All rights reserved.</p>
       </footer>
 
-    </div><!-- /main-area -->
+    </div>
 
   </div><!-- /layout -->
 
@@ -374,20 +354,25 @@
   <script src="../js/blotter-complaint.js"></script>
   <script>
     window.toggleSection = function(id) {
-  document.getElementById(id).classList.toggle("collapsed");
-};
-        function closeModal(id) {
-          document.getElementById(id).classList.remove("open");
-        }
-        window.doLogout = function() {
-  logAction(currentAdmin.id, "super_admin", "Logged out");
-  setCurrentUser(null);
-  location.href = "../auth/login.html";
-};
+      document.getElementById(id).classList.toggle("collapsed");
+    };
+    function closeModal(id) {
+      document.getElementById(id).classList.remove("open");
+    }
+    window.doLogout = function() {
+      logAction(currentAdmin.id, "admin", "Logged out");
+      setCurrentUser(null);
+      location.href = "../auth/login.html";
+    };
 
     document.addEventListener('DOMContentLoaded', function() {
       var user = getCurrentUser();
       if (!user) { location.href = '../auth/login.html'; return; }
+      // Role check: allow both admin and super_admin
+      if (!user.roles || (!user.roles.includes("admin") && !user.roles.includes("super_admin"))) {
+        location.href = '../auth/login.html';
+        return;
+      }
 
       document.getElementById('name').textContent = user.firstName || user.fullName || 'Admin';
       document.getElementById('avatar').textContent = (user.firstName || user.fullName || 'SA')

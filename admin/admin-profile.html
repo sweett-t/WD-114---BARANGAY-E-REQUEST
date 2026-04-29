@@ -1,183 +1,1017 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Profile | Barangay E-Request</title>
-    <link rel="stylesheet" href="../css/style.css" />
-    <link rel="stylesheet" href="../css/navbar.css" />
-    <link rel="stylesheet" href="../css/admin-profile.css" />
-  </head>
-  <body>
-    <!-- CHECKBOX STATES -->
-    <input type="checkbox" id="toast-save" />
-    <input type="checkbox" id="toast-logout-confirm" />
-    <input type="checkbox" id="toast-logout-cancel" />
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile | Admin</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/user-profile.css" />
+  <link rel="stylesheet" href="../css/user-dashboard.css" />
+  <style>
+    * { box-sizing:border-box;margin:0;padding:0 }
+    html, body { height:100%;overflow:hidden }
+    body { font-family:'Segoe UI',sans-serif;background:#f1f5f9 }
 
-    <!-- TOASTS -->
-    <div class="toast-wrap">
-      <div class="toast toast-success toast-save-msg">
-        ✅ Changes saved successfully!
+    .sa-layout { display:flex;min-height:100vh }
+    .sa-sidebar { width:240px;flex-shrink:0;background:#fff;border-right:1px solid #e5e7eb;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto }
+    .sa-body { flex:1;min-width:0;display:flex;flex-direction:column }
+    .sa-main { flex:1;padding:2rem;max-width:1300px;width:100%;margin:0 auto }
+    .sa-footer { background:#f8fafc;border-top:1px solid #e5e7eb;padding:1rem 2rem;text-align:center;font-size:0.85rem;color:#6b7280 }
+    .footer { background:#f8fafc;border-top:1px solid #e5e7eb;padding:1rem 2rem;text-align:center;font-size:0.85rem;color:#6b7280 }
+
+    .sb-brand { display:flex;align-items:center;gap:0.5rem;padding:1.25rem 1rem;border-bottom:1px solid #e5e7eb;font-weight:800;font-size:0.95rem;color:#2563eb;text-decoration:none }
+    .sb-user { display:flex;align-items:center;gap:0.65rem;padding:1rem;border-bottom:1px solid #f1f5f9 }
+    .sb-avatar { width:38px;height:38px;border-radius:50%;background:#2563eb;color:#fff;font-size:0.8rem;font-weight:700;display:flex;align-items:center;justify-content:center }
+    .sb-name { font-size:0.85rem;font-weight:600;color:#1e293b }
+    .sb-role { font-size:0.7rem;color:#64748b }
+    .sb-section { padding:0 0.5rem;margin-top:0.5rem }
+    .sb-section-header { display:flex;align-items:center;justify-content:space-between;padding:0.35rem 0.5rem;cursor:pointer;user-select:none;border-radius:0.375rem }
+    .sb-section-header:hover { background:#f8fafc }
+    .sb-label { font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#94a3b8 }
+    .sb-chevron { font-size:0.6rem;color:#94a3b8;transition:transform 0.2s }
+    .sb-section.collapsed .sb-chevron { transform:rotate(-90deg) }
+    .sb-section.collapsed .sb-links { display:none }
+    .sb-links { display:flex;flex-direction:column;gap:1px;padding:0.25rem 0 }
+    .sb-link { display:flex;align-items:center;gap:0.6rem;padding:0.5rem 0.75rem;border-radius:0.5rem;text-decoration:none;font-size:0.875rem;color:#374151;white-space:nowrap }
+    .sb-link:hover { background:#f1f5f9 }
+    .sb-link.active { background:#dbeafe;color:#2563eb;font-weight:600 }
+    .sb-link svg { width:15px;height:15px;flex-shrink:0;opacity:0.7 }
+    .sb-divider { border:none;border-top:1px solid #f1f5f9;margin:0.5rem 0.5rem }
+    .sb-logout { margin-top:auto;padding:0.75rem 0.5rem;border-top:1px solid #e5e7eb }
+    .sb-logout-btn { width:100%;padding:0.5rem;background:#fee2e2;color:#991b1b;border:1px solid #fecaca;border-radius:0.5rem;font-weight:600;cursor:pointer }
+    .page-header { margin-bottom:1.5rem }
+    .page-header h1 { font-size:clamp(1.5rem,3vw,2rem);font-weight:700;color:#1e293b;margin-bottom:0.25rem }
+    .page-header p { color:#64748b;font-size:0.95rem }
+    .profile-grid { display:grid;grid-template-columns:250px 1fr;gap:1.5rem }
+    .profile-card { background:#fff;border:1px solid #e5e7eb;border-radius:0.5rem;padding:1.5rem;text-align:center }
+    .profile-avatar { display:flex;justify-content:center;margin-bottom:1rem }
+    .avatar-large { width:80px;height:80px;border-radius:50%;background:#2563eb;color:#fff;font-size:1.5rem;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto }
+    .change-photo { background:#f3f4f6;color:#374151;border:none;padding:0.4rem 0.75rem;border-radius:0.375rem;font-size:0.8rem;cursor:pointer;margin-bottom:1rem }
+    .change-photo:hover { background:#e5e7eb }
+    #profile-name { font-size:1.1rem;font-weight:600;color:#1e293b }
+    #profile-email { font-size:0.85rem;color:#64748b;margin-top:0.25rem }
+    #member-since { font-size:0.75rem;color:#94a3b8 }
+    .form-card { background:#fff;border:1px solid #e5e7eb;border-radius:0.5rem;padding:1.5rem }
+    .form-card h3 { font-size:1rem;font-weight:600;color:#1e293b;margin-bottom:1rem;padding-bottom:0.75rem;border-bottom:1px solid #f1f5f9 }
+    .form-group { margin-bottom:1rem }
+    .form-group label { display:block;font-size:0.8rem;font-weight:600;color:#374151;margin-bottom:0.35rem }
+    .form-group input,.form-group select { width:100%;padding:0.6rem;border:1px solid #d1d5db;border-radius:0.375rem;font-size:0.9rem }
+    .form-group input:disabled { background:#f3f4f6;color:#6b7280 }
+    .row { display:grid;grid-template-columns:1fr 1fr;gap:1rem }
+    .btn { padding:0.6rem 1.25rem;border-radius:0.375rem;font-size:0.85rem;font-weight:600;cursor:pointer;border:none }
+    .btn-primary { background:#2563eb;color:#fff }
+    .btn-primary:hover { background:#1d4ed8 }
+    .btn-secondary { background:#f3f4f6;color:#374151;border:1px solid #d1d5db }
+    .success-msg { color:#10b981;font-size:0.85rem;margin-top:0.5rem;display:none }
+    .success-msg.show { display:block }
+    @media (max-width:768px) { .layout { flex-direction:column } .sidebar { width:100%;height:auto;position:relative } .profile-grid { grid-template-columns:1fr } }
+  </style>
+</head>
+<body>
+  <div class="toast" id="toast">Profile saved successfully!</div>
+  <div class="sa-layout">
+    <aside class="sa-sidebar">
+      <a href="admin-dashboard.html" class="sb-brand">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Barangay E-Request
+      </a>
+      <div class="sb-user">
+        <div class="sb-avatar" id="sb-avatar">SA</div>
+        <div>
+          <div class="sb-name" id="sb-name">Loading...</div>
+          <div class="sb-role">Admin</div>
+        </div>
       </div>
-      <div class="toast toast-warning toast-logout-msg toast-confirm-wrap">
-        <div>⚠️ Are you sure you want to log out?</div>
-        <div class="toast-actions">
-          <a href="../auth/login.html" class="toast-btn toast-btn-danger"
-            >Yes, Log Out</a
+      <div class="sb-section" id="sec-sa">
+        <div class="sb-section-header" onclick="toggleSection('sec-sa')"><span class="sb-label">Admin</span><span class="sb-chevron">▼</span></div>
+        <div class="sb-links">
+          <a href="admin-dashboard.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</a>
+          <a href="admin-requests.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>All Requests</a>
+          <a href="admin-blotter.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Blotter</a>
+          <a href="admin-reports.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Reports</a>
+        </div>
+      </div>
+      <hr class="sb-divider">
+      <div class="sb-section" id="sec-user">
+        <div class="sb-section-header" onclick="toggleSection('sec-user')"><span class="sb-label">My User Area</span><span class="sb-chevron">▼</span></div>
+        <div class="sb-links">
+          <a href="sa-dashboard.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</a>
+          <a href="sa-new-request.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>New Request</a>
+          <a href="sa-my-requests.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12"/></svg>My Requests</a>
+          <a href="sa-blotter.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Blotter</a>
+          <a href="admin-profile.html" class="sb-link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</a>
+        </div>
+      </div>
+      <div class="sb-logout"><button class="sb-logout-btn" onclick="doLogout()">Logout</button></div>
+    </aside>
+    <div class="toast-msg" id="toast-msg">Profile saved successfully!</div>
+    <div class="sa-body">
+    <main class="profile-content">
+      <!-- Change Password Modal -->
+      <div class="modal-overlay" id="password-modal">
+      <div class="modal">
+        <h3>Change Password</h3>
+        <p>Enter your current password and new password.</p>
+        <input
+          type="password"
+          id="current-password"
+          placeholder="Current Password"
+        />
+        <input type="password" id="new-password" placeholder="New Password" />
+        <input
+          type="password"
+          id="confirm-password"
+          placeholder="Confirm New Password"
+        />
+        <div class="btn-row">
+          <button class="btn-cancel" onclick="closePasswordModal()">
+            Cancel
+          </button>
+          <button class="btn-confirm" onclick="changePassword()">Change</button>
+        </div>
+        <p
+          style="
+            text-align: center;
+            margin-top: 0.75rem;
+            margin-bottom: 0;
+            font-size: 0.8rem;
+          "
+        >
+          <a
+            href="#"
+            onclick="
+              event.preventDefault();
+              closePasswordModal();
+              openForgotPasswordModal();
+            "
+            style="color: #2563eb; text-decoration: underline"
+            >Forgot Password?</a
           >
-          <label for="toast-logout-cancel" class="toast-btn toast-btn-cancel"
-            >Cancel</label
-          >
+        </p>
+      </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div class="modal-overlay" id="forgot-modal">
+      <div class="modal">
+        <h3>Reset Password</h3>
+        <p>
+          Enter your email address and we'll send you a link to reset your
+          password.
+        </p>
+        <input type="email" id="reset-email" placeholder="Email Address" />
+        <div class="btn-row">
+          <button class="btn-cancel" onclick="closeForgotPasswordModal()">
+            Cancel
+          </button>
+          <button class="btn-confirm" onclick="sendResetLink()">
+            Send Link
+          </button>
         </div>
       </div>
     </div>
 
-    <!-- NAVBAR -->
-    <nav class="navbar">
-      <a href="admin-dashboard.html" class="navbar-brand">Barangay E-Request</a>
-      <input
-        type="checkbox"
-        id="nav-toggle"
-        class="nav-toggle"
-        aria-hidden="true"
-      />
-      <ul class="navbar-nav">
-        <li><a href="../admin/admin-dashboard.html">Dashboard</a></li>
-        <li><a href="../admin/manage-requests.html">Requests</a></li>
-        <li><a href="../admin/manage-users.html">Users</a></li>
-        <li><a href="../admin/report.html">Reports</a></li>
-        <li>
-          <a href="../admin/admin-profile.html" class="active">Profile</a>
-        </li>
-      </ul>
-      <div class="navbar-right">
-        <div class="navbar-user">
-          <div class="avatar">AD</div>
-          <span class="navbar-username">Admin</span>
+    <!-- Civil Status Reason Modal -->
+    <div class="modal-overlay" id="reason-modal">
+      <div class="modal">
+        <h3>Reason for Change</h3>
+        <p>Please provide a reason for changing your civil status:</p>
+        <textarea
+          id="change-reason"
+          placeholder="e.g., Got married on January 15, 2026..."
+        ></textarea>
+        <div class="btn-row">
+          <button class="btn-cancel" onclick="closeReasonModal()">
+            Cancel
+          </button>
+          <button class="btn-confirm" onclick="confirmChange()">Confirm</button>
         </div>
-        <label for="nav-toggle" class="hamburger" aria-label="Toggle menu">
-          <span></span><span></span><span></span>
-        </label>
       </div>
-    </nav>
+    </div>
 
-    <main class="dashboard-content">
-      <div class="dashboard-header">
-        <h1>Admin Profile</h1>
-        <p>Manage your admin account details and credentials.</p>
+    <!-- Change Photo Input (hidden) -->
+    <input
+      type="file"
+      id="photo-input"
+      accept="image/*"
+      style="display: none"
+      onchange="changePhoto(event)"
+    />
+
+    <main class="profile-content">
+      <div class="dashboard-header" style="margin-bottom: 1.25rem">
+        <h1>My Profile</h1>
+        <p>Update your personal information and account settings.</p>
       </div>
 
       <div class="profile-grid">
         <div class="profile-summary">
           <div class="profile-avatar">
-            <div class="admin-avatar-large">AD</div>
-            <span class="admin-role-badge">Administrator</span>
+            <div class="avatar avatar-large" id="profile-avatar">JD</div>
           </div>
-          <h3>Barangay Admin</h3>
-          <p>admin@barangay.gov.ph</p>
-          <p>Barangay Records System</p>
-          <div class="summary-stats">
-            <div class="summary-stat">
-              <span class="stat-num">42</span>
-              <span class="stat-lbl">Requests Handled</span>
-            </div>
-            <div class="summary-stat">
-              <span class="stat-num">5</span>
-              <span class="stat-lbl">Users Managed</span>
-            </div>
-          </div>
+          <button
+            type="button"
+            class="change-photo-btn"
+            onclick="document.getElementById('photo-input').click()"
+          >
+            Change Photo
+          </button>
+          <h3 id="profile-name-display">Loading...</h3>
+          <p id="profile-username-display">@username</p>
+          <p id="profile-email-display">email@example.com</p>
+          <p class="member-since">
+            Member since <span id="member-since">2026</span>
+          </p>
         </div>
 
         <div class="profile-form">
-          <form action="#" method="post">
-            <h3>Account Information</h3>
-            <label for="admin-name">Full Name</label>
-            <input id="admin-name" type="text" value="Barangay Admin" />
-            <label for="admin-email">Email Address</label>
-            <input
-              id="admin-email"
-              type="email"
-              value="admin@barangay.gov.ph"
-            />
-            <label for="admin-contact">Contact Number</label>
-            <input id="admin-contact" type="tel" value="+63 912 000 0001" />
-            <label for="admin-position">Position / Role</label>
-            <input id="admin-position" type="text" value="Barangay Secretary" />
-            <label for="admin-barangay">Barangay</label>
-            <input
-              id="admin-barangay"
-              type="text"
-              value="Barangay 1 - Lunzuran"
-            />
-
-            <h3>Barangay Branding</h3>
-
-<label for="barangay-logo">Barangay Logo</label>
-<input id="barangay-logo" type="file" accept="image/*" />
-
-<label for="document-layout">Document Layout Template</label>
-<input
-  id="document-layout"
-  type="file"
-  accept=".pdf,.doc,.docx,.png,.jpg"
-/>
-
-<p class="upload-hint">
-  Upload your official barangay logo and document format (PDF, Word, or image).
-</p>
-
-            <h3>Security</h3>
-            <label for="admin-username">Username</label>
-            <input
-              id="admin-username"
-              type="text"
-              value="brgy.admin"
-              disabled
-            />
-            <label for="admin-password">Password</label>
-            <input id="admin-password" type="password" value="********" />
-            <button type="button" class="btn btn-outline btn-change-password">
-              Change / Reset
-            </button>
-            <label for="admin-secq">Security Question</label>
-            <input
-              id="admin-secq"
-              type="text"
-              value="What is the barangay code?"
-            />
-            <label for="admin-seca">Answer</label>
-            <input id="admin-seca" type="text" value="*******" />
-
-            <!-- Save triggers toast -->
-            <label
-              for="toast-save"
-              class="btn btn-primary"
-              style="
-                width: 100%;
-                box-sizing: border-box;
-                padding: 0.75rem;
-                font-size: 1rem;
-                font-weight: 600;
-                margin-top: 1rem;
-                display: block;
-                text-align: center;
-                cursor: pointer;
-              "
-              >Save Changes</label
-            >
-
-            <div class="logout-section">
-              <label for="toast-logout-confirm" class="btn btn-logout"
-                >Log Out</label
-              >
+          <h3>Account</h3>
+          <div class="field-row" style="align-items: flex-end">
+            <div class="form-field" style="margin-bottom: 0">
+              <label>Username</label>
+              <input type="text" id="username" />
             </div>
-          </form>
+            <div class="form-field" style="margin-bottom: 0; flex: 0 0 200px">
+              <label>Password</label>
+              <div style="display: flex; align-items: center; gap: 0.5rem">
+                <input
+                  type="password"
+                  value="••••••••"
+                  id="password-display"
+                  readonly
+                  style="background: #e5e7eb; cursor: default"
+                />
+                <button
+                  type="button"
+                  class="btn-password"
+                  onclick="openPasswordModal()"
+                >
+                  Change
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <h3>Personal Information</h3>
+          <div class="field-row">
+            <div class="form-field">
+              <label>Last Name <span class="field-note">Editable</span></label>
+              <input type="text" id="lastName" />
+            </div>
+            <div class="form-field">
+              <label>First Name <span class="field-note">Editable</span></label>
+              <input type="text" id="firstName" />
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="form-field">
+              <label>Middle Name</label>
+              <input type="text" id="middleName" />
+            </div>
+            <div class="form-field">
+              <label>Suffix</label>
+              <input type="text" id="suffix" placeholder="Jr., Sr." />
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="form-field">
+              <label
+                >Date of Birth
+                <span class="field-note read-only">Read-only</span></label
+              >
+              <input
+                type="date"
+                id="dob"
+                readonly
+                style="background: #e5e7eb"
+              />
+            </div>
+            <div class="form-field">
+              <label
+                >Gender
+                <span class="field-note read-only">Read-only</span></label
+              >
+              <select id="gender" disabled style="background: #e5e7eb">
+                <option value="">Select</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-field">
+            <label>Civil Status <span class="field-note">Editable</span></label>
+            <select id="civilStatus" onchange="checkCivilStatusChange()">
+              <option value="Single">Single</option>
+              <option value="Married">Married</option>
+              <option value="Widowed">Widowed</option>
+              <option value="Divorced">Divorced</option>
+              <option value="Separated">Separated</option>
+            </select>
+          </div>
+          <div class="form-field" id="reason-field" style="display: none">
+            <label>Reason for Change</label>
+            <textarea id="civilStatusReason" rows="2" readonly></textarea>
+          </div>
+
+          <h3>Address</h3>
+          <div class="field-row">
+            <div class="form-field">
+              <label
+                >House/Block # <span class="field-note">Editable</span></label
+              >
+              <input type="text" id="houseNumber" />
+            </div>
+            <div class="form-field">
+              <label>Purok <span class="field-note">Editable</span></label>
+              <input type="text" id="purok" />
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="form-field">
+              <label>Street <span class="field-note">Editable</span></label>
+              <input type="text" id="street" />
+            </div>
+            <div class="form-field">
+              <label>Landmark <span class="field-note">Editable</span></label>
+              <input type="text" id="landmark" />
+            </div>
+          </div>
+
+          <h3>Contact</h3>
+          <div class="field-row">
+            <div class="form-field">
+              <label>Email <span class="field-note">Editable</span></label>
+              <input type="email" id="email" />
+            </div>
+            <div class="form-field">
+              <label>Mobile <span class="field-note">Editable</span></label>
+              <input type="tel" id="phone" />
+            </div>
+          </div>
+          <div class="form-field">
+            <label>Emergency Contact</label>
+            <input type="tel" id="emergencyContact" />
+          </div>
+
+          <h3>
+            ID Information <span class="field-note read-only">Read-only</span>
+          </h3>
+          <div class="field-row">
+            <div class="form-field">
+              <label>ID Type</label>
+              <input
+                type="text"
+                id="idType"
+                readonly
+                style="background: #e5e7eb"
+              />
+            </div>
+            <div class="form-field">
+              <label>ID Number</label>
+              <input
+                type="text"
+                id="idNumber"
+                readonly
+                style="background: #e5e7eb"
+              />
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="form-field">
+              <label>ID Front</label>
+              <div id="id-front-preview" class="id-preview"></div>
+            </div>
+            <div class="form-field">
+              <label>ID Back</label>
+              <div id="id-back-preview" class="id-preview"></div>
+            </div>
+          </div>
+          <p class="field-note-box">
+            Your ID information cannot be changed. Contact the barangay office
+            for updates.
+          </p>
+
+          <div class="section-actions">
+            <button type="button" class="btn-logout" onclick="logout()">
+              Log Out
+            </button>
+            <button type="button" class="btn-save" onclick="saveProfile()">
+              Save Changes
+            </button>
+          </div>
         </div>
       </div>
-    </main>
+</main>
+    </div>
+  </div>
 
-    <footer class="footer">
-      <p>&copy; 2026 Barangay Records System. All rights reserved.</p>
-    </footer>
-  </body>
+  <!-- Notification Modal -->
+    <div
+      class="notification-modal"
+      id="notification-modal"
+      onclick="closeNotificationModal(event)"
+    >
+      <div class="notification-panel" onclick="event.stopPropagation()">
+        <div class="notification-panel-header">
+          <h3>Notifications</h3>
+          <div>
+            <button onclick="showMarkAllReadModal()">Mark all read</button>
+            <button onclick="showClearAllModal()" style="margin-left: 0.75rem">
+              Clear all
+            </button>
+          </div>
+        </div>
+        <div class="notification-list" id="notification-list"></div>
+      </div>
+    </div>
+    <!-- Hidden dummy elements required by script.js notification helpers -->
+  <span id="user-nav-name" style="display:none"></span>
+  <div id="user-avatar" style="display:none"></div>
+
+  <script src="../js/script.js"></script>
+  <script>
+    var originalCivilStatus = "";
+    var pendingCivilStatus = "";
+
+    document.addEventListener("DOMContentLoaded", function () {
+      var user = getCurrentUser();
+      if (!user) {
+        window.location.href = "../auth/login.html";
+        return;
+      }
+      // Role check: allow both admin and super_admin
+      if (!user.roles || (!user.roles.includes("admin") && !user.roles.includes("super_admin"))) {
+        location.href = "../auth/login.html";
+        return;
+      }
+
+      document.getElementById("footer-year").textContent = new Date().getFullYear();
+
+      loadUserInfo();
+      loadProfileData();
+      loadNotificationBadge();
+    });
+
+    document
+      .getElementById("confirm-modal")
+      .addEventListener("click", function (e) {
+        if (e.target === this) closeConfirmModal();
+      });
+
+    function getInitials(name) {
+      if (!name) return "U";
+      return name
+        .split(" ")
+        .map(function (n) {
+          return n[0];
+        })
+        .join("")
+        .substring(0, 2)
+        .toUpperCase();
+    }
+
+    function loadUserInfo() {
+      var user = getCurrentUser();
+      if (user) {
+        document.getElementById("user-nav-name").textContent =
+          user.fullName || "User";
+        var initials = getInitials(user.fullName);
+        document.getElementById("user-avatar").textContent = initials;
+
+        // Load profile picture
+        var avatarEl = document.getElementById("profile-avatar");
+        if (user.photo) {
+          avatarEl.style.backgroundImage = "url(" + user.photo + ")";
+          avatarEl.style.backgroundSize = "cover";
+          avatarEl.style.backgroundPosition = "center";
+          avatarEl.textContent = "";
+        } else {
+          avatarEl.textContent = initials;
+        }
+      }
+    }
+
+    function getInitials(name) {
+      if (!name) return "U";
+      return name
+        .split(" ")
+        .map(function (n) {
+          return n[0];
+        })
+        .join("")
+        .substring(0, 2)
+        .toUpperCase();
+    }
+
+    function loadProfileData() {
+      var user = getCurrentUser();
+      var userId = user ? user.id : null;
+      var allUsers = getData(STORAGE_KEYS.USERS);
+      if (userId && allUsers.length > 0) {
+        var storedUser = allUsers.find(function (u) {
+          return u.id === userId;
+        });
+        if (storedUser) {
+          user = storedUser;
+          setCurrentUser(user);
+        }
+      }
+      if (!user) return;
+
+      var residents = getData(STORAGE_KEYS.RESIDENTS) || [];
+      var resident = residents.find(function (r) {
+        return r.userId === user.id;
+      });
+
+      var sex = user.sex || user.gender || (resident && resident.sex) || "";
+      var houseNumber =
+        user.houseNumber ||
+        (resident && resident.houseNumber) ||
+        (resident && resident.address && resident.address.houseNumber) ||
+        "";
+      var purok =
+        user.purok ||
+        (resident && resident.purok) ||
+        (resident && resident.address && resident.address.purok) ||
+        "";
+      var street =
+        user.street ||
+        (resident && resident.street) ||
+        (resident && resident.address && resident.address.street) ||
+        "";
+      var landmark =
+        user.landmark ||
+        (resident && resident.landmark) ||
+        (resident && resident.address && resident.address.landmark) ||
+        "";
+      var civilStatus =
+        user.civilStatus || (resident && resident.civilStatus) || "Single";
+
+      document.getElementById("profile-name-display").textContent =
+        user.fullName || "User";
+      document.getElementById("profile-username-display").textContent =
+        "@" + (user.username || "user");
+      document.getElementById("profile-email-display").textContent =
+        user.email || "No email";
+      document.getElementById("member-since").textContent = user.createdAt
+        ? new Date(user.createdAt).toLocaleDateString("en-PH", {
+            year: "numeric",
+            month: "long",
+          })
+        : "2026";
+
+      document.getElementById("username").value = user.username || "";
+      document.getElementById("firstName").value =
+        user.firstName || (resident && resident.firstName) || "";
+      document.getElementById("lastName").value =
+        user.lastName || (resident && resident.lastName) || "";
+      document.getElementById("middleName").value =
+        user.middleName || (resident && resident.middleName) || "";
+      document.getElementById("suffix").value =
+        user.suffix || (resident && resident.suffix) || "";
+      document.getElementById("dob").value =
+        user.birthdate || (resident && resident.birthdate) || "";
+      document.getElementById("gender").value = sex;
+      document.getElementById("civilStatus").value = civilStatus;
+      originalCivilStatus = civilStatus;
+
+      document.getElementById("houseNumber").value = houseNumber;
+      document.getElementById("purok").value = purok;
+      document.getElementById("street").value = street;
+      document.getElementById("landmark").value = landmark;
+
+      document.getElementById("email").value = user.email || "";
+      document.getElementById("phone").value = user.phone || "";
+      document.getElementById("emergencyContact").value =
+        user.altContact ||
+        user.emergencyContact ||
+        (resident && resident.contact && resident.contact.altContact) ||
+        "";
+
+      if (user.idInfo) {
+        document.getElementById("idType").value = user.idInfo.type || "";
+        document.getElementById("idNumber").value = user.idInfo.number || "";
+        var frontPreview = document.getElementById("id-front-preview");
+        var backPreview = document.getElementById("id-back-preview");
+        if (user.idInfo.front) {
+          frontPreview.style.backgroundImage =
+            "url(" + user.idInfo.front + ")";
+        }
+        if (user.idInfo.back) {
+          backPreview.style.backgroundImage = "url(" + user.idInfo.back + ")";
+        }
+      }
+
+      if (user.changeHistory && user.changeHistory.length > 0) {
+        var lastChange = user.changeHistory[user.changeHistory.length - 1];
+        if (lastChange.field === "civilStatus") {
+          document.getElementById("reason-field").style.display = "block";
+          document.getElementById("civilStatusReason").value =
+            lastChange.reason;
+        }
+      }
+    }
+
+    function changePhoto(event) {
+      var file = event.target.files[0];
+      if (!file) return;
+
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var user = getCurrentUser();
+        if (user) {
+          user.photo = e.target.result;
+          setCurrentUser(user);
+
+          var users = getData(STORAGE_KEYS.USERS) || [];
+          var idx = users.findIndex(function (u) {
+            return u.id === user.id;
+          });
+          if (idx >= 0) {
+            users[idx] = user;
+            setData(STORAGE_KEYS.USERS, users);
+          }
+
+          var residents = getData(STORAGE_KEYS.RESIDENTS) || [];
+          var rIdx = residents.findIndex(function (r) {
+            return r.userId === user.id;
+          });
+          if (rIdx >= 0) {
+            residents[rIdx].profilePic = e.target.result;
+            setData(STORAGE_KEYS.RESIDENTS, residents);
+          }
+
+          var avatarEl = document.getElementById("profile-avatar");
+          avatarEl.style.backgroundImage = "url(" + user.photo + ")";
+          avatarEl.style.backgroundSize = "cover";
+          avatarEl.style.backgroundPosition = "center";
+          avatarEl.textContent = "";
+
+          var navAvatar = document.getElementById("user-avatar");
+          navAvatar.style.backgroundImage = "url(" + user.photo + ")";
+          navAvatar.style.backgroundSize = "cover";
+          navAvatar.style.backgroundPosition = "center";
+          navAvatar.textContent = "";
+
+          showToast("Profile photo updated!");
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function openPasswordModal() {
+      document.getElementById("password-modal").classList.add("active");
+    }
+    function closePasswordModal() {
+      document.getElementById("password-modal").classList.remove("active");
+      document.getElementById("current-password").value = "";
+      document.getElementById("new-password").value = "";
+      document.getElementById("confirm-password").value = "";
+    }
+
+    function changePassword() {
+      var current = document.getElementById("current-password").value;
+      var newPass = document.getElementById("new-password").value;
+      var confirm = document.getElementById("confirm-password").value;
+      var user = getCurrentUser();
+
+      if (!current || !newPass || !confirm) {
+        alert("Please fill in all fields");
+        return;
+      }
+      if (current !== (user.password || "")) {
+        alert("Current password is incorrect");
+        return;
+      }
+      if (newPass !== confirm) {
+        alert("New passwords do not match");
+        return;
+      }
+      if (newPass.length < 6) {
+        alert("Password must be at least 6 characters");
+        return;
+      }
+
+      user.password = newPass;
+      var users = getData(STORAGE_KEYS.USERS) || [];
+      var idx = users.findIndex(function (u) {
+        return u.id === user.id;
+      });
+      if (idx >= 0) {
+        users[idx] = user;
+        setData(STORAGE_KEYS.USERS, users);
+      }
+      setCurrentUser(user);
+
+      closePasswordModal();
+      showToast("Password changed successfully!");
+    }
+
+    function checkCivilStatusChange() {
+      var newStatus = document.getElementById("civilStatus").value;
+      if (
+        newStatus !== originalCivilStatus &&
+        (newStatus === "Married" ||
+          newStatus === "Widowed" ||
+          newStatus === "Divorced")
+      ) {
+        pendingCivilStatus = newStatus;
+        document.getElementById("reason-modal").classList.add("active");
+      }
+    }
+
+    function closeReasonModal() {
+      document.getElementById("reason-modal").classList.remove("active");
+      document.getElementById("change-reason").value = "";
+      document.getElementById("civilStatus").value = originalCivilStatus;
+    }
+
+    function confirmChange() {
+      var reason = document.getElementById("change-reason").value.trim();
+      if (!reason) {
+        alert("Please provide a reason");
+        return;
+      }
+
+      var user = getCurrentUser();
+      if (user) {
+        if (!user.changeHistory) user.changeHistory = [];
+        user.changeHistory.push({
+          field: "civilStatus",
+          from: originalCivilStatus,
+          to: pendingCivilStatus,
+          reason: reason,
+          date: new Date().toISOString(),
+        });
+      }
+
+      document.getElementById("reason-modal").classList.remove("active");
+      document.getElementById("change-reason").value = "";
+      document.getElementById("reason-field").style.display = "block";
+      document.getElementById("civilStatusReason").value = reason;
+    }
+
+    function saveProfile() {
+      document.getElementById("confirm-title").textContent = "Save Changes";
+      document.getElementById("confirm-message").textContent =
+        "Are you sure you want to save these changes?";
+      document.getElementById("confirm-yes-btn").onclick = function () {
+        doSaveProfile();
+        closeConfirmModal();
+      };
+      document.getElementById("confirm-modal").classList.add("active");
+    }
+
+    function doSaveProfile() {
+      var user = getCurrentUser();
+      if (!user) return;
+
+      user.username = document.getElementById("username").value.trim();
+      user.firstName = document.getElementById("firstName").value.trim();
+      user.lastName = document.getElementById("lastName").value.trim();
+      user.middleName = document.getElementById("middleName").value.trim();
+      user.suffix = document.getElementById("suffix").value.trim();
+      user.civilStatus = document.getElementById("civilStatus").value;
+
+      user.houseNumber = document.getElementById("houseNumber").value.trim();
+      user.purok = document.getElementById("purok").value.trim();
+      user.street = document.getElementById("street").value.trim();
+      user.landmark = document.getElementById("landmark").value.trim();
+
+      user.email = document.getElementById("email").value.trim();
+      user.phone = document.getElementById("phone").value.trim();
+      user.altContact = document
+        .getElementById("emergencyContact")
+        .value.trim();
+
+      var parts = [user.firstName, user.middleName, user.lastName].filter(
+        function (p) {
+          return p;
+        },
+      );
+      user.fullName = parts.join(" ");
+
+      setCurrentUser(user);
+
+      var users = getData(STORAGE_KEYS.USERS) || [];
+      var idx = users.findIndex(function (u) {
+        return u.id === user.id;
+      });
+      if (idx >= 0) {
+        users[idx] = user;
+        setData(STORAGE_KEYS.USERS, users);
+      }
+
+      var residents = getData(STORAGE_KEYS.RESIDENTS) || [];
+      var rIdx = residents.findIndex(function (r) {
+        return r.userId === user.id;
+      });
+      if (rIdx >= 0) {
+        residents[rIdx].firstName = user.firstName;
+        residents[rIdx].lastName = user.lastName;
+        residents[rIdx].middleName = user.middleName;
+        residents[rIdx].suffix = user.suffix;
+        residents[rIdx].name = user.fullName;
+        residents[rIdx].fullName = user.fullName;
+        residents[rIdx].civilStatus = user.civilStatus;
+        residents[rIdx].houseNumber = user.houseNumber;
+        residents[rIdx].purok = user.purok;
+        residents[rIdx].street = user.street;
+        residents[rIdx].landmark = user.landmark;
+        residents[rIdx].contact = {
+          phone: user.phone,
+          email: user.email,
+          altContact: user.altContact,
+        };
+        setData(STORAGE_KEYS.RESIDENTS, residents);
+      }
+
+      loadUserInfo();
+      loadProfileData();
+
+      showToast("Profile saved successfully!");
+    }
+
+    function showToast(msg) {
+      var toast = document.getElementById("toast-msg");
+      toast.textContent = msg;
+      toast.classList.add("show");
+      setTimeout(function () {
+        toast.classList.remove("show");
+      }, 3000);
+    }
+
+    function logout() {
+      document.getElementById("confirm-title").textContent = "Log Out";
+      document.getElementById("confirm-message").textContent =
+        "Are you sure you want to log out?";
+      document.getElementById("confirm-yes-btn").onclick = function () {
+        localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
+        window.location.href = "../auth/login.html";
+      };
+      document.getElementById("confirm-modal").classList.add("active");
+    }
+
+    function openForgotPasswordModal() {
+      document.getElementById("forgot-modal").classList.add("active");
+    }
+
+    function closeForgotPasswordModal() {
+      document.getElementById("forgot-modal").classList.remove("active");
+      document.getElementById("reset-email").value = "";
+    }
+
+    function sendResetLink() {
+      var email = document.getElementById("reset-email").value.trim();
+      if (!email) {
+        showToast("Please enter your email address.");
+        return;
+      }
+      showToast("Password reset link sent to " + email);
+      closeForgotPasswordModal();
+    }
+
+    var notificationBell = document.getElementById("notification-bell");
+    if (notificationBell) {
+      loadNotificationBadge();
+    }
+    function loadNotificationBadge() {
+      var user = getCurrentUser();
+      if (!user) return;
+      var unread = getUnreadCount(user.id);
+      var badge = document.getElementById("notification-badge");
+      if (badge) {
+        if (unread > 0) {
+          badge.textContent = unread > 9 ? "9+" : unread;
+          badge.style.display = "flex";
+        } else {
+          badge.style.display = "none";
+        }
+      }
+    }
+
+    function showNotifications() {
+      var user = getCurrentUser();
+      if (!user) return;
+
+      var notifications = getUserNotifications(user.id);
+      var listEl = document.getElementById("notification-list");
+
+      if (notifications.length === 0) {
+        listEl.innerHTML =
+          '<div class="notification-empty">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">' +
+          '<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>' +
+          '<path d="M13.73 21a2 2 0 0 1-3.46 0"></path>' +
+          "</svg>" +
+          "<p>No notifications yet</p></div>";
+      } else {
+        var html = "";
+        notifications.forEach(function (n) {
+          var timeAgo = getTimeAgo(n.createdAt);
+          html +=
+            '<div class="notification-item ' +
+            n.type +
+            " " +
+            (n.read ? "" : "unread") +
+            '" ' +
+            "onclick=\"viewNotification('" +
+            n.id +
+            "')\">" +
+            '<div class="notification-item-header">' +
+            '<span class="notification-item-title">' +
+            escapeHtml(n.title) +
+            "</span>" +
+            '<span class="notification-item-time">' +
+            timeAgo +
+            "</span>" +
+            "</div>" +
+            '<div class="notification-item-message">' +
+            escapeHtml(n.message) +
+            "</div>" +
+            "</div>";
+        });
+        listEl.innerHTML = html;
+      }
+
+      document.getElementById("notification-modal").classList.add("show");
+      loadNotificationBadge();
+    }
+
+    function viewNotification(id) {
+      markNotificationRead(id);
+      loadNotificationBadge();
+      showNotifications();
+    }
+
+    function closeNotificationModal(event) {
+      if (event && event.target !== event.currentTarget) return;
+      document.getElementById("notification-modal").classList.remove("show");
+    }
+
+    function markAllRead() {
+      var user = getCurrentUser();
+      if (user) {
+        markAllNotificationsRead(user.id);
+        loadNotificationBadge();
+        showNotifications();
+      }
+    }
+
+    function showMarkAllReadModal() {
+      var user = getCurrentUser();
+      if (user) { markAllNotificationsRead(user.id); loadNotificationBadge(); }
+    }
+
+    function showClearAllModal() {
+      var user = getCurrentUser();
+      if (user) { clearNotifications(user.id); loadNotificationBadge(); }
+    }
+
+    function closeConfirmModal() {
+      document.getElementById("confirm-modal").classList.remove("active");
+    }
+
+    document
+      .getElementById("confirm-modal")
+      .addEventListener("click", function (e) {
+        if (e.target === this) closeConfirmModal();
+      });
+
+    function getTimeAgo(timestamp) {
+      var now = new Date();
+      var then = new Date(timestamp);
+      var diff = Math.floor((now - then) / 1000);
+
+      if (diff < 60) return "Just now";
+      if (diff < 3600) return Math.floor(diff / 60) + "m ago";
+      if (diff < 86400) return Math.floor(diff / 3600) + "h ago";
+      if (diff < 604800) return Math.floor(diff / 86400) + "d ago";
+      return then.toLocaleDateString("en-PH", {
+        month: "short",
+        day: "numeric",
+      });
+    }
+
+    function escapeHtml(str) {
+      if (!str) return "";
+      return str
+        .toString()
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
+
+    window.toggleSection = function(id) {
+      document.getElementById(id).classList.toggle('collapsed');
+    };
+    window.doLogout = function() {
+      var user = getCurrentUser();
+      if (user) logAction(user.id, "admin", "Logged out");
+      setCurrentUser(null);
+      location.href = '../auth/login.html';
+    };
+  </script>
+</body>
 </html>

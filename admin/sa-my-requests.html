@@ -1,0 +1,576 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Requests | Admin</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/user-requests.css" />
+  <link rel="stylesheet" href="../css/user-dashboard.css" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0 }
+    body { font-family: 'Segoe UI', sans-serif; background: #f1f5f9 }
+
+    /* ── Layout ── */
+    .layout { display: flex; min-height: 100vh }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: 240px;
+      flex-shrink: 0;
+      background: #fff;
+      border-right: 1px solid #e5e7eb;
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1.25rem 1rem;
+      border-bottom: 1px solid #e5e7eb;
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: #2563eb;
+      text-decoration: none;
+    }
+    .user {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      padding: 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #2563eb;
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .user-name { font-size: 0.85rem; font-weight: 600; color: #1e293b }
+    .user-role { font-size: 0.7rem; color: #64748b }
+    .section { padding: 0 0.5rem; margin-top: 0.5rem }
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.35rem 0.5rem;
+      cursor: pointer;
+      user-select: none;
+      border-radius: 0.375rem;
+    }
+    .section-header:hover { background: #f8fafc }
+    .label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #94a3b8;
+    }
+    .chevron { font-size: 0.6rem; color: #94a3b8; transition: transform 0.2s }
+    .collapsed .chevron { transform: rotate(-90deg) }
+    .collapsed .links { display: none }
+    .links { display: flex; flex-direction: column; gap: 1px; padding: 0.25rem 0 }
+    .link {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.5rem;
+      text-decoration: none;
+      font-size: 0.875rem;
+      color: #374151;
+      transition: background 0.15s, color 0.15s;
+    }
+    .link:hover { background: #f1f5f9; color: #1e293b }
+    .link.active { background: #dbeafe; color: #2563eb; font-weight: 600 }
+    .link svg { width: 15px; height: 15px; flex-shrink: 0; opacity: 0.7 }
+    .divider { border: none; border-top: 1px solid #f1f5f9; margin: 0.5rem }
+    .logout { margin-top: auto; padding: 0.75rem 0.5rem; border-top: 1px solid #e5e7eb }
+    .logout-btn {
+      width: 100%;
+      padding: 0.5rem;
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+      border-radius: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .logout-btn:hover { background: #fecaca }
+
+    /* ── Main area ── */
+    .main-area {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1.5rem;
+    }
+
+    /* ── Content wrapper ── */
+    main {
+      width: 100%;
+      max-width: 960px;
+    }
+
+    /* ── Footer ── */
+    footer {
+      width: 100%;
+      max-width: 960px;
+      margin-top: 2rem;
+      padding-top: 1.25rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: #6b7280;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .layout { flex-direction: column }
+      .sidebar { width: 100%; height: auto; position: relative }
+      .main-area { padding: 1.25rem 1rem }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+
+    <!-- ── Sidebar ── -->
+    <aside class="sidebar">
+      <a href="admin-dashboard.html" class="brand">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        Barangay E-Request
+      </a>
+
+      <div class="user">
+        <div class="avatar" id="avatar">SA</div>
+        <div>
+          <div class="user-name" id="name">Loading...</div>
+          <div class="user-role">Admin</div>
+        </div>
+      </div>
+
+      <!-- Admin section -->
+      <div class="section" id="sec-sa">
+        <div class="section-header" onclick="toggleSection('sec-sa')">
+          <span class="label">Admin</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="links">
+          <a href="admin-dashboard.html" class="link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            Dashboard
+          </a>
+          <a href="admin-requests.html" class="link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            All Requests
+          </a>
+          <a href="admin-blotter.html" class="link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Blotter
+          </a>
+          <a href="admin-reports.html" class="link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            Reports
+          </a>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- My User Area section -->
+      <div class="section" id="sec-user">
+        <div class="section-header" onclick="toggleSection('sec-user')">
+          <span class="label">My User Area</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="links">
+          <a href="sa-dashboard.html" class="link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            Dashboard
+          </a>
+          <a href="sa-new-request.html" class="link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            New Request
+          </a>
+          <a href="sa-my-requests.html" class="link active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12"/></svg>
+            My Requests
+          </a>
+          <a href="sa-blotter.html" class="link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Blotter
+          </a>
+          <a href="admin-profile.html" class="link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Profile
+          </a>
+        </div>
+      </div>
+
+      <div class="logout">
+        <button class="logout-btn" onclick="doLogout()">Logout</button>
+      </div>
+    </aside>
+
+    <!-- ── Right content area ── -->
+    <div class="main-area">
+      <main>
+
+        <div class="page-header">
+          <h1>My Requests</h1>
+          <p>View and track all your document requests, blotter records, and complaints.</p>
+          <p style="font-size: 0.85rem; color: #64748b; margin-top: 0.5rem">
+            Click <strong>View</strong> to see details and progress of each request.
+          </p>
+        </div>
+
+        <div class="filter-bar">
+          <div class="filter-group">
+            <label for="filter-type">Document Type</label>
+            <select id="filter-type" onchange="applyFilters()">
+              <option value="">All Types</option>
+              <option value="Barangay Clearance">Barangay Clearance</option>
+              <option value="Barangay ID">Barangay ID</option>
+              <option value="Business Clearance">Business Clearance</option>
+              <option value="Certificate of Indigency">Certificate of Indigency</option>
+              <option value="Solo Parent">Solo Parent Certificate</option>
+              <option value="Senior Citizen">Senior Citizen Certificate</option>
+              <option value="Blotter">Blotter</option>
+              <option value="Complaint">Complaint</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="filter-status">Status</label>
+            <select id="filter-status" onchange="applyFilters()">
+              <option value="">All Status</option>
+              <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+              <option value="ready">Ready for Pickup</option>
+              <option value="released">Released</option>
+              <option value="rejected">Rejected</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="filter-date-from">Date From</label>
+            <input type="date" id="filter-date-from" onchange="applyFilters()" />
+          </div>
+          <div class="filter-group">
+            <label for="filter-date-to">Date To</label>
+            <input type="date" id="filter-date-to" onchange="applyFilters()" />
+          </div>
+          <div class="filter-group">
+            <label for="filter-search">Search</label>
+            <input type="text" id="filter-search" placeholder="Tracking # or type…" onkeyup="applyFilters()" />
+          </div>
+        </div>
+
+        <div class="requests-table-card">
+          <div class="card-header">
+            <h3>All Requests</h3>
+            <span class="results-count" id="results-count">Loading...</span>
+          </div>
+          <div style="overflow-x: auto">
+            <table class="requests-table">
+              <thead>
+                <tr>
+                  <th>Document Type</th>
+                  <th>Date Requested</th>
+                  <th>Tracking #</th>
+                  <th>Status</th>
+                  <th>Purpose/Description</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="requests-tbody">
+                <tr>
+                  <td colspan="6" style="text-align: center; padding: 2rem; color: #6b7280">Loading...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination" id="pagination">
+            <button type="button" id="prev-btn" onclick="prevPage()">← Previous</button>
+            <span class="page-info" id="page-info">Page 1 of 1</span>
+            <button type="button" id="next-btn" onclick="nextPage()">Next →</button>
+          </div>
+        </div>
+
+      </main>
+
+      <footer>
+        <p>&copy; <span id="footer-year"></span> Barangay Records System. All rights reserved.</p>
+      </footer>
+    </div><!-- /main-area -->
+
+  </div><!-- /layout -->
+
+  <!-- View Request Modal -->
+  <div class="modal-overlay" id="view-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Request Details</h3>
+        <button type="button" class="modal-close" onclick="closeViewModal()">×</button>
+      </div>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+  <!-- Notification Modal -->
+  <div class="notification-modal" id="notification-modal" onclick="closeNotificationModal(event)">
+    <div class="notification-panel" onclick="event.stopPropagation()">
+      <div class="notification-panel-header">
+        <h3>Notifications</h3>
+        <div>
+          <button onclick="showMarkAllReadModal()">Mark all read</button>
+          <button onclick="showClearAllModal()" style="margin-left: 0.75rem">Clear all</button>
+        </div>
+      </div>
+      <div class="notification-list" id="notification-list"></div>
+    </div>
+  </div>
+
+  <!-- Hidden dummy elements required by script.js notification helpers -->
+  <span id="user-nav-name" style="display:none"></span>
+  <div id="user-avatar" style="display:none"></div>
+
+  <script src="../js/script.js"></script>
+  <script>
+    var allRequests = [], filteredRequests = [], currentPage = 1, itemsPerPage = 5;
+
+    window.toggleSection = function(id) {
+      document.getElementById(id).classList.toggle("collapsed");
+    };
+    function closeModal(id) {
+      document.getElementById(id).classList.remove("open");
+    }
+    window.doLogout = function() {
+      logAction(currentAdmin.id, "admin", "Logged out");
+      setCurrentUser(null);
+      location.href = "../auth/login.html";
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var user = getCurrentUser();
+      if (!user) { location.href = '../auth/login.html'; return; }
+      // Role check: allow both admin and super_admin
+      if (!user.roles || (!user.roles.includes("admin") && !user.roles.includes("super_admin"))) {
+        location.href = '../auth/login.html';
+        return;
+      }
+
+      document.getElementById('name').textContent = user.firstName || user.fullName || 'Admin';
+      document.getElementById('avatar').textContent = (user.firstName || user.fullName || 'SA')
+        .split(' ').map(function(n) { return n[0]; }).join('').substring(0, 2).toUpperCase();
+      document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+      loadRequests();
+      if (typeof loadNotificationBadge === 'function') loadNotificationBadge();
+    });
+
+    function loadRequests() {
+      var user = getCurrentUser();
+      if (!user) {
+        document.getElementById('requests-tbody').innerHTML =
+          '<tr><td colspan="6">Please log in.</td></tr>';
+        return;
+      }
+      var requests = getData(STORAGE_KEYS.REQUESTS) || [];
+      allRequests = requests
+        .filter(function(r) { return r.userId === user.id; })
+        .sort(function(a, b) { return new Date(b.createdAt) - new Date(a.createdAt); });
+      filteredRequests = allRequests.slice();
+      currentPage = 1;
+      renderRequests();
+    }
+
+    function applyFilters() {
+      var typeFilter   = document.getElementById('filter-type').value;
+      var statusFilter = document.getElementById('filter-status').value;
+      var dateFrom     = document.getElementById('filter-date-from').value;
+      var dateTo       = document.getElementById('filter-date-to').value;
+      var searchTerm   = document.getElementById('filter-search').value.toLowerCase();
+
+      filteredRequests = allRequests.filter(function(r) {
+        if (typeFilter && r.type !== typeFilter && !(r.type || '').toLowerCase().includes(typeFilter.toLowerCase())) return false;
+        if (statusFilter && r.status !== statusFilter) return false;
+        if (dateFrom) {
+          var created = new Date(r.createdAt).toISOString().split('T')[0];
+          if (created < dateFrom) return false;
+        }
+        if (dateTo) {
+          var created = new Date(r.createdAt).toISOString().split('T')[0];
+          if (created > dateTo) return false;
+        }
+        if (searchTerm) {
+          var searchText = (r.id + ' ' + r.type + ' ' + (r.purpose || '') + (r.complaintDescription || '')).toLowerCase();
+          if (!searchText.includes(searchTerm)) return false;
+        }
+        return true;
+      });
+      currentPage = 1;
+      renderRequests();
+    }
+
+    function renderRequests() {
+      var tbody     = document.getElementById('requests-tbody');
+      var countEl   = document.getElementById('results-count');
+      var totalPages = Math.ceil(filteredRequests.length / itemsPerPage) || 1;
+
+      if (!filteredRequests || filteredRequests.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:#6b7280">No requests found.</td></tr>';
+        countEl.textContent = 'Showing 0 of 0';
+        updatePagination(totalPages);
+        return;
+      }
+
+      var startIdx  = (currentPage - 1) * itemsPerPage;
+      var pageItems = filteredRequests.slice(startIdx, startIdx + itemsPerPage);
+      var rows = '';
+
+      pageItems.forEach(function(r) {
+        var dateStr = new Date(r.createdAt).toLocaleDateString('en-PH', {
+          year: 'numeric', month: 'short', day: 'numeric'
+        });
+        var purpose = r.purpose || r.complaintDescription || r.incidentDescription || '-';
+        if (purpose.length > 40) purpose = purpose.substring(0, 40) + '...';
+
+        var badgeClass = 'badge-pending';
+        if (r.status === 'approved')  badgeClass = 'badge-approved';
+        if (r.status === 'ready')     badgeClass = 'badge-ready';
+        if (r.status === 'released')  badgeClass = 'badge-released';
+        if (r.status === 'rejected')  badgeClass = 'badge-rejected';
+
+        rows += '<tr>' +
+          '<td data-label="Document Type"><strong>' + (r.type || r.requestType || '-') + '</strong></td>' +
+          '<td data-label="Date Requested">' + dateStr + '</td>' +
+          '<td data-label="Tracking #">' + (r.trackingNumber || r.id) + '</td>' +
+          '<td data-label="Status"><span class="badge ' + badgeClass + '">' + (r.status || 'pending').toUpperCase() + '</span></td>' +
+          '<td data-label="Purpose">' + purpose + '</td>' +
+          '<td data-label="Action"><button type="button" class="btn-link" onclick="viewRequest(\'' + r.id + '\')">View</button></td>' +
+          '</tr>';
+      });
+
+      tbody.innerHTML = rows;
+      countEl.textContent = 'Showing ' + filteredRequests.length + ' request(s)';
+      updatePagination(totalPages);
+    }
+
+    function updatePagination(totalPages) {
+      var prevBtn  = document.getElementById('prev-btn');
+      var nextBtn  = document.getElementById('next-btn');
+      var pageInfo = document.getElementById('page-info');
+      prevBtn.disabled = currentPage === 1;
+      nextBtn.disabled = currentPage === totalPages || totalPages <= 1;
+      pageInfo.textContent = 'Page ' + currentPage + ' of ' + totalPages;
+    }
+
+    function prevPage() {
+      if (currentPage > 1) { currentPage--; renderRequests(); }
+    }
+    function nextPage() {
+      var totalPages = Math.ceil(filteredRequests.length / itemsPerPage);
+      if (currentPage < totalPages) { currentPage++; renderRequests(); }
+    }
+
+    function viewRequest(id) {
+      var request = filteredRequests.find(function(r) { return r.id === id; });
+      if (!request) return;
+      var status = request.status || 'pending';
+      var stages = getStages(status);
+
+      var details =
+        '<div class="modal-row"><div class="modal-key">Tracking #</div><div class="modal-val">' + (request.trackingNumber || request.id) + '</div></div>' +
+        '<div class="modal-row"><div class="modal-key">Type</div><div class="modal-val">' + (request.type || request.requestType) + '</div></div>' +
+        '<div class="modal-row"><div class="modal-key">Date Filed</div><div class="modal-val">' + new Date(request.createdAt).toLocaleDateString('en-PH') + '</div></div>' +
+        '<div class="modal-row"><div class="modal-key">Status</div><div class="modal-val"><span class="badge badge-' + status + '">' + status.toUpperCase() + '</span></div></div>';
+
+      if (request.purpose)
+        details += '<div class="modal-row"><div class="modal-key">Purpose</div><div class="modal-val">' + request.purpose + '</div></div>';
+      if (request.complaintDescription)
+        details += '<div class="modal-row"><div class="modal-key">Description</div><div class="modal-val">' + request.complaintDescription + '</div></div>';
+      if (request.incidentDescription)
+        details += '<div class="modal-row"><div class="modal-key">Description</div><div class="modal-val">' + request.incidentDescription + '</div></div>';
+      if (request.fee !== undefined)
+        details += '<div class="modal-row"><div class="modal-key">Fee</div><div class="modal-val">₱' + (request.fee || 0) + '</div></div>';
+
+      details += '<div class="tracker"><h4>Request Progress</h4><div class="track-steps">' + stages + '</div></div>';
+
+      document.getElementById('modal-content').innerHTML = details;
+      document.getElementById('view-modal').classList.add('open');
+    }
+
+    function getStages(status) {
+      var allStages   = ['Pending', 'Approved', 'Ready', 'Released'];
+      var statusOrder = { pending: 0, approved: 1, ready: 2, released: 3 };
+      var currentIdx  = statusOrder[status] !== undefined ? statusOrder[status] : 0;
+      var html = '';
+
+      allStages.forEach(function(stage, idx) {
+        var isDone    = idx < currentIdx;
+        var isCurrent = idx === currentIdx;
+        var isLast    = idx === allStages.length - 1;
+        html += '<div class="track-step"><div class="track-left">';
+        html += '<div class="track-dot' + (isDone ? ' done' : '') + (isCurrent ? ' current' : '') + '"></div>';
+        if (!isLast) html += '<div class="track-line' + (isDone ? ' done' : '') + '"></div>';
+        html += '</div><div class="track-content">';
+        html += '<h5>' + stage + '</h5><p>' + (isDone ? 'Completed' : isCurrent ? 'Processing...' : 'Pending') + '</p></div></div>';
+      });
+      return html;
+    }
+
+    function closeViewModal() {
+      document.getElementById('view-modal').classList.remove('open');
+    }
+
+    function closeNotificationModal(event) {
+      if (event && event.target !== event.currentTarget) return;
+      document.getElementById('notification-modal').classList.remove('show');
+    }
+
+    function showMarkAllReadModal() {
+      var user = getCurrentUser();
+      if (user && typeof markAllNotificationsRead === 'function') {
+        markAllNotificationsRead(user.id);
+        if (typeof loadNotificationBadge === 'function') loadNotificationBadge();
+      }
+    }
+
+    function showClearAllModal() {
+      var user = getCurrentUser();
+      if (user && typeof clearNotifications === 'function') {
+        clearNotifications(user.id);
+        if (typeof loadNotificationBadge === 'function') loadNotificationBadge();
+      }
+    }
+
+    // confirm-modal may be injected by script.js globally
+    document.addEventListener('DOMContentLoaded', function() {
+      var confirmModal = document.getElementById('confirm-modal');
+      if (confirmModal) {
+        confirmModal.addEventListener('click', function(e) {
+          if (e.target === this && typeof closeConfirmModal === 'function') closeConfirmModal();
+        });
+      }
+    });
+  </script>
+</body>
+</html>

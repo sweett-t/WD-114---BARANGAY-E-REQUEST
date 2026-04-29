@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Blotter & Complaints | Super Admin</title>
+    <title>All Requests | Admin</title>
     <style>
       :root {
         --color-primary: #2563eb;
@@ -114,6 +114,9 @@
       .sb-section.collapsed .sb-links {
         display: none;
       }
+      .sb-section.collapsed .sb-chevron {
+        transform: rotate(-90deg);
+      }
       .sb-links {
         display: flex;
         flex-direction: column;
@@ -190,6 +193,8 @@
         justify-content: space-between;
         padding: 1rem 1.25rem;
         border-bottom: 1px solid #e5e7eb;
+        flex-wrap: wrap;
+        gap: 0.5rem;
       }
       .tbl-card-hdr h3 {
         font-size: 1rem;
@@ -214,6 +219,7 @@
         font-size: 0.72rem;
         font-weight: 700;
         text-transform: uppercase;
+        letter-spacing: 0.4px;
         color: #64748b;
       }
       .filter-group input,
@@ -246,6 +252,9 @@
         color: #1e293b;
         border-bottom: 1px solid #f1f5f9;
       }
+      .sa-table tbody tr:hover td {
+        background: #f8fafc;
+      }
       .tbl-footer {
         display: flex;
         align-items: center;
@@ -271,6 +280,14 @@
         background: #fff;
         cursor: pointer;
       }
+      .pag-btns button:hover:not(:disabled) {
+        border-color: #2563eb;
+        color: #2563eb;
+      }
+      .pag-btns button:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
       .badge {
         display: inline-flex;
         padding: 0.2rem 0.6rem;
@@ -282,9 +299,17 @@
         background: #fef3c7;
         color: #92400e;
       }
-      .badge-resolved {
+      .badge-approved {
         background: #d1fae5;
         color: #065f46;
+      }
+      .badge-rejected {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+      .badge-released {
+        background: #dbeafe;
+        color: #1e40af;
       }
       .btn {
         padding: 0.35rem 0.75rem;
@@ -292,21 +317,32 @@
         font-size: 0.8rem;
         font-weight: 600;
         cursor: pointer;
+        border: 1.5px solid;
       }
       .btn-approve {
         color: #065f46;
         background: #d1fae5;
-        border: 1px solid #a7f3d0;
+        border-color: #a7f3d0;
+      }
+      .btn-reject {
+        color: #991b1b;
+        background: #fee2e2;
+        border-color: #fecaca;
+      }
+      .btn-release {
+        color: #1e40af;
+        background: #dbeafe;
+        border-color: #bfdbfe;
       }
       .btn-view {
         color: #2563eb;
         background: #fff;
-        border: 1px solid #bfdbfe;
+        border-color: #bfdbfe;
       }
       .btn-print {
         color: #fff;
         background: #2563eb;
-        border: 1px solid #2563eb;
+        border-color: #2563eb;
       }
       .modal-overlay {
         display: none;
@@ -326,7 +362,7 @@
         border-radius: 0.75rem;
         box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
         width: 100%;
-        max-width: 500px;
+        max-width: 580px;
         max-height: 90vh;
         overflow-y: auto;
         padding: 1.5rem;
@@ -341,6 +377,7 @@
       .modal-hdr h3 {
         font-size: 1.1rem;
         font-weight: 700;
+        color: #1e293b;
       }
       .modal-close {
         background: none;
@@ -354,6 +391,7 @@
         gap: 1rem;
         padding: 0.55rem 0;
         border-bottom: 1px solid #f1f5f9;
+        font-size: 0.875rem;
       }
       .modal-key {
         flex: 0 0 140px;
@@ -371,13 +409,14 @@
         margin-top: 1rem;
         padding-top: 1rem;
         border-top: 1px solid #e5e7eb;
+        flex-wrap: wrap;
       }
     </style>
   </head>
   <body>
     <div class="sa-layout">
       <aside class="sa-sidebar">
-        <a href="superadmin-dashboard.html" class="sb-brand"
+        <a href="admin-dashboard.html" class="sb-brand"
           ><svg
             width="18"
             height="18"
@@ -392,24 +431,19 @@
           <div class="sb-avatar" id="sb-avatar">SA</div>
           <div>
             <div class="sb-name" id="sb-name">Loading...</div>
-            <div class="sb-role">Super Admin</div>
+            <div class="sb-role">Admin</div>
           </div>
         </div>
         <div class="sb-section" id="sec-sa">
           <div class="sb-section-header" onclick="toggleSection('sec-sa')">
-            <span class="sb-label">Super Admin</span
+            <span class="sb-label">Admin</span
             ><span class="sb-chevron">▼</span>
           </div>
           <div class="sb-links">
-            <a href="superadmin-dashboard.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</a>
-            <a href="superadmin-requests.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Requests</a>
-            <a href="superadmin-blotter.html" class="sb-link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Blotter & Complaints</a>
-            <a href="superadmin-users.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Users</a>
-            <a href="manage-admins.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>Manage Admins</a>
-            <a href="request-forms.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/></svg>Request Forms</a>
-            <a href="system-logs.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12"/></svg>System Logs</a>
-            <a href="superadmin-reports.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Reports</a>
-            <a href="superadmin-settings.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><circle cx="12" cy="12" r="3"/></svg>Settings</a>
+            <a href="admin-dashboard.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</a>
+            <a href="admin-requests.html" class="sb-link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Requests</a>
+            <a href="admin-blotter.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Blotter & Complaints</a>
+            <a href="admin-reports.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Reports</a>
           </div>
         </div>
         <hr class="sb-divider" />
@@ -423,7 +457,7 @@
             <a href="sa-new-request.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>New Request</a>
             <a href="sa-blotter.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Blotter & Complaint</a>
             <a href="sa-my-requests.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12"/></svg>My Requests</a>
-            <a href="superadmin-profile.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>My Profile</a>
+            <a href="admin-profile.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>My Profile</a>
           </div>
         </div>
         <div class="sb-logout">
@@ -433,8 +467,8 @@
       <div class="sa-body">
         <main class="sa-main">
           <div class="page-hdr">
-            <h1>Blotter & Complaints</h1>
-            <p>View all filed blotters and complaints.</p>
+            <h1>All Requests</h1>
+            <p>Review, approve, reject, release document requests.</p>
           </div>
           <div class="tbl-card">
             <div class="filter-bar">
@@ -443,23 +477,23 @@
                 ><input
                   type="text"
                   id="searchInput"
-                  placeholder="Tracking # only..."
+                  placeholder="Tracking #, name, type..."
                 />
-              </div>
-              <div class="filter-group">
-                <label>Type</label
-                ><select id="typeFilter">
-                  <option value="">All</option>
-                  <option value="Blotter">Blotter</option>
-                  <option value="Complaint">Complaint</option>
-                </select>
               </div>
               <div class="filter-group">
                 <label>Status</label
                 ><select id="statusFilter">
                   <option value="">All</option>
                   <option value="pending">Pending</option>
-                  <option value="resolved">Resolved</option>
+                  <option value="approved">Approved</option>
+                  <option value="rejected">Rejected</option>
+                  <option value="released">Released</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label>Type</label
+                ><select id="typeFilter">
+                  <option value="">All</option>
                 </select>
               </div>
               <div class="filter-group">
@@ -472,17 +506,19 @@
             <table class="sa-table">
               <thead>
                 <tr>
-                  <th>#</th>
+                  <th>Tracking #</th>
+                  <th>Resident</th>
                   <th>Type</th>
-                  <th>Status</th>
                   <th>Date Filed</th>
+                  <th>Status</th>
+                  <th>Processed By</th>
                   <th>Actions</th>
                 </tr>
               </thead>
-              <tbody id="blotter-table-body">
+              <tbody id="requests-table-body">
                 <tr>
                   <td
-                    colspan="5"
+                    colspan="7"
                     style="text-align: center; color: #94a3b8; padding: 2rem"
                   >
                     Loading...
@@ -505,7 +541,7 @@
     <div class="modal-overlay" id="viewModal">
       <div class="modal-box">
         <div class="modal-hdr">
-          <h3>Blotter Details</h3>
+          <h3>Request Details</h3>
           <button class="modal-close" onclick="closeModal('viewModal')">
             &times;
           </button>
@@ -513,60 +549,140 @@
         <div id="viewContent"></div>
       </div>
     </div>
+    <div class="modal-overlay" id="rejectModal">
+      <div class="modal-box">
+        <div class="modal-hdr">
+          <h3>Reject Request</h3>
+          <button class="modal-close" onclick="closeModal('rejectModal')">
+            &times;
+          </button>
+        </div>
+        <div class="form-field">
+          <label>Reason</label
+          ><select id="rejectReason">
+            <option>Incomplete documents</option>
+            <option>Invalid information</option>
+            <option>Duplicate request</option>
+            <option>Others</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Comment</label
+          ><textarea
+            id="rejectComment"
+            style="width: 100%; padding: 0.5rem; height: 80px"
+          ></textarea>
+        </div>
+        <div class="modal-footer">
+          <button
+            class="btn"
+            style="background: #fff; border: 1px solid #cbd5e1"
+            onclick="closeModal('rejectModal')"
+          >
+            Cancel</button
+          ><button
+            class="btn"
+            style="
+              background: #fee2e2;
+              border: 1px solid #fecaca;
+              color: #991b1b;
+            "
+            onclick="confirmReject()"
+          >
+            Reject
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hidden dummy elements required by script.js notification helpers -->
+    <span id="user-nav-name" style="display: none"></span>
+    <div id="user-avatar" style="display: none"></div>
     <script src="../js/script.js"></script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         const currentAdmin = getCurrentUser();
-        if (!currentAdmin || (currentAdmin.roles || [])[0] !== "super_admin") {
+        if (!currentAdmin || (!currentAdmin.roles || (!currentAdmin.roles.includes("admin") && !currentAdmin.roles.includes("super_admin")))) {
           location.href = "../auth/login.html";
           return;
         }
         document.getElementById("footer-year").textContent =
           "© " + new Date().getFullYear() + " Barangay Records System.";
-        document.getElementById("sb-avatar").textContent = (
-          currentAdmin.firstName || "SA"
-        )
-          .split(" ")
-          .map((n) => n[0])
-          .join("")
-          .substring(0, 2)
-          .toUpperCase();
-        document.getElementById("sb-name").textContent =
-          currentAdmin.firstName || currentAdmin.fullName;
+        initSidebar();
 
         let page = 1,
           PER_PAGE = 10,
           filtered = [];
         const requests = getData(STORAGE_KEYS.REQUESTS).filter(
-          (r) => r.typeKey === "blotter" || r.typeKey === "complaint",
+          (r) => r.typeKey !== "blotter" && r.typeKey !== "complaint",
+        );
+        const users = getData(STORAGE_KEYS.USERS);
+        const settings = getData(STORAGE_KEYS.SETTINGS) || {};
+
+        const typeSelect = document.getElementById("typeFilter");
+        const rt = settings.requestTypes ||
+          getData("REQUEST_TYPES") || [
+            "Barangay Clearance",
+            "Certificate of Residency",
+            "Business Permit",
+          ];
+        rt.forEach(
+          (t) =>
+            (typeSelect.innerHTML +=
+              '<option value="' + t.name + '">' + t.name + "</option>"),
         );
 
-        window.toggleSection = function(id) {
-  document.getElementById(id).classList.toggle("collapsed");
-};
+        function displayName(u) {
+          return u
+            ? u.lastName
+              ? [u.lastName + ",", u.firstName, u.middleName]
+                  .filter(Boolean)
+                  .join(" ")
+              : u.fullName || u.name
+            : "Unknown";
+        }
+        function toggleSection(id) {
+          document.getElementById(id).classList.toggle("collapsed");
+        }
+        function initSidebar() {
+          document.getElementById("sb-avatar").textContent = (
+            currentAdmin.firstName || "SA"
+          )
+            .split(" ")
+            .map((n) => n[0])
+            .join("")
+            .substring(0, 2)
+            .toUpperCase();
+          document.getElementById("sb-name").textContent =
+            currentAdmin.firstName || currentAdmin.fullName;
+        }
+        function doLogout() {
+          logAction(currentAdmin.id, "admin", "Logged out");
+          setCurrentUser(null);
+          location.href = "../auth/login.html";
+        }
         function closeModal(id) {
           document.getElementById(id).classList.remove("open");
         }
-        window.doLogout = function() {
-  logAction(currentAdmin.id, "super_admin", "Logged out");
-  setCurrentUser(null);
-  location.href = "../auth/login.html";
-};
 
         function applyFilters() {
           const search = document
             .getElementById("searchInput")
             .value.toLowerCase();
-          const type = document.getElementById("typeFilter").value;
           const status = document.getElementById("statusFilter").value;
+          const type = document.getElementById("typeFilter").value;
           const from = document.getElementById("dateFrom").value;
           const to = document.getElementById("dateTo").value;
 
           filtered = requests.filter((r) => {
+            const user = users.find((u) => u.id === r.userId);
+            const name = displayName(user) || r.requesterName || "";
             return (
-              (!search || (r.id || "").toLowerCase().includes(search)) &&
-              (!type || r.type === type) &&
+              (!search ||
+                (r.id && r.id.toLowerCase().includes(search)) ||
+                name.toLowerCase().includes(search)) &&
               (!status || r.status === status) &&
+              (!type || r.type === type) &&
               (!from || new Date(r.createdAt) >= new Date(from)) &&
               (!to || new Date(r.createdAt) <= new Date(to + "T23:59:59"))
             );
@@ -583,41 +699,58 @@
             start = (page - 1) * PER_PAGE,
             end = Math.min(start + PER_PAGE, total);
           const slice = filtered.slice(start, end);
-          const tbody = document.getElementById("blotter-table-body");
 
+          const tbody = document.getElementById("requests-table-body");
           if (!slice.length) {
             tbody.innerHTML =
-              '<tr><td colspan="5" style="text-align:center;color:#94a3b8;padding:2rem;">No results found.</td></tr>';
+              '<tr><td colspan="7" style="text-align:center;color:#94a3b8;padding:2rem;">No results found.</td></tr>';
           } else {
             tbody.innerHTML = slice
-              .map((r, i) => {
-                let btns =
-                  '<button class="btn btn-view" onclick="viewBlotter(\'' +
+              .map((r) => {
+                const user = users.find((u) => u.id === r.userId);
+                const name = displayName(user) || r.requesterName || "-";
+                const processed = r.approvedBy || r.rejectedBy || "-";
+                let btns = "";
+                if (r.status === "pending")
+                  btns =
+                    '<button class="btn btn-approve"' +
+                    (r.userId === currentAdmin.id
+                      ? ' disabled title="Cannot approve your own"'
+                      : " onclick=\"approveRequest('" + r.id + "')\"") +
+                    '>Approve</button> <button class="btn btn-reject" onclick="openReject(\'' +
+                    r.id +
+                    "')\">Reject</button>";
+                else if (r.status === "approved")
+                  btns =
+                    '<button class="btn btn-release" onclick="releaseRequest(\'' +
+                    r.id +
+                    "')\">Release</button>";
+                if (r.status === "approved" || r.status === "released")
+                  btns +=
+                    '<button class="btn btn-print" onclick="printRequest(\'' +
+                    r.id +
+                    "')\">Print</button> ";
+                btns +=
+                  ' <button class="btn btn-view" onclick="viewRequest(\'' +
                   r.id +
                   "')\">View</button>";
-                if (r.status !== "resolved")
-                  btns +=
-                    ' <button class="btn btn-approve" onclick="resolveBlotter(\'' +
-                    r.id +
-                    "')\">Mark Resolved</button>";
-                if (r.status === "resolved")
-                  btns +=
-                    ' <button class="btn btn-print" onclick="printBlotter(\'' +
-                    r.id +
-                    "')\">Print</button>";
                 return (
                   "<tr><td>" +
-                  (start + i + 1) +
+                  (r.id || "").substring(0, 8).toUpperCase() +
+                  "</td><td>" +
+                  name +
                   "</td><td>" +
                   r.type +
+                  "</td><td>" +
+                  (r.createdAt
+                    ? new Date(r.createdAt).toLocaleDateString()
+                    : "-") +
                   '</td><td><span class="badge badge-' +
                   r.status +
                   '">' +
                   r.status +
                   "</span></td><td>" +
-                  (r.createdAt
-                    ? new Date(r.createdAt).toLocaleDateString()
-                    : "-") +
+                  processed +
                   "</td><td>" +
                   btns +
                   "</td></tr>"
@@ -637,70 +770,15 @@
           page += delta;
           renderTable();
         };
-        window.viewBlotter = function (id) {
-          const r = requests.find((x) => x.id === id);
-          if (!r) return;
-          // PRIVACY: only show public-safe fields
-          const content = [
-            { k: "Type", v: r.type },
-            { k: "Status", v: r.status },
-            {
-              k: "Date Filed",
-              v: r.createdAt ? new Date(r.createdAt).toLocaleString() : "-",
-            },
-            { k: "Incident Type", v: r["incident-type"] || "-" },
-            { k: "Incident Date", v: r["incident-date"] || "-" },
-            { k: "Incident Location", v: r["incident-location"] || "-" },
-            {
-              k: "Description",
-              v: r["incident-description"] || r["complaint-description"] || "-",
-            },
-          ]
-            .map(
-              (f) =>
-                '<div class="modal-row"><span class="modal-key">' +
-                f.k +
-                '</span><span class="modal-val">' +
-                f.v +
-                "</span></div>",
-            )
-            .join("");
-          document.getElementById("viewContent").innerHTML = content;
-          document.getElementById("viewModal").classList.add("open");
-        };
-        window.resolveBlotter = function (id) {
-          if (!confirm("Mark this blotter as resolved?")) return;
-          const r = requests.find((x) => x.id === id);
-          if (r) {
-            r.status = "resolved";
-            updateItem(STORAGE_KEYS.REQUESTS, id, r);
-            addNotification(
-              r.userId,
-              "Blotter Update",
-              "Your " + r.type + " has been marked resolved.",
-              "info",
-            );
-            logAction(
-              currentAdmin.id,
-              "super_admin",
-              "Marked blotter resolved: " + id,
-              id,
-            );
-            applyFilters();
-          }
-        };
-        window.printBlotter = function (id) {
-          alert("Print blotter: " + id);
-        };
-
+        window.applyFilters = applyFilters;
         document
           .getElementById("searchInput")
           .addEventListener("input", applyFilters);
         document
-          .getElementById("typeFilter")
+          .getElementById("statusFilter")
           .addEventListener("change", applyFilters);
         document
-          .getElementById("statusFilter")
+          .getElementById("typeFilter")
           .addEventListener("change", applyFilters);
         document
           .getElementById("dateFrom")
@@ -709,6 +787,121 @@
           .getElementById("dateTo")
           .addEventListener("change", applyFilters);
 
+        let currentReqId = null;
+        window.approveRequest = function (id) {
+          const req = requests.find((r) => r.id === id);
+          if (req) {
+            req.status = "approved";
+            req.approvedBy = currentAdmin.fullName;
+            req.approvedAt = new Date().toISOString();
+            updateItem(STORAGE_KEYS.REQUESTS, id, req);
+            addNotification(
+              req.userId,
+              "Request Approved",
+              "Your " + req.type + " has been approved.",
+              "success",
+            );
+            logAction(
+              currentAdmin.id,
+              "admin",
+              "Approved request " + id,
+              id,
+            );
+            applyFilters();
+          }
+        };
+        window.openReject = function (id) {
+          currentReqId = id;
+          document.getElementById("rejectModal").classList.add("open");
+        };
+        window.confirmReject = function () {
+          const req = requests.find((r) => r.id === currentReqId);
+          if (req) {
+            req.status = "rejected";
+            req.rejectedBy = currentAdmin.fullName;
+            req.rejectedAt = new Date().toISOString();
+            req.rejectionReason = document.getElementById("rejectReason").value;
+            req.rejectComment = document.getElementById("rejectComment").value;
+            updateItem(STORAGE_KEYS.REQUESTS, currentReqId, req);
+            addNotification(
+              req.userId,
+              "Request Rejected",
+              "Your " + req.type + " has been rejected: " + req.rejectionReason,
+              "error",
+            );
+            logAction(
+              currentAdmin.id,
+              "admin",
+              "Rejected request " + currentReqId,
+              currentReqId,
+            );
+            closeModal("rejectModal");
+            applyFilters();
+          }
+        };
+        window.releaseRequest = function (id) {
+          const req = requests.find((r) => r.id === id);
+          if (req) {
+            req.status = "released";
+            req.releasedBy = currentAdmin.fullName;
+            req.releasedAt = new Date().toISOString();
+            updateItem(STORAGE_KEYS.REQUESTS, id, req);
+            addNotification(
+              req.userId,
+              "Request Released",
+              "Your " + req.type + " is ready for pickup.",
+              "info",
+            );
+            logAction(
+              currentAdmin.id,
+              "admin",
+              "Released request " + id,
+              id,
+            );
+            applyFilters();
+          }
+        };
+        window.viewRequest = function (id) {
+          const req = requests.find((r) => r.id === id);
+          if (!req) return;
+          const user = users.find((u) => u.id === req.userId);
+          document.getElementById("viewContent").innerHTML = [
+            { k: "Control No.", v: req.id },
+            { k: "Resident", v: displayName(user) || req.requesterName },
+            { k: "Type", v: req.type },
+            { k: "Purpose", v: req.purpose || "-" },
+            { k: "Status", v: req.status },
+            {
+              k: "Date Filed",
+              v: req.createdAt ? new Date(req.createdAt).toLocaleString() : "-",
+            },
+            { k: "Approved By", v: req.approvedBy || "-" },
+            {
+              k: "Approved At",
+              v: req.approvedAt
+                ? new Date(req.approvedAt).toLocaleString()
+                : "-",
+            },
+            { k: "Rejected By", v: req.rejectedBy || "-" },
+            { k: "Rejection Reason", v: req.rejectionReason || "-" },
+          ]
+            .map(
+              (r) =>
+                '<div class="modal-row"><span class="modal-key">' +
+                r.k +
+                '</span><span class="modal-val">' +
+                r.v +
+                "</span></div>",
+            )
+            .join("");
+          document.getElementById("viewModal").classList.add("open");
+        };
+        window.printRequest = function (id) {
+          window.open(
+            "../superadmin/print-request.html?id=" + encodeURIComponent(id),
+            "_blank",
+          );
+        };
         applyFilters();
       });
     </script>
