@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -810,8 +811,6 @@
       </div>
     </div>
 
-      <span id="user-nav-name" style="display:none"></span>
-  <div id="user-avatar" style="display:none"></div>
     <script src="../js/script.js"></script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
@@ -836,17 +835,9 @@
           return u.fullName || u.name || "Unknown";
         }
 
-       window.toggleSection = function(id) {
-  document.getElementById(id).classList.toggle("collapsed");
-};
-        function closeModal(id) {
-          document.getElementById(id).classList.remove("open");
+        function toggleSection(id) {
+          document.getElementById(id).classList.toggle("collapsed");
         }
-        window.doLogout = function() {
-  logAction(currentAdmin.id, "super_admin", "Logged out");
-  setCurrentUser(null);
-  location.href = "../auth/login.html";
-};
 
         function initSidebar() {
           const initials = displayName(currentAdmin)
@@ -862,22 +853,26 @@
             currentAdmin.firstName || currentAdmin.fullName || "Super Admin";
         }
 
+        function doLogout() {
+          logAction(currentAdmin.id, "super_admin", "Logged out");
+          setCurrentUser(null);
+          location.href = "../auth/login.html";
+        }
+
         const requests = getData(STORAGE_KEYS.REQUESTS) || [];
         const users = getData(STORAGE_KEYS.USERS) || [];
+        const blotters = getData(STORAGE_KEYS.BLOTTER) || [];
 
         const total = requests.length;
         const pending = requests.filter((r) => r.status === "pending").length;
         const approved = requests.filter((r) => r.status === "approved").length;
         const released = requests.filter((r) => r.status === "released").length;
         const rejected = requests.filter((r) => r.status === "rejected").length;
-        const totalUsers = users.filter((u) => u.roles[0] === "user").length;
-        const totalAdmins = users.filter((u) => u.roles[0] === "admin").length;
-        const totalSuperAdmins = users.filter(
-          (u) => u.roles[0] === "super_admin",
-        ).length;
-        const blotters = requests.filter(
-          (r) => r.typeKey === "blotter" || r.typeKey === "complaint",
-        ).length;
+        const totalUsers = users.filter((u) => u.roles && u.roles[0] === "user").length;
+        const totalAdmins = users.filter((u) => u.roles && u.roles[0] === "admin").length;
+        const totalSuperAdmins = users.filter((u) => u.roles && u.roles[0] === "super_admin").length;
+        
+        const blottersCount = requests.filter((r) => r.typeKey === "blotter" || r.typeKey === "complaint").length;
 
         document.getElementById("stat-total").textContent = total;
         document.getElementById("stat-pending").textContent = pending;
@@ -885,9 +880,8 @@
         document.getElementById("stat-released").textContent = released;
         document.getElementById("stat-users").textContent = totalUsers;
         document.getElementById("stat-admins").textContent = totalAdmins;
-        document.getElementById("stat-superadmins").textContent =
-          totalSuperAdmins;
-        document.getElementById("stat-blotter").textContent = blotters;
+        document.getElementById("stat-superadmins").textContent = totalSuperAdmins;
+        document.getElementById("stat-blotter").textContent = blotters.length;
 
         const max = Math.max(pending, approved, rejected, released, 1);
         document.getElementById("statusChart").innerHTML = [
@@ -949,5 +943,43 @@
           : '<tr><td colspan="4" style="text-align:center;color:#94a3b8;padding:2rem;">No activity yet</td></tr>';
       });
     </script>
-  </body>
+  <!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+</body>
 </html>

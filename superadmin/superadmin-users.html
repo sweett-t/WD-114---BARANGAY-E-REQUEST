@@ -127,7 +127,6 @@
         text-decoration: none;
         font-size: 0.875rem;
         color: #374151;
-        white-space: nowrap;
       }
       .sb-link:hover {
         background: #f1f5f9;
@@ -136,12 +135,6 @@
         background: #dbeafe;
         color: #2563eb;
         font-weight: 600;
-      }
-      .sb-link svg {
-        width: 15px;
-        height: 15px;
-        flex-shrink: 0;
-        opacity: 0.7;
       }
       .sb-divider {
         border: none;
@@ -465,7 +458,7 @@
           PER_PAGE = 10,
           filtered = [];
         const users = getData(STORAGE_KEYS.USERS).filter(
-          (u) => u.roles[0] === "user",
+          (u) => u.roles && u.roles[0] === "user",
         );
 
         function displayName(u) {
@@ -475,17 +468,14 @@
                 .join(" ")
             : u.fullName || u.name || "Unknown";
         }
-        window.toggleSection = function(id) {
-  document.getElementById(id).classList.toggle("collapsed");
-};
-        function closeModal(id) {
-          document.getElementById(id).classList.remove("open");
+        function toggleSection(id) {
+          document.getElementById(id).classList.toggle("collapsed");
         }
-        window.doLogout = function() {
-  logAction(currentAdmin.id, "super_admin", "Logged out");
-  setCurrentUser(null);
-  location.href = "../auth/login.html";
-};
+        function doLogout() {
+          logAction(currentAdmin.id, "super_admin", "Logged out");
+          setCurrentUser(null);
+          location.href = "../auth/login.html";
+        }
 
         function applyFilters() {
           const search = document
