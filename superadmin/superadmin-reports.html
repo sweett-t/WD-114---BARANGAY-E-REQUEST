@@ -175,6 +175,12 @@
             <option value="all">All Time</option>
           </select>
         </div>
+        <div class="filter-group">
+          <label>Fiscal Year</label>
+          <select id="fiscalYearFilter" onchange="applyFiscalYear()">
+            <option value="">All</option>
+          </select>
+        </div>
         <button class="btn btn-primary" onclick="refreshAll()">Apply</button>
       </div>
 
@@ -286,6 +292,16 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('dateFrom').value = new Date().getFullYear() + '-01-01';
   document.getElementById('dateTo').value = today;
 
+  const fySelect = document.getElementById('fiscalYearFilter');
+  const now = new Date();
+  const currentFY = now.getMonth() >= 6 ? now.getFullYear() : now.getFullYear() - 1;
+  for (let y = currentFY + 1; y >= currentFY - 3; y--) {
+    const opt = document.createElement('option');
+    opt.value = y;
+    opt.textContent = 'FY ' + y + '-' + (y + 1);
+    fySelect.appendChild(opt);
+  }
+
   allRequests = getData(STORAGE_KEYS.REQUESTS) || [];
   allUsers    = (getData(STORAGE_KEYS.USERS) || []).filter(u => (u.roles || []).includes('user'));
   allBlotter  = getData(STORAGE_KEYS.BLOTTER) || [];
@@ -302,7 +318,18 @@ function applyQuickRange() {
   else if (val === '3month') { from.setMonth(today.getMonth()-3); document.getElementById('dateFrom').value = fmt(from); document.getElementById('dateTo').value = fmt(today); }
   else if (val === 'year')   { document.getElementById('dateFrom').value = today.getFullYear()+'-01-01'; document.getElementById('dateTo').value = fmt(today); }
   else if (val === 'all')    { document.getElementById('dateFrom').value = '2020-01-01'; document.getElementById('dateTo').value = fmt(today); }
-  if (val) refreshAll();
+  if (val) { document.getElementById('fiscalYearFilter').value = ''; refreshAll(); }
+}
+
+function applyFiscalYear() {
+  const val = document.getElementById('fiscalYearFilter').value;
+  if (!val) { refreshAll(); return; }
+  const fy = parseInt(val);
+  const fmt = d => d.toISOString().split('T')[0];
+  document.getElementById('dateFrom').value = fmt(new Date(fy, 6, 1));
+  document.getElementById('dateTo').value = fmt(new Date(fy + 1, 5, 30));
+  document.getElementById('quickRange').value = '';
+  refreshAll();
 }
 
 function inRange(dateStr) {

@@ -156,6 +156,7 @@
               <div class="filter-group"><label>Type</label><select id="typeFilter"><option value="">All</option></select></div>
               <div class="filter-group"><label>Date From</label><input type="date" id="dateFrom" /></div>
               <div class="filter-group"><label>Date To</label><input type="date" id="dateTo" /></div>
+              <div class="filter-group"><label>Fiscal Year</label><select id="fiscalYearFilter"><option value="">All</option></select></div>
             </div>
             <table class="sa-table">
               <thead>
@@ -271,6 +272,20 @@
           typeSelect.innerHTML += '<option value="' + name + '">' + name + '</option>';
         });
 
+        var fySelect = document.getElementById('fiscalYearFilter');
+        var now = new Date();
+        var currentFY = now.getMonth() >= 6 ? now.getFullYear() : now.getFullYear() - 1;
+        for (var y = currentFY + 1; y >= currentFY - 3; y--) {
+          var opt = document.createElement('option');
+          opt.value = y;
+          opt.textContent = 'FY ' + y + '-' + (y + 1);
+          fySelect.appendChild(opt);
+        }
+
+        function getFiscalDates(fyStart) {
+          return { from: new Date(fyStart, 6, 1), to: new Date(fyStart + 1, 5, 30, 23, 59, 59) };
+        }
+
         function displayName(u) {
           if (!u) return 'Unknown';
           if (u.lastName) return [u.lastName + ',', u.firstName, u.middleName].filter(Boolean).join(' ');
@@ -288,6 +303,9 @@
           var type   = document.getElementById('typeFilter').value;
           var from   = document.getElementById('dateFrom').value;
           var to     = document.getElementById('dateTo').value;
+          var fy     = document.getElementById('fiscalYearFilter').value;
+          var fyFrom = null, fyTo = null;
+          if (fy) { var d = getFiscalDates(parseInt(fy)); fyFrom = d.from; fyTo = d.to; }
 
           filtered = requests.filter(function(r) {
             var user = users.find(function(u) { return u.id === r.userId; });
@@ -296,7 +314,9 @@
               && (!status || r.status === status)
               && (!type   || r.type === type)
               && (!from   || new Date(r.createdAt) >= new Date(from))
-              && (!to     || new Date(r.createdAt) <= new Date(to + 'T23:59:59'));
+              && (!to     || new Date(r.createdAt) <= new Date(to + 'T23:59:59'))
+              && (!fyFrom || new Date(r.createdAt) >= fyFrom)
+              && (!fyTo   || new Date(r.createdAt) <= fyTo);
           });
           filtered.sort(function(a, b) { return new Date(b.createdAt) - new Date(a.createdAt); });
           page = 1;
@@ -361,6 +381,7 @@
         document.getElementById('typeFilter').addEventListener('change', applyFilters);
         document.getElementById('dateFrom').addEventListener('change', applyFilters);
         document.getElementById('dateTo').addEventListener('change', applyFilters);
+        document.getElementById('fiscalYearFilter').addEventListener('change', applyFilters);
 
         /* ── Actions ── */
         var currentReqId = null;

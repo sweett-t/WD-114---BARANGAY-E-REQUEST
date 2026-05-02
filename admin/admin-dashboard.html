@@ -257,6 +257,9 @@
       .stat-gray {
         border-left-color: #6b7280;
       }
+      .stat-slate {
+        border-left-color: #64748b;
+      }
 
       .chart-card {
         background: #fff;
@@ -302,6 +305,7 @@
         font-size: 0.72rem;
         font-weight: 700;
         color: #fff;
+        min-width: 2px;
       }
       .bar-count {
         flex: 0 0 40px;
@@ -364,6 +368,36 @@
       .page-hdr {
         margin-bottom: 1.75rem;
       }
+      .page-hdr .fiscal-info {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 0.75rem;
+      }
+      .page-hdr .fiscal-year {
+        font-size: 0.875rem;
+        color: #fff;
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        padding: 0.5rem 1.1rem;
+        border-radius: 9999px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.3rem;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+      .page-hdr .fiscal-year span,
+      .page-hdr .fiscal-year strong {
+        display: inline-block;
+        line-height: 1;
+        margin: 0;
+        padding: 0;
+      }
+      .page-hdr .current-date {
+        font-size: 0.875rem;
+        color: #64748b;
+      }
       .page-hdr h1 {
         font-size: clamp(1.5rem, 3vw, 2rem);
         font-weight: 700;
@@ -407,6 +441,10 @@
       .badge-released {
         background: #dbeafe;
         color: #1e40af;
+      }
+      .badge-cancelled {
+        background: #f3f4f6;
+        color: #6b7280;
       }
       .badge-admin {
         background: #dbeafe;
@@ -612,6 +650,10 @@
       <div class="sa-body">
         <main class="sa-main">
           <div class="page-hdr">
+            <div class="fiscal-info">
+              <span class="fiscal-year"><span>FY</span> <strong id="fiscalYearText"></strong></span>
+              <span class="current-date" id="currentDate"></span>
+            </div>
             <h1>Welcome back, <span id="welcomeName">Admin</span>!</h1>
             <p>Full system overview and recent activity.</p>
           </div>
@@ -637,13 +679,43 @@
               <p class="stat-num" id="stat-released">0</p>
               <p class="stat-sub">Completed</p>
             </div>
+            <div class="stat-card stat-red">
+              <h4>Rejected</h4>
+              <p class="stat-num" id="stat-rejected">0</p>
+              <p class="stat-sub">Declined</p>
+            </div>
+            <div class="stat-card stat-slate">
+              <h4>Cancelled</h4>
+              <p class="stat-num" id="stat-cancelled">0</p>
+              <p class="stat-sub" id="stat-cancelled-sub">By user or admin</p>
+            </div>
           </section>
 
           <section class="stats-grid">
+            <div class="stat-card stat-purple">
+              <h4>Total Users</h4>
+              <p class="stat-num" id="stat-users">0</p>
+              <p class="stat-sub">Registered residents</p>
+            </div>
+            <div class="stat-card stat-blue">
+              <h4>Admins</h4>
+              <p class="stat-num" id="stat-admins">0</p>
+              <p class="stat-sub">Admin accounts</p>
+            </div>
             <div class="stat-card stat-red">
               <h4>Blotter Cases</h4>
               <p class="stat-num" id="stat-blotter">0</p>
-              <p class="stat-sub">Complaints</p>
+              <p class="stat-sub">Complaints &amp; blotters</p>
+            </div>
+            <div class="stat-card stat-orange">
+              <h4>Edited Requests</h4>
+              <p class="stat-num" id="stat-edited">0</p>
+              <p class="stat-sub">Modified after filing</p>
+            </div>
+            <div class="stat-card stat-slate">
+              <h4>Admin-Cancelled</h4>
+              <p class="stat-num" id="stat-admin-cancelled">0</p>
+              <p class="stat-sub">Cancelled by staff</p>
             </div>
           </section>
 
@@ -652,7 +724,7 @@
             <div id="statusChart"></div>
           </div>
 
-          <div class="table-card tbl-card">
+          <div class="tbl-card">
             <div class="tbl-card-hdr">
               <h3>Recent Requests</h3>
               <a
@@ -661,7 +733,7 @@
                 >View All</a
               >
             </div>
-            <div class="tbl-wrap">
+            <div style="overflow-x:auto;">
               <table class="sa-table">
                 <thead>
                   <tr>
@@ -670,19 +742,37 @@
                     <th>Type</th>
                     <th>Date</th>
                     <th>Status</th>
+                    <th>Edited?</th>
                     <th>Action</th>
                   </tr>
                 </thead>
                 <tbody id="recent-requests-body">
                   <tr>
                     <td
-                      colspan="6"
+                      colspan="7"
                       style="text-align: center; color: #94a3b8; padding: 2rem"
                     >
                       Loading...
                     </td>
                   </tr>
                 </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="tbl-card">
+            <div class="tbl-card-hdr">
+              <h3>Recent Activity</h3>
+              <a
+                href="admin-requests.html"
+                style="font-size: 0.85rem; color: #2563eb"
+                >View All</a
+              >
+            </div>
+            <div style="overflow-x:auto;">
+              <table class="sa-table">
+                <thead><tr><th>Full Name</th><th>Role</th><th>Action</th><th>Date &amp; Time</th></tr></thead>
+                <tbody id="activity-body"><tr><td colspan="4" style="text-align:center;color:#94a3b8;padding:2rem;">Loading...</td></tr></tbody>
               </table>
             </div>
           </div>
@@ -707,6 +797,10 @@
           "© " +
           new Date().getFullYear() +
           " Barangay Records System. All rights reserved.";
+        const now = new Date();
+        const fyStart = now.getMonth() >= 6 ? now.getFullYear() : now.getFullYear() - 1;
+        document.getElementById("fiscalYearText").textContent = fyStart + "-" + (fyStart + 1);
+        document.getElementById("currentDate").textContent = now.toLocaleDateString("en-PH", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
         initSidebar();
 
         function displayName(u) {
@@ -746,21 +840,33 @@
 
         const requests = getData(STORAGE_KEYS.REQUESTS) || [];
         const users = getData(STORAGE_KEYS.USERS) || [];
+        const blotters = getData(STORAGE_KEYS.BLOTTER) || [];
 
         const total = requests.length;
         const pending = requests.filter((r) => r.status === "pending").length;
         const approved = requests.filter((r) => r.status === "approved").length;
         const released = requests.filter((r) => r.status === "released").length;
         const rejected = requests.filter((r) => r.status === "rejected").length;
-        const blotters = requests.filter(
-          (r) => r.typeKey === "blotter" || r.typeKey === "complaint",
-        ).length;
+        const cancelled = requests.filter((r) => r.status === "cancelled").length;
+        const cancelledAdmin = requests.filter((r) => r.status === "cancelled" && r.cancelledBy === "admin").length;
+        const cancelledUser = requests.filter((r) => r.status === "cancelled" && r.cancelledBy !== "admin").length;
+        const edited = requests.filter((r) => r.editedByUser || r.editedByAdmin).length;
+
+        const totalUsers = users.filter((u) => u.roles && u.roles.includes("user")).length;
+        const totalAdmins = users.filter((u) => u.roles && u.roles.includes("admin")).length;
 
         document.getElementById("stat-total").textContent = total;
         document.getElementById("stat-pending").textContent = pending;
         document.getElementById("stat-approved").textContent = approved;
         document.getElementById("stat-released").textContent = released;
-        document.getElementById("stat-blotter").textContent = blotters;
+        document.getElementById("stat-rejected").textContent = rejected;
+        document.getElementById("stat-cancelled").textContent = cancelled;
+        document.getElementById("stat-cancelled-sub").textContent = cancelledUser + " by user · " + cancelledAdmin + " by admin";
+        document.getElementById("stat-users").textContent = totalUsers;
+        document.getElementById("stat-admins").textContent = totalAdmins;
+        document.getElementById("stat-blotter").textContent = blotters.length;
+        document.getElementById("stat-edited").textContent = edited;
+        document.getElementById("stat-admin-cancelled").textContent = cancelledAdmin;
 
         const max = Math.max(pending, approved, rejected, released, 1);
         document.getElementById("statusChart").innerHTML = [
@@ -788,17 +894,39 @@
             ? recentReqs
                 .map((r) => {
                   const reqUser = users.find((u) => u.id === r.userId) || {};
+                  const editedLabel = r.editedByAdmin
+                    ? '<span style="font-size:0.68rem;background:#dbeafe;color:#1e40af;border-radius:4px;padding:0.1rem 0.35rem;">Admin</span>'
+                    : r.editedByUser
+                    ? '<span style="font-size:0.68rem;background:#fef3c7;color:#92400e;border-radius:4px;padding:0.1rem 0.35rem;">User</span>'
+                    : '-';
                   return `<tr>
           <td>${(r.id || "").substring(0, 8).toUpperCase()}</td>
           <td>${displayName(reqUser) || r.requesterName || "-"}</td>
           <td>${r.type || "-"}</td>
           <td>${r.createdAt ? new Date(r.createdAt).toLocaleDateString() : "-"}</td>
           <td><span class="badge badge-${r.status}">${r.status}</span></td>
+          <td>${editedLabel}</td>
           <td><a href="admin-requests.html?view=${r.id}" style="color:#2563eb;font-size:0.8rem;">View</a></td>
         </tr>`;
                 })
                 .join("")
-            : '<tr><td colspan="6" style="text-align:center;color:#94a3b8;padding:2rem;">No requests yet</td></tr>';
+            : '<tr><td colspan="7" style="text-align:center;color:#94a3b8;padding:2rem;">No requests yet</td></tr>';
+
+        var logs = getData(STORAGE_KEYS.LOGS) || [];
+        logs.sort(function(a, b) { return new Date(b.timestamp) - new Date(a.timestamp); });
+        document.getElementById("activity-body").innerHTML = logs.slice(0, 10).length
+          ? logs.slice(0, 10).map(function(l) {
+              var logUser = users.find(function(u) { return u.id === l.userId; }) || {};
+              var name = l.fullName || displayName(logUser) || l.userId;
+              var role = l.role || (logUser.roles ? logUser.roles[0] : "user");
+              return '<tr style="' + (role === "admin" ? "background:#eff6ff" : "") + '">'
+                + '<td>' + name + '</td>'
+                + '<td><span class="badge badge-' + (role === "admin" ? "admin" : "user") + '">' + role + '</span></td>'
+                + '<td>' + (l.action || "-") + '</td>'
+                + '<td>' + (l.timestamp ? new Date(l.timestamp).toLocaleString() : "-") + '</td>'
+                + '</tr>';
+            }).join("")
+          : '<tr><td colspan="4" style="text-align:center;color:#94a3b8;padding:2rem;">No activity yet</td></tr>';
       });
     </script>
   </body>

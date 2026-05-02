@@ -77,6 +77,8 @@
     .kpi-released { --accent: var(--info); }
     .kpi-rejected { --accent: var(--danger); }
     .kpi-revenue { --accent: #0891b2; }
+    .kpi-cancelled{ --accent: #6b7280; }
+    .kpi-edited   { --accent: #d97706; }
 
     /* ── Section card ── */
     .section-card { background: #fff; border: 1px solid var(--gray-200); border-radius: 0.5rem; margin-bottom: 1.5rem; overflow: hidden; }
@@ -119,6 +121,7 @@
     .badge-approved { background: var(--success-light); color: var(--success); }
     .badge-rejected { background: var(--danger-light); color: var(--danger); }
     .badge-released { background: var(--primary-light); color: var(--primary); }
+    .badge-cancelled { background: #f3f4f6; color: #6b7280; }
 
     /* ── Progress bars ── */
     .progress-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
@@ -187,7 +190,7 @@
       <div class="page-hdr">
         <div>
           <h1>Reports & Analytics</h1>
-          <p>Detailed breakdown of requests, users, revenue, and system activity.</p>
+          <p>Detailed breakdown of requests, users, revenue, edits, and cancellations.</p>
         </div>
         <div class="hdr-actions">
           <button class="btn btn-outline" onclick="exportCSV()">⬇ Export CSV</button>
@@ -215,6 +218,12 @@
             <option value="3month">Last 3 Months</option>
             <option value="year">This Year</option>
             <option value="all">All Time</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Fiscal Year</label>
+          <select id="fiscalYearFilter" onchange="applyFiscalYear()">
+            <option value="">All</option>
           </select>
         </div>
         <button class="btn btn-primary" onclick="refreshAll()">Apply</button>
@@ -246,6 +255,16 @@
           <div class="kpi-num" id="kpi-rejected">0</div>
           <div class="kpi-label">Rejected</div>
           <div class="kpi-sub" id="kpi-rejected-sub"></div>
+        </div>
+        <div class="kpi-card kpi-cancelled">
+          <div class="kpi-num" id="kpi-cancelled">0</div>
+          <div class="kpi-label">Cancelled</div>
+          <div class="kpi-sub" id="kpi-cancelled-sub"></div>
+        </div>
+        <div class="kpi-card kpi-edited">
+          <div class="kpi-num" id="kpi-edited">0</div>
+          <div class="kpi-label">Edited</div>
+          <div class="kpi-sub" id="kpi-edited-sub"></div>
         </div>
         <div class="kpi-card kpi-revenue">
           <div class="kpi-num" id="kpi-revenue">₱0</div>
@@ -296,6 +315,8 @@
           <div class="tab-nav">
             <button class="tab-btn active" onclick="switchTab('requests', this)">📄 Requests</button>
             <button class="tab-btn" onclick="switchTab('bytype', this)">📊 By Type</button>
+            <button class="tab-btn" onclick="switchTab('cancelled', this)">🚫 Cancelled</button>
+            <button class="tab-btn" onclick="switchTab('edited', this)">✏️ Edited</button>
             <button class="tab-btn" onclick="switchTab('users', this)">👥 Users</button>
             <button class="tab-btn" onclick="switchTab('revenue', this)">💰 Revenue</button>
             <button class="tab-btn" onclick="switchTab('blotter', this)">🛡 Blotter</button>
@@ -306,7 +327,7 @@
             <table class="sa-table" id="requestsTable">
               <thead><tr>
                 <th>#</th><th>Tracking ID</th><th>Resident</th><th>Document Type</th>
-                <th>Purpose</th><th>Fee</th><th>Status</th><th>Date Filed</th><th>Processed By</th>
+                <th>Purpose</th><th>Fee</th><th>Status</th><th>Edited?</th><th>Date Filed</th><th>Processed By</th>
               </tr></thead>
               <tbody id="requestsBody"></tbody>
             </table>
@@ -315,6 +336,23 @@
           <!-- By Type Tab -->
           <div class="tab-panel" id="tab-bytype">
             <div id="byTypeContent"></div>
+          </div>
+
+          <!-- Cancelled Tab -->
+          <div class="tab-panel" id="tab-cancelled">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:1.25rem;" id="cancelledSummary"></div>
+            <table class="sa-table">
+              <thead><tr><th>#</th><th>Tracking ID</th><th>Resident</th><th>Type</th><th>Cancelled By</th><th>Reason</th><th>Cancelled At</th></tr></thead>
+              <tbody id="cancelledBody"></tbody>
+            </table>
+          </div>
+
+          <!-- Edited Tab -->
+          <div class="tab-panel" id="tab-edited">
+            <table class="sa-table">
+              <thead><tr><th>#</th><th>Tracking ID</th><th>Resident</th><th>Type</th><th>Status</th><th>Edited By</th><th>Date Filed</th></tr></thead>
+              <tbody id="editedBody"></tbody>
+            </table>
           </div>
 
           <!-- Users Tab -->
@@ -355,13 +393,14 @@
 <script src="../js/script.js"></script>
 <script>
 window.toggleSection = function(id) { document.getElementById(id).classList.toggle('collapsed'); };
-window.doLogout = function() { logAction(currentAdmin.id, "admin", "Logged out"); setCurrentUser(null); location.href = '../auth/login.html'; };
+window.doLogout = function() { setCurrentUser(null); location.href = '../auth/login.html'; };
 
 const COLORS = {
   pending:  '#d97706',
   approved: '#059669',
   released: '#2563eb',
   rejected: '#dc2626',
+  cancelled:'#9ca3af',
   'pending-review': '#7c3aed',
   'pending-approval': '#0891b2',
 };
@@ -383,6 +422,16 @@ document.addEventListener('DOMContentLoaded', function() {
   const yearStart = new Date().getFullYear() + '-01-01';
   document.getElementById('dateFrom').value = yearStart;
   document.getElementById('dateTo').value = today;
+
+  const fySelect = document.getElementById('fiscalYearFilter');
+  const now = new Date();
+  const currentFY = now.getMonth() >= 6 ? now.getFullYear() : now.getFullYear() - 1;
+  for (let y = currentFY + 1; y >= currentFY - 3; y--) {
+    const opt = document.createElement('option');
+    opt.value = y;
+    opt.textContent = 'FY ' + y + '-' + (y + 1);
+    fySelect.appendChild(opt);
+  }
 
   allRequests = getData(STORAGE_KEYS.REQUESTS) || [];
   allUsers = (getData(STORAGE_KEYS.USERS) || []).filter(u => (u.roles || []).includes('user'));
@@ -418,7 +467,18 @@ function applyQuickRange() {
     document.getElementById('dateFrom').value = '2020-01-01';
     document.getElementById('dateTo').value = fmt(today);
   }
-  if (val) refreshAll();
+  if (val) { document.getElementById('fiscalYearFilter').value = ''; refreshAll(); }
+}
+
+function applyFiscalYear() {
+  const val = document.getElementById('fiscalYearFilter').value;
+  if (!val) { refreshAll(); return; }
+  const fy = parseInt(val);
+  const fmt = d => d.toISOString().split('T')[0];
+  document.getElementById('dateFrom').value = fmt(new Date(fy, 6, 1));
+  document.getElementById('dateTo').value = fmt(new Date(fy + 1, 5, 30));
+  document.getElementById('quickRange').value = '';
+  refreshAll();
 }
 
 function inRange(dateStr) {
@@ -433,7 +493,6 @@ function refreshAll() {
   filteredRequests = allRequests.filter(r => !['blotter','complaint'].includes(r.typeKey) && inRange(r.createdAt));
   const filteredBlotter = allBlotter.filter(b => inRange(b.createdAt));
   const filteredBlotterReqs = allRequests.filter(r => ['blotter','complaint'].includes(r.typeKey) && inRange(r.createdAt));
-  const combined = [...filteredBlotter, ...filteredBlotterReqs];
 
   updateKPIs(filteredRequests);
   drawDonut(filteredRequests);
@@ -441,33 +500,44 @@ function refreshAll() {
   drawTimeline(allRequests);
   renderRequestsTable(filteredRequests);
   renderByType(filteredRequests);
+  renderCancelledTab(filteredRequests);
+  renderEditedTab(filteredRequests);
   renderUsersTable();
   renderRevenue(filteredRequests);
-  renderBlotterTable(combined);
+  renderBlotterTable([...filteredBlotter, ...filteredBlotterReqs]);
 }
 
 function updateKPIs(reqs) {
-  const total = reqs.length;
-  const pending = reqs.filter(r => r.status === 'pending' || r.status === 'pending-review' || r.status === 'pending-approval').length;
-  const approved = reqs.filter(r => r.status === 'approved').length;
-  const released = reqs.filter(r => r.status === 'released').length;
-  const rejected = reqs.filter(r => r.status === 'rejected').length;
-  const revenue = reqs.reduce((s, r) => s + (Number(r.fee) || 0), 0);
+  const total     = reqs.length;
+  const pending   = reqs.filter(r => r.status === 'pending' || r.status === 'pending-review' || r.status === 'pending-approval').length;
+  const approved  = reqs.filter(r => r.status === 'approved').length;
+  const released  = reqs.filter(r => r.status === 'released').length;
+  const rejected  = reqs.filter(r => r.status === 'rejected').length;
+  const cancelled = reqs.filter(r => r.status === 'cancelled').length;
+  const cancelledByAdmin = reqs.filter(r => r.status === 'cancelled' && r.cancelledBy === 'admin').length;
+  const cancelledByUser  = reqs.filter(r => r.status === 'cancelled' && r.cancelledBy !== 'admin').length;
+  const edited    = reqs.filter(r => r.editedByUser || r.editedByAdmin).length;
+  const editedByAdmin = reqs.filter(r => r.editedByAdmin).length;
+  const revenue   = reqs.reduce((s, r) => s + (Number(r.fee) || 0), 0);
 
-  document.getElementById('kpi-total').textContent = total;
-  document.getElementById('kpi-pending').textContent = pending;
+  document.getElementById('kpi-total').textContent    = total;
+  document.getElementById('kpi-pending').textContent  = pending;
   document.getElementById('kpi-approved').textContent = approved;
   document.getElementById('kpi-released').textContent = released;
   document.getElementById('kpi-rejected').textContent = rejected;
-  document.getElementById('kpi-revenue').textContent = '₱' + revenue.toLocaleString();
+  document.getElementById('kpi-cancelled').textContent= cancelled;
+  document.getElementById('kpi-edited').textContent   = edited;
+  document.getElementById('kpi-revenue').textContent  = '₱' + revenue.toLocaleString();
 
   const pct = n => total ? Math.round(n / total * 100) + '%' : '0%';
-  document.getElementById('kpi-total-sub').textContent = 'in selected period';
-  document.getElementById('kpi-pending-sub').textContent = pct(pending) + ' of total';
-  document.getElementById('kpi-approved-sub').textContent = pct(approved) + ' of total';
-  document.getElementById('kpi-released-sub').textContent = pct(released) + ' of total';
-  document.getElementById('kpi-rejected-sub').textContent = pct(rejected) + ' of total';
-  document.getElementById('kpi-revenue-sub').textContent = 'from ' + reqs.filter(r => (r.fee || 0) > 0).length + ' paid requests';
+  document.getElementById('kpi-total-sub').textContent     = 'in selected period';
+  document.getElementById('kpi-pending-sub').textContent   = pct(pending) + ' of total';
+  document.getElementById('kpi-approved-sub').textContent  = pct(approved) + ' of total';
+  document.getElementById('kpi-released-sub').textContent  = pct(released) + ' of total';
+  document.getElementById('kpi-rejected-sub').textContent  = pct(rejected) + ' of total';
+  document.getElementById('kpi-cancelled-sub').textContent = cancelledByUser + ' user · ' + cancelledByAdmin + ' admin';
+  document.getElementById('kpi-edited-sub').textContent    = editedByAdmin + ' by admin · ' + (edited - editedByAdmin) + ' by user';
+  document.getElementById('kpi-revenue-sub').textContent   = 'from ' + reqs.filter(r => (r.fee || 0) > 0).length + ' paid requests';
 }
 
 function drawDonut(reqs) {
@@ -582,11 +652,13 @@ function fmt(d) { return d ? new Date(d).toLocaleDateString('en-PH', {year:'nume
 function renderRequestsTable(reqs) {
   const users = getData(STORAGE_KEYS.USERS) || [];
   const body = document.getElementById('requestsBody');
-  if (!reqs.length) { body.innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--gray-400);padding:2rem;">No requests in this period.</td></tr>'; return; }
+  if (!reqs.length) { body.innerHTML = '<tr><td colspan="10" style="text-align:center;color:var(--gray-400);padding:2rem;">No requests in this period.</td></tr>'; return; }
   body.innerHTML = reqs.slice(0, 200).map((r, i) => {
     const u = users.find(x => x.id === r.userId);
     const name = displayName(u) || r.requesterName || '-';
-    const processed = r.approvedBy || r.rejectedBy || r.releasedBy || '-';
+    const processed = r.approvedBy || r.rejectedBy || r.releasedBy || r.cancelledByAdmin || '-';
+    const editedLabel = r.editedByAdmin ? '<span style="font-size:0.68rem;background:#dbeafe;color:#1e40af;border-radius:4px;padding:0.1rem 0.35rem;">Admin</span>'
+                      : r.editedByUser  ? '<span style="font-size:0.68rem;background:#fef3c7;color:#92400e;border-radius:4px;padding:0.1rem 0.35rem;">User</span>' : '-';
     return `<tr>
       <td style="color:var(--gray-400);">${i+1}</td>
       <td style="font-family:monospace;font-size:0.78rem;">${(r.id||'').substring(0,10).toUpperCase()}</td>
@@ -594,7 +666,8 @@ function renderRequestsTable(reqs) {
       <td>${r.type || r.typeKey || '-'}</td>
       <td>${r.purpose || '-'}</td>
       <td>${r.fee > 0 ? '₱'+r.fee : 'FREE'}</td>
-      <td><span class="badge badge-${r.status}">${r.status||'-'}</span></td>
+      <td><span class="badge badge-${r.status||'pending'}">${r.status||'-'}</span></td>
+      <td>${editedLabel}</td>
       <td>${fmt(r.createdAt)}</td>
       <td>${processed}</td>
     </tr>`;
@@ -605,12 +678,13 @@ function renderByType(reqs) {
   const counts = {};
   reqs.forEach(r => {
     const t = r.type || r.typeKey || 'Unknown';
-    if (!counts[t]) counts[t] = { total:0, pending:0, approved:0, released:0, rejected:0, revenue:0 };
+    if (!counts[t]) counts[t] = { total:0, pending:0, approved:0, released:0, rejected:0, cancelled:0, revenue:0 };
     counts[t].total++;
     if (r.status === 'pending' || r.status === 'pending-review') counts[t].pending++;
     else if (r.status === 'approved') counts[t].approved++;
     else if (r.status === 'released') counts[t].released++;
     else if (r.status === 'rejected') counts[t].rejected++;
+    else if (r.status === 'cancelled') counts[t].cancelled++;
     counts[t].revenue += Number(r.fee) || 0;
   });
 
@@ -630,6 +704,7 @@ function renderByType(reqs) {
             <span>✓ ${s.approved} approved</span>
             <span>📦 ${s.released} released</span>
             <span>✗ ${s.rejected} rejected</span>
+            <span>🚫 ${s.cancelled} cancelled</span>
             <span style="margin-left:auto;font-weight:700;color:var(--gray-900);">₱${s.revenue.toLocaleString()}</span>
           </div>
         </div>
@@ -637,6 +712,38 @@ function renderByType(reqs) {
       </div>`)
     .join('')
     : '<p style="color:var(--gray-400);text-align:center;padding:2rem;">No data.</p>';
+}
+
+function renderCancelledTab(reqs) {
+  const cancelled = reqs.filter(r => r.status === 'cancelled');
+  const byUser  = cancelled.filter(r => r.cancelledBy !== 'admin').length;
+  const byAdmin = cancelled.filter(r => r.cancelledBy === 'admin').length;
+  document.getElementById('cancelledSummary').innerHTML = [
+    { label: 'Total Cancelled', value: cancelled.length, color: '#9ca3af' },
+    { label: 'By Resident',     value: byUser,           color: '#d97706' },
+    { label: 'By Admin/Staff',  value: byAdmin,          color: '#dc2626' },
+  ].map(({label,value,color}) => `<div style="background:var(--gray-50);border:1px solid var(--gray-200);border-left:4px solid ${color};border-radius:0.5rem;padding:1rem;"><div style="font-size:1.75rem;font-weight:800;color:${color};">${value}</div><div style="font-size:0.72rem;text-transform:uppercase;color:var(--gray-500);font-weight:700;margin-top:0.25rem;">${label}</div></div>`).join('');
+
+  const users=getData(STORAGE_KEYS.USERS)||[], body=document.getElementById('cancelledBody');
+  if (!cancelled.length) { body.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--gray-400);padding:2rem;">No cancelled requests in this period.</td></tr>'; return; }
+  body.innerHTML=cancelled.map((r,i) => {
+    const u=users.find(x=>x.id===r.userId);
+    const who = r.cancelledBy==='admin' ? (r.cancelledByAdmin||'Admin') + ' <span style="font-size:0.68rem;background:#fee2e2;color:#991b1b;border-radius:4px;padding:0.1rem 0.35rem;">Staff</span>' : 'Resident';
+    return `<tr><td style="color:var(--gray-400);">${i+1}</td><td style="font-family:monospace;font-size:0.78rem;">${(r.id||'').substring(0,10).toUpperCase()}</td><td>${displayName(u)||r.requesterName||'-'}</td><td>${r.type||'-'}</td><td>${who}</td><td>${r.cancelReason||'-'}</td><td>${fmt(r.cancelledAt)}</td></tr>`;
+  }).join('');
+}
+
+function renderEditedTab(reqs) {
+  const edited = reqs.filter(r => r.editedByUser || r.editedByAdmin);
+  const users=getData(STORAGE_KEYS.USERS)||[], body=document.getElementById('editedBody');
+  if (!edited.length) { body.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--gray-400);padding:2rem;">No edited requests in this period.</td></tr>'; return; }
+  body.innerHTML=edited.map((r,i) => {
+    const u=users.find(x=>x.id===r.userId);
+    const editedBy = r.editedByAdmin
+      ? '<span style="font-size:0.68rem;background:#dbeafe;color:#1e40af;border-radius:4px;padding:0.1rem 0.35rem;">Admin</span>'
+      : '<span style="font-size:0.68rem;background:#fef3c7;color:#92400e;border-radius:4px;padding:0.1rem 0.35rem;">User</span>';
+    return `<tr><td style="color:var(--gray-400);">${i+1}</td><td style="font-family:monospace;font-size:0.78rem;">${(r.id||'').substring(0,10).toUpperCase()}</td><td>${displayName(u)||r.requesterName||'-'}</td><td>${r.type||'-'}</td><td><span class="badge badge-${r.status||'pending'}">${r.status||'-'}</span></td><td>${editedBy}</td><td>${fmt(r.createdAt)}</td></tr>`;
+  }).join('');
 }
 
 function renderUsersTable() {
@@ -716,7 +823,7 @@ function renderBlotterTable(items) {
     const type = b.typeKey === 'complaint' ? 'Complaint' : 'Blotter';
     const complainant = b.complainantName || b.requesterName || '-';
     const status = b.status || '-';
-    const statusClass = { Pending:'badge-pending', Ongoing:'badge-pending', Resolved:'badge-approved', Escalated:'badge-rejected', pending:'badge-pending', resolved:'badge-approved', rejected:'badge-rejected' }[status] || 'badge-pending';
+    const statusClass = { Pending:'badge-pending', Ongoing:'badge-pending', Resolved:'badge-approved', Escalated:'badge-rejected', pending:'badge-pending', resolved:'badge-approved', rejected:'badge-rejected', cancelled:'badge-cancelled' }[status] || 'badge-pending';
     return `<tr>
       <td style="color:var(--gray-400);">${i+1}</td>
       <td style="font-family:monospace;font-size:0.78rem;">${(b.id||'').substring(0,10).toUpperCase()}</td>
@@ -736,28 +843,15 @@ function switchTab(name, btn) {
 }
 
 function exportCSV() {
-  const rows = [['Tracking ID','Resident','Document Type','Purpose','Fee','Status','Date Filed','Approved By','Rejected By','Released By']];
-  const users = getData(STORAGE_KEYS.USERS) || [];
+  const rows=[['Tracking ID','Resident','Document Type','Purpose','Fee','Status','Edited By','Cancelled By','Cancel Reason','Date Filed','Processed By']];
+  const users=getData(STORAGE_KEYS.USERS)||[];
   filteredRequests.forEach(r => {
-    const u = users.find(x => x.id === r.userId);
-    rows.push([
-      (r.id||'').toUpperCase(),
-      displayName(u) || r.requesterName || '',
-      r.type || r.typeKey || '',
-      r.purpose || '',
-      r.fee || 0,
-      r.status || '',
-      r.createdAt ? new Date(r.createdAt).toLocaleDateString('en-PH') : '',
-      r.approvedBy || '',
-      r.rejectedBy || '',
-      r.releasedBy || '',
-    ]);
+    const u=users.find(x=>x.id===r.userId);
+    rows.push([(r.id||'').toUpperCase(),displayName(u)||r.requesterName||'',r.type||r.typeKey||'',r.purpose||'',r.fee||0,r.status||'',r.editedByAdmin?'Admin':r.editedByUser?'User':'',r.cancelledBy==='admin'?(r.cancelledByAdmin||'Admin'):r.cancelledBy==='user'?'User':'',r.cancelReason||'',r.createdAt?new Date(r.createdAt).toLocaleDateString('en-PH'):'',r.approvedBy||r.rejectedBy||r.releasedBy||'']);
   });
-  const csv = rows.map(r => r.map(v => '"' + String(v).replace(/"/g, '""') + '"').join(',')).join('\n');
-  const a = document.createElement('a');
-  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
-  a.download = 'requests_report_' + new Date().toISOString().split('T')[0] + '.csv';
-  a.click();
+  const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const a=document.createElement('a'); a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download='requests_report_'+new Date().toISOString().split('T')[0]+'.csv'; a.click();
 }
 </script>
 </body>

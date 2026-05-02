@@ -311,10 +311,14 @@
         background: #dbeafe;
         color: #1e40af;
       }
+      .badge-cancelled {
+        background: #f3f4f6;
+        color: #6b7280;
+      }
       .btn {
-        padding: 0.35rem 0.75rem;
+        padding: 0.3rem 0.65rem;
         border-radius: 0.375rem;
-        font-size: 0.8rem;
+        font-size: 0.78rem;
         font-weight: 600;
         cursor: pointer;
         border: 1.5px solid;
@@ -344,6 +348,15 @@
         background: #2563eb;
         border-color: #2563eb;
       }
+      .btn-sa-edit  { color: #0891b2; background: #ecfeff; border-color: #a5f3fc; }
+      .btn-sa-cancel{ color: #b91c1c; background: #fef2f2; border-color: #fecaca; }
+      .btn-gap { display: flex; gap: 0.35rem; flex-wrap: wrap; align-items: center; }
+      .cancel-warning { background: #fff7ed; border: 1px solid #fed7aa; border-radius: 0.5rem; padding: 0.9rem 1rem; margin-bottom: 1rem; font-size: 0.875rem; color: #92400e; }
+      .edit-note { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 0.5rem; padding: 0.75rem 1rem; margin-bottom: 1rem; font-size: 0.82rem; color: #1e40af; }
+      #toast { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 2000; background: #1e293b; color: #fff; padding: 0.75rem 1.25rem; border-radius: 0.6rem; font-size: 0.875rem; font-weight: 500; box-shadow: 0 8px 24px rgba(0,0,0,0.2); display: none; }
+      #toast.show { display: block; }
+      #toast.success { background: #16a34a; }
+      #toast.error   { background: #dc2626; }
       .modal-overlay {
         display: none;
         position: fixed;
@@ -411,6 +424,9 @@
         border-top: 1px solid #e5e7eb;
         flex-wrap: wrap;
       }
+      .form-field { margin-bottom: 1rem; }
+      .form-field label { display: block; font-size: 0.8rem; font-weight: 600; color: #374151; margin-bottom: 0.35rem; }
+      .form-field select, .form-field textarea, .form-field input { width: 100%; padding: 0.5rem 0.65rem; font-size: 0.875rem; border: 1.5px solid #cbd5e1; border-radius: 0.375rem; background: #fff; }
     </style>
   </head>
   <body>
@@ -468,7 +484,7 @@
         <main class="sa-main">
           <div class="page-hdr">
             <h1>All Requests</h1>
-            <p>Review, approve, reject, release document requests.</p>
+            <p>Review, approve, reject, release, edit, or cancel resident document requests.</p>
           </div>
           <div class="tbl-card">
             <div class="filter-bar">
@@ -487,7 +503,8 @@
                   <option value="pending">Pending</option>
                   <option value="approved">Approved</option>
                   <option value="rejected">Rejected</option>
-                  <option value="released">Released</option>
+                   <option value="released">Released</option>
+                   <option value="cancelled">Cancelled</option>
                 </select>
               </div>
               <div class="filter-group">
@@ -502,6 +519,9 @@
               <div class="filter-group">
                 <label>Date To</label><input type="date" id="dateTo" />
               </div>
+              <div class="filter-group">
+                <label>Fiscal Year</label><select id="fiscalYearFilter"><option value="">All</option></select>
+              </div>
             </div>
             <table class="sa-table">
               <thead>
@@ -511,6 +531,7 @@
                   <th>Type</th>
                   <th>Date Filed</th>
                   <th>Status</th>
+                  <th>Edited?</th>
                   <th>Processed By</th>
                   <th>Actions</th>
                 </tr>
@@ -518,7 +539,7 @@
               <tbody id="requests-table-body">
                 <tr>
                   <td
-                    colspan="7"
+                    colspan="8"
                     style="text-align: center; color: #94a3b8; padding: 2rem"
                   >
                     Loading...
@@ -568,10 +589,7 @@
         </div>
         <div class="form-field">
           <label>Comment</label
-          ><textarea
-            id="rejectComment"
-            style="width: 100%; padding: 0.5rem; height: 80px"
-          ></textarea>
+          ><textarea id="rejectComment" style="height:80px;"></textarea>
         </div>
         <div class="modal-footer">
           <button
@@ -595,315 +613,449 @@
       </div>
     </div>
 
+    <!-- Edit Modal (admin editing a resident's request) -->
+    <div class="modal-overlay" id="editModal">
+      <div class="modal-box">
+        <div class="modal-hdr"><h3>Edit Request</h3><button class="modal-close" onclick="closeModal('editModal')">&times;</button></div>
+        <div class="edit-note">You are editing a resident's pending request as Admin. Changes will be logged.</div>
+        <input type="hidden" id="editReqId" />
+        <div class="form-field"><label>Purpose</label><input type="text" id="editPurpose" placeholder="Purpose…" /></div>
+        <div class="form-field"><label>Description / Notes</label><textarea id="editDescription" style="height:80px;" placeholder="Additional details…"></textarea></div>
+        <div class="modal-footer">
+          <button class="btn" style="background:#fff;border:1px solid #cbd5e1;" onclick="closeModal('editModal')">Discard</button>
+          <button class="btn" style="background:#2563eb;border:1px solid #2563eb;color:#fff;" onclick="confirmEdit()">Save Changes</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cancel Modal (admin cancelling a resident's request) -->
+    <div class="modal-overlay" id="cancelModal">
+      <div class="modal-box">
+        <div class="modal-hdr"><h3>Cancel Request</h3><button class="modal-close" onclick="closeModal('cancelModal')">&times;</button></div>
+        <input type="hidden" id="cancelReqId" />
+        <div class="cancel-warning">You are cancelling this request. This <strong>cannot be undone</strong>. The change will be logged.</div>
+        <div class="form-field"><label>Reason for cancellation</label><textarea id="cancelReason" style="height:80px;" placeholder="Provide a clear reason…"></textarea></div>
+        <div class="modal-footer">
+          <button class="btn" style="background:#fff;border:1px solid #cbd5e1;" onclick="closeModal('cancelModal')">Go Back</button>
+          <button class="btn" style="background:#dc2626;border:1px solid #dc2626;color:#fff;" onclick="confirmCancelAdmin()">Yes, Cancel Request</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Hidden dummy elements required by script.js notification helpers -->
     <span id="user-nav-name" style="display: none"></span>
     <div id="user-avatar" style="display: none"></div>
+    <div id="toast"></div>
     <script src="../js/script.js"></script>
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const currentAdmin = getCurrentUser();
-        if (!currentAdmin || (!currentAdmin.roles || (!currentAdmin.roles.includes("admin") && !currentAdmin.roles.includes("super_admin")))) {
-          location.href = "../auth/login.html";
-          return;
-        }
-        document.getElementById("footer-year").textContent =
-          "© " + new Date().getFullYear() + " Barangay Records System.";
-        initSidebar();
+  document.addEventListener("DOMContentLoaded", function () {
+    const currentAdmin = getCurrentUser();
 
-        let page = 1,
-          PER_PAGE = 10,
-          filtered = [];
-        const requests = getData(STORAGE_KEYS.REQUESTS).filter(
-          (r) => r.typeKey !== "blotter" && r.typeKey !== "complaint",
+    if (
+      !currentAdmin ||
+      (!currentAdmin.roles ||
+        (!currentAdmin.roles.includes("admin") &&
+          !currentAdmin.roles.includes("super_admin")))
+    ) {
+      location.href = "../auth/login.html";
+      return;
+    }
+
+    document.getElementById("footer-year").textContent =
+      "© " + new Date().getFullYear() + " Barangay Records System.";
+
+    // Sidebar
+    function initSidebar() {
+      document.getElementById("sb-avatar").textContent = (
+        currentAdmin.firstName || "SA"
+      )
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .substring(0, 2)
+        .toUpperCase();
+
+      document.getElementById("sb-name").textContent =
+        currentAdmin.firstName || currentAdmin.fullName;
+    }
+
+    window.closeModal = function (id) {
+      document.getElementById(id).classList.remove("open");
+    };
+
+    window.toggleSection = function (id) {
+      document.getElementById(id).classList.toggle("collapsed");
+    };
+
+    window.doLogout = function () {
+      var u = getCurrentUser();
+      if (u) logAction(u.id, "admin", "Logged out");
+      setCurrentUser(null);
+      location.href = "../auth/login.html";
+    };
+
+    // STATE
+    let page = 1;
+    const PER_PAGE = 10;
+    let filtered = [];
+
+    const requests = getData(STORAGE_KEYS.REQUESTS).filter(
+      (r) => r.typeKey !== "blotter" && r.typeKey !== "complaint"
+    );
+
+    const users = getData(STORAGE_KEYS.USERS);
+    const settings = getData(STORAGE_KEYS.SETTINGS) || {};
+
+    // Request Types
+    const typeSelect = document.getElementById("typeFilter");
+    const rt =
+      settings.requestTypes ||
+      getData("REQUEST_TYPES") || [
+        "Barangay Clearance",
+        "Certificate of Residency",
+        "Business Permit",
+      ];
+
+    rt.forEach((t) => {
+      const name = typeof t === "object" ? t.name : t;
+      typeSelect.innerHTML += `<option value="${name}">${name}</option>`;
+    });
+
+    const fySelect = document.getElementById("fiscalYearFilter");
+    const now = new Date();
+    const currentFY = now.getMonth() >= 6 ? now.getFullYear() : now.getFullYear() - 1;
+    for (let y = currentFY + 1; y >= currentFY - 3; y--) {
+      const opt = document.createElement("option");
+      opt.value = y;
+      opt.textContent = `FY ${y}-${y + 1}`;
+      fySelect.appendChild(opt);
+    }
+
+    function getFiscalDates(fyStart) {
+      const from = new Date(fyStart, 6, 1);
+      const to = new Date(fyStart + 1, 5, 30, 23, 59, 59);
+      return { from, to };
+    }
+
+    function displayName(u) {
+      if (!u) return "Unknown";
+      if (u.lastName)
+        return [u.lastName + ",", u.firstName, u.middleName]
+          .filter(Boolean)
+          .join(" ");
+      return u.fullName || u.name || "Unknown";
+    }
+
+    function getRequestsFromStorage() {
+      return getData(STORAGE_KEYS.REQUESTS).filter(
+        (r) => r.typeKey !== "blotter" && r.typeKey !== "complaint"
+      );
+    }
+
+    function applyFilters() {
+      const all = getRequestsFromStorage();
+
+      const search = document
+        .getElementById("searchInput")
+        .value.toLowerCase();
+      const status = document.getElementById("statusFilter").value;
+      const type = document.getElementById("typeFilter").value;
+      const from = document.getElementById("dateFrom").value;
+      const to = document.getElementById("dateTo").value;
+      const fy = document.getElementById("fiscalYearFilter").value;
+
+      let fyFrom = null, fyTo = null;
+      if (fy) { const d = getFiscalDates(parseInt(fy)); fyFrom = d.from; fyTo = d.to; }
+
+      filtered = all.filter((r) => {
+        const user = users.find((u) => u.id === r.userId);
+        const name = displayName(user) || r.requesterName || "";
+
+        return (
+          (!search ||
+            (r.id && r.id.toLowerCase().includes(search)) ||
+            name.toLowerCase().includes(search)) &&
+          (!status || r.status === status) &&
+          (!type || r.type === type) &&
+          (!from || new Date(r.createdAt) >= new Date(from)) &&
+          (!to || new Date(r.createdAt) <= new Date(to + "T23:59:59")) &&
+          (!fyFrom || new Date(r.createdAt) >= fyFrom) &&
+          (!fyTo || new Date(r.createdAt) <= fyTo)
         );
-        const users = getData(STORAGE_KEYS.USERS);
-        const settings = getData(STORAGE_KEYS.SETTINGS) || {};
-
-        const typeSelect = document.getElementById("typeFilter");
-        const rt = settings.requestTypes ||
-          getData("REQUEST_TYPES") || [
-            "Barangay Clearance",
-            "Certificate of Residency",
-            "Business Permit",
-          ];
-        rt.forEach(
-          (t) =>
-            (typeSelect.innerHTML +=
-              '<option value="' + t.name + '">' + t.name + "</option>"),
-        );
-
-        function displayName(u) {
-          return u
-            ? u.lastName
-              ? [u.lastName + ",", u.firstName, u.middleName]
-                  .filter(Boolean)
-                  .join(" ")
-              : u.fullName || u.name
-            : "Unknown";
-        }
-        function toggleSection(id) {
-          document.getElementById(id).classList.toggle("collapsed");
-        }
-        function initSidebar() {
-          document.getElementById("sb-avatar").textContent = (
-            currentAdmin.firstName || "SA"
-          )
-            .split(" ")
-            .map((n) => n[0])
-            .join("")
-            .substring(0, 2)
-            .toUpperCase();
-          document.getElementById("sb-name").textContent =
-            currentAdmin.firstName || currentAdmin.fullName;
-        }
-        function doLogout() {
-          logAction(currentAdmin.id, "admin", "Logged out");
-          setCurrentUser(null);
-          location.href = "../auth/login.html";
-        }
-        function closeModal(id) {
-          document.getElementById(id).classList.remove("open");
-        }
-
-        function applyFilters() {
-          const search = document
-            .getElementById("searchInput")
-            .value.toLowerCase();
-          const status = document.getElementById("statusFilter").value;
-          const type = document.getElementById("typeFilter").value;
-          const from = document.getElementById("dateFrom").value;
-          const to = document.getElementById("dateTo").value;
-
-          filtered = requests.filter((r) => {
-            const user = users.find((u) => u.id === r.userId);
-            const name = displayName(user) || r.requesterName || "";
-            return (
-              (!search ||
-                (r.id && r.id.toLowerCase().includes(search)) ||
-                name.toLowerCase().includes(search)) &&
-              (!status || r.status === status) &&
-              (!type || r.type === type) &&
-              (!from || new Date(r.createdAt) >= new Date(from)) &&
-              (!to || new Date(r.createdAt) <= new Date(to + "T23:59:59"))
-            );
-          });
-          filtered.sort(
-            (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
-          );
-          page = 1;
-          renderTable();
-        }
-
-        function renderTable() {
-          const total = filtered.length,
-            start = (page - 1) * PER_PAGE,
-            end = Math.min(start + PER_PAGE, total);
-          const slice = filtered.slice(start, end);
-
-          const tbody = document.getElementById("requests-table-body");
-          if (!slice.length) {
-            tbody.innerHTML =
-              '<tr><td colspan="7" style="text-align:center;color:#94a3b8;padding:2rem;">No results found.</td></tr>';
-          } else {
-            tbody.innerHTML = slice
-              .map((r) => {
-                const user = users.find((u) => u.id === r.userId);
-                const name = displayName(user) || r.requesterName || "-";
-                const processed = r.approvedBy || r.rejectedBy || "-";
-                let btns = "";
-                if (r.status === "pending")
-                  btns =
-                    '<button class="btn btn-approve"' +
-                    (r.userId === currentAdmin.id
-                      ? ' disabled title="Cannot approve your own"'
-                      : " onclick=\"approveRequest('" + r.id + "')\"") +
-                    '>Approve</button> <button class="btn btn-reject" onclick="openReject(\'' +
-                    r.id +
-                    "')\">Reject</button>";
-                else if (r.status === "approved")
-                  btns =
-                    '<button class="btn btn-release" onclick="releaseRequest(\'' +
-                    r.id +
-                    "')\">Release</button>";
-                if (r.status === "approved" || r.status === "released")
-                  btns +=
-                    '<button class="btn btn-print" onclick="printRequest(\'' +
-                    r.id +
-                    "')\">Print</button> ";
-                btns +=
-                  ' <button class="btn btn-view" onclick="viewRequest(\'' +
-                  r.id +
-                  "')\">View</button>";
-                return (
-                  "<tr><td>" +
-                  (r.id || "").substring(0, 8).toUpperCase() +
-                  "</td><td>" +
-                  name +
-                  "</td><td>" +
-                  r.type +
-                  "</td><td>" +
-                  (r.createdAt
-                    ? new Date(r.createdAt).toLocaleDateString()
-                    : "-") +
-                  '</td><td><span class="badge badge-' +
-                  r.status +
-                  '">' +
-                  r.status +
-                  "</span></td><td>" +
-                  processed +
-                  "</td><td>" +
-                  btns +
-                  "</td></tr>"
-                );
-              })
-              .join("");
-          }
-          document.getElementById("rowCount").textContent =
-            total === 0
-              ? "No results"
-              : "Showing " + (start + 1) + "–" + end + " of " + total;
-          document.getElementById("btnPrev").disabled = page <= 1;
-          document.getElementById("btnNext").disabled = end >= total;
-        }
-
-        window.changePage = function (delta) {
-          page += delta;
-          renderTable();
-        };
-        window.applyFilters = applyFilters;
-        document
-          .getElementById("searchInput")
-          .addEventListener("input", applyFilters);
-        document
-          .getElementById("statusFilter")
-          .addEventListener("change", applyFilters);
-        document
-          .getElementById("typeFilter")
-          .addEventListener("change", applyFilters);
-        document
-          .getElementById("dateFrom")
-          .addEventListener("change", applyFilters);
-        document
-          .getElementById("dateTo")
-          .addEventListener("change", applyFilters);
-
-        let currentReqId = null;
-        window.approveRequest = function (id) {
-          const req = requests.find((r) => r.id === id);
-          if (req) {
-            req.status = "approved";
-            req.approvedBy = currentAdmin.fullName;
-            req.approvedAt = new Date().toISOString();
-            updateItem(STORAGE_KEYS.REQUESTS, id, req);
-            addNotification(
-              req.userId,
-              "Request Approved",
-              "Your " + req.type + " has been approved.",
-              "success",
-            );
-            logAction(
-              currentAdmin.id,
-              "admin",
-              "Approved request " + id,
-              id,
-            );
-            applyFilters();
-          }
-        };
-        window.openReject = function (id) {
-          currentReqId = id;
-          document.getElementById("rejectModal").classList.add("open");
-        };
-        window.confirmReject = function () {
-          const req = requests.find((r) => r.id === currentReqId);
-          if (req) {
-            req.status = "rejected";
-            req.rejectedBy = currentAdmin.fullName;
-            req.rejectedAt = new Date().toISOString();
-            req.rejectionReason = document.getElementById("rejectReason").value;
-            req.rejectComment = document.getElementById("rejectComment").value;
-            updateItem(STORAGE_KEYS.REQUESTS, currentReqId, req);
-            addNotification(
-              req.userId,
-              "Request Rejected",
-              "Your " + req.type + " has been rejected: " + req.rejectionReason,
-              "error",
-            );
-            logAction(
-              currentAdmin.id,
-              "admin",
-              "Rejected request " + currentReqId,
-              currentReqId,
-            );
-            closeModal("rejectModal");
-            applyFilters();
-          }
-        };
-        window.releaseRequest = function (id) {
-          const req = requests.find((r) => r.id === id);
-          if (req) {
-            req.status = "released";
-            req.releasedBy = currentAdmin.fullName;
-            req.releasedAt = new Date().toISOString();
-            updateItem(STORAGE_KEYS.REQUESTS, id, req);
-            addNotification(
-              req.userId,
-              "Request Released",
-              "Your " + req.type + " is ready for pickup.",
-              "info",
-            );
-            logAction(
-              currentAdmin.id,
-              "admin",
-              "Released request " + id,
-              id,
-            );
-            applyFilters();
-          }
-        };
-        window.viewRequest = function (id) {
-          const req = requests.find((r) => r.id === id);
-          if (!req) return;
-          const user = users.find((u) => u.id === req.userId);
-          document.getElementById("viewContent").innerHTML = [
-            { k: "Control No.", v: req.id },
-            { k: "Resident", v: displayName(user) || req.requesterName },
-            { k: "Type", v: req.type },
-            { k: "Purpose", v: req.purpose || "-" },
-            { k: "Status", v: req.status },
-            {
-              k: "Date Filed",
-              v: req.createdAt ? new Date(req.createdAt).toLocaleString() : "-",
-            },
-            { k: "Approved By", v: req.approvedBy || "-" },
-            {
-              k: "Approved At",
-              v: req.approvedAt
-                ? new Date(req.approvedAt).toLocaleString()
-                : "-",
-            },
-            { k: "Rejected By", v: req.rejectedBy || "-" },
-            { k: "Rejection Reason", v: req.rejectionReason || "-" },
-          ]
-            .map(
-              (r) =>
-                '<div class="modal-row"><span class="modal-key">' +
-                r.k +
-                '</span><span class="modal-val">' +
-                r.v +
-                "</span></div>",
-            )
-            .join("");
-          document.getElementById("viewModal").classList.add("open");
-        };
-        window.printRequest = function (id) {
-          window.open(
-            "../superadmin/print-request.html?id=" + encodeURIComponent(id),
-            "_blank",
-          );
-        };
-        applyFilters();
       });
-    </script>
+
+      filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      page = 1;
+      renderTable();
+    }
+
+    function renderTable() {
+      const total = filtered.length;
+      const start = (page - 1) * PER_PAGE;
+      const end = Math.min(start + PER_PAGE, total);
+      const slice = filtered.slice(start, end);
+
+      const tbody = document.getElementById("requests-table-body");
+
+      if (!slice.length) {
+        tbody.innerHTML =
+          '<tr><td colspan="8" style="text-align:center;color:#94a3b8;padding:2rem;">No results found.</td></tr>';
+      } else {
+        tbody.innerHTML = slice
+          .map((r) => {
+            const user = users.find((u) => u.id === r.userId);
+            const name = displayName(user) || r.requesterName || "-";
+
+            const processed =
+              r.approvedBy ||
+              r.rejectedBy ||
+              r.releasedBy ||
+              r.cancelledByAdmin ||
+              "-";
+
+            const editedBadge = r.editedByUser
+              ? '<span style="font-size:0.7rem;background:#fef3c7;color:#92400e;border-radius:4px;padding:0.1rem 0.4rem;">User</span>'
+              : r.editedByAdmin
+              ? '<span style="font-size:0.7rem;background:#dbeafe;color:#1e40af;border-radius:4px;padding:0.1rem 0.4rem;">Admin</span>'
+              : "-";
+
+            let btns = '<div class="btn-gap">';
+
+            if (r.status === "pending") {
+              const selfBlock =
+                r.userId === currentAdmin.id
+                  ? ' disabled title="Cannot approve your own"'
+                  : "";
+
+              btns +=
+                '<button class="btn btn-approve"' +
+                selfBlock +
+                " onclick=\"approveRequest('" +
+                r.id +
+                "')\">Approve</button>";
+
+              btns +=
+                '<button class="btn btn-reject" onclick="openReject(\'' +
+                r.id +
+                "')\">Reject</button>";
+
+              btns +=
+                '<button class="btn btn-sa-edit" onclick="openEditAdmin(\'' +
+                r.id +
+                "')\">Edit</button>";
+
+              btns +=
+                '<button class="btn btn-sa-cancel" onclick="openCancelAdmin(\'' +
+                r.id +
+                "')\">Cancel</button>";
+            } else if (r.status === "approved") {
+              btns +=
+                '<button class="btn btn-release" onclick="releaseRequest(\'' +
+                r.id +
+                "')\">Release</button>";
+
+              btns +=
+                '<button class="btn btn-print" onclick="printRequest(\'' +
+                r.id +
+                "')\">Print</button>";
+            } else if (r.status === "released") {
+              btns +=
+                '<button class="btn btn-print" onclick="printRequest(\'' +
+                r.id +
+                "')\">Print</button>";
+            }
+
+            btns +=
+              '<button class="btn btn-view" onclick="viewRequest(\'' +
+              r.id +
+              "')\">View</button></div>";
+
+            return `
+              <tr>
+                <td>${(r.id || "").substring(0, 8).toUpperCase()}</td>
+                <td>${name}</td>
+                <td>${r.type || "-"}</td>
+                <td>${
+                  r.createdAt
+                    ? new Date(r.createdAt).toLocaleDateString()
+                    : "-"
+                }</td>
+                <td><span class="badge badge-${r.status || "pending"}">${
+              r.status || "pending"
+            }</span></td>
+                <td>${editedBadge}</td>
+                <td>${processed}</td>
+                <td>${btns}</td>
+              </tr>
+            `;
+          })
+          .join("");
+      }
+
+      document.getElementById("rowCount").textContent =
+        total === 0
+          ? "No results"
+          : `Showing ${start + 1}–${end} of ${total}`;
+
+      document.getElementById("btnPrev").disabled = page <= 1;
+      document.getElementById("btnNext").disabled = end >= total;
+    }
+
+    window.changePage = function (delta) {
+      page += delta;
+      renderTable();
+    };
+
+    // EVENTS
+    document
+      .getElementById("searchInput")
+      .addEventListener("input", applyFilters);
+    document
+      .getElementById("statusFilter")
+      .addEventListener("change", applyFilters);
+    document
+      .getElementById("typeFilter")
+      .addEventListener("change", applyFilters);
+    document
+      .getElementById("dateFrom")
+      .addEventListener("change", applyFilters);
+    document
+      .getElementById("dateTo")
+      .addEventListener("change", applyFilters);
+    document
+      .getElementById("fiscalYearFilter")
+      .addEventListener("change", applyFilters);
+
+    let currentReqId = null;
+
+    // APPROVE
+    window.approveRequest = function (id) {
+      const req = getRequestsFromStorage().find((r) => r.id === id);
+      if (!req) return;
+
+      req.status = "approved";
+      req.approvedBy = currentAdmin.fullName || currentAdmin.firstName;
+      req.approvedAt = new Date().toISOString();
+
+      updateItem(STORAGE_KEYS.REQUESTS, id, req);
+
+      addNotification(
+        req.userId,
+        "Request Approved",
+        "Your " + req.type + " has been approved.",
+        "success"
+      );
+
+      logAction(currentAdmin.id, "admin", "Approved request " + id, id);
+      applyFilters();
+    };
+
+    // REJECT
+    window.openReject = function (id) {
+      currentReqId = id;
+      document.getElementById("rejectModal").classList.add("open");
+    };
+
+    window.confirmReject = function () {
+      const req = getRequestsFromStorage().find(
+        (r) => r.id === currentReqId
+      );
+      if (!req) return;
+
+      req.status = "rejected";
+      req.rejectedBy = currentAdmin.fullName || currentAdmin.firstName;
+      req.rejectedAt = new Date().toISOString();
+
+      updateItem(STORAGE_KEYS.REQUESTS, currentReqId, req);
+      window.closeModal("rejectModal");
+      applyFilters();
+    };
+
+    // RELEASE
+    window.releaseRequest = function (id) {
+      const req = getRequestsFromStorage().find((r) => r.id === id);
+      if (!req) return;
+
+      req.status = "released";
+      req.releasedBy = currentAdmin.fullName || currentAdmin.firstName;
+      req.releasedAt = new Date().toISOString();
+
+      updateItem(STORAGE_KEYS.REQUESTS, id, req);
+      applyFilters();
+    };
+
+    // EDIT
+    window.openEditAdmin = function (id) {
+      const req = getRequestsFromStorage().find((r) => r.id === id);
+      if (!req) return;
+
+      currentReqId = id;
+      document.getElementById("editModal").classList.add("open");
+    };
+
+    window.confirmEdit = function () {
+      const id = currentReqId;
+      const req = getRequestsFromStorage().find((r) => r.id === id);
+      if (!req) return;
+
+      updateItem(STORAGE_KEYS.REQUESTS, id, req);
+      window.closeModal("editModal");
+      applyFilters();
+    };
+
+    // CANCEL
+    window.openCancelAdmin = function (id) {
+      currentReqId = id;
+      document.getElementById("cancelModal").classList.add("open");
+    };
+
+    window.confirmCancelAdmin = function () {
+      const id = currentReqId;
+      const req = getRequestsFromStorage().find((r) => r.id === id);
+      if (!req) return;
+
+      req.status = "cancelled";
+      updateItem(STORAGE_KEYS.REQUESTS, id, req);
+
+      window.closeModal("cancelModal");
+      applyFilters();
+    };
+
+    // VIEW
+    window.viewRequest = function (id) {
+      const req = getRequestsFromStorage().find((r) => r.id === id);
+      if (!req) return;
+
+      document.getElementById("viewContent").innerHTML = `
+        <div class="modal-row"><span class="modal-key">ID</span><span class="modal-val">${req.id}</span></div>
+        <div class="modal-row"><span class="modal-key">Type</span><span class="modal-val">${req.type}</span></div>
+        <div class="modal-row"><span class="modal-key">Status</span><span class="modal-val">${req.status}</span></div>
+      `;
+
+      document.getElementById("viewModal").classList.add("open");
+    };
+
+    window.printRequest = function (id) {
+      window.open(
+        "../superadmin/print-request.html?id=" +
+          encodeURIComponent(id),
+        "_blank"
+      );
+    };
+
+    initSidebar();
+    applyFilters();
+  });
+
+  function showToast(msg, type) {
+    var t = document.getElementById("toast");
+    t.textContent = msg;
+    t.className = "show " + (type || "");
+    setTimeout(function () {
+      t.className = "";
+    }, 3000);
+  }
+</script>
+
   </body>
 </html>

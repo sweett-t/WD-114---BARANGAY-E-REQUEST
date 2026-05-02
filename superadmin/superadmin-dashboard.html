@@ -70,6 +70,10 @@
       .sa-table tbody tr:hover td { background: #f8fafc; }
 
       .page-hdr { margin-bottom: 1.75rem; }
+      .page-hdr .fiscal-info { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.75rem; }
+      .page-hdr .fiscal-year { font-size: 0.875rem; color: #fff; background: linear-gradient(135deg, #2563eb, #1d4ed8); padding: 0.5rem 1.1rem; border-radius: 9999px; display: inline-flex; align-items: center; justify-content: center; gap: 0.3rem; font-weight: 600; white-space: nowrap; }
+      .page-hdr .fiscal-year span, .page-hdr .fiscal-year strong { display: inline-block; line-height: 1; margin: 0; padding: 0; }
+      .page-hdr .current-date { font-size: 0.875rem; color: #64748b; }
       .page-hdr h1 { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700; color: #1e293b; margin-bottom: 0.25rem; }
       .page-hdr p { color: #64748b; font-size: 0.95rem; }
 
@@ -128,6 +132,10 @@
       <div class="sa-body">
         <main class="sa-main">
           <div class="page-hdr">
+            <div class="fiscal-info">
+              <span class="fiscal-year"><span>FY</span> <strong id="fiscalYearText"></strong></span>
+              <span class="current-date" id="currentDate"></span>
+            </div>
             <h1>Welcome back, <span id="welcomeName">Super Admin</span>!</h1>
             <p>Full system overview and recent activity.</p>
           </div>
@@ -196,6 +204,9 @@
         }
 
         document.getElementById("footer-year").textContent = "© " + new Date().getFullYear() + " Barangay Records System. All rights reserved.";
+        var now = new Date(); var fyStart = now.getMonth() >= 6 ? now.getFullYear() : now.getFullYear() - 1;
+        document.getElementById("fiscalYearText").textContent = fyStart + "-" + (fyStart + 1);
+        document.getElementById("currentDate").textContent = now.toLocaleDateString("en-PH", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
         initSidebar();
 
         function displayName(u) {

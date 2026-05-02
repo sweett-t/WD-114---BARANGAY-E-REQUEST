@@ -70,6 +70,10 @@
   <div class="sidebar-body">
     <main class="dashboard-content">
       <div class="dashboard-header">
+        <div class="fiscal-info">
+          <span class="fiscal-year"><span>FY</span> <strong id="fiscalYearText"></strong></span>
+          <span class="current-date" id="currentDate"></span>
+        </div>
         <div class="dashboard-header-top">
           <h1>Welcome back, <span id="welcomeName">User</span>!</h1>
           <a href="sa-new-request.html" class="btn btn-primary btn-new-request">+ New Request</a>
@@ -132,6 +136,9 @@
     document.addEventListener('DOMContentLoaded',function(){
       if(!user){location.href='../auth/login.html';return}
       document.getElementById('current-year').textContent=new Date().getFullYear();
+      const now=new Date();const fyStart=now.getMonth()>=6?now.getFullYear():now.getFullYear()-1;
+      document.getElementById('fiscalYearText').textContent=fyStart+'-'+(fyStart+1);
+      document.getElementById('currentDate').textContent=now.toLocaleDateString('en-PH',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
       document.getElementById('name').textContent=user.firstName||user.fullName;
       document.getElementById('avatar').textContent=(user.firstName||'SA').split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
       document.getElementById('welcomeName').textContent=user.firstName||user.fullName||'User';

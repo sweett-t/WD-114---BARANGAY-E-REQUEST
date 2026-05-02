@@ -145,6 +145,39 @@
       .sidebar { width: 100%; height: auto; position: relative }
       .main-area { padding: 1.25rem 1rem }
     }
+
+    /* Action buttons */
+    .action-btns { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .btn-link { background: none; border: none; cursor: pointer; font-size: 0.82rem; font-weight: 600; padding: 0.28rem 0.65rem; border-radius: 0.375rem; transition: background 0.15s, color 0.15s; }
+    .btn-view   { color: #2563eb; } .btn-view:hover   { background: #dbeafe; }
+    .btn-edit   { color: #0891b2; } .btn-edit:hover   { background: #cffafe; }
+    .btn-cancel { color: #dc2626; } .btn-cancel:hover { background: #fee2e2; }
+
+    /* Edit/Cancel Modal */
+    .action-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 1100; align-items: center; justify-content: center; }
+    .action-modal-overlay.open { display: flex; }
+    .action-modal { background: #fff; border-radius: 1rem; padding: 2rem; width: 100%; max-width: 480px; box-shadow: 0 20px 60px rgba(0,0,0,0.18); position: relative; animation: slideUp 0.2s ease; }
+    @keyframes slideUp { from { transform: translateY(16px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .action-modal h3 { font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem; }
+    .action-modal .modal-close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 1.4rem; cursor: pointer; color: #6b7280; }
+    .action-modal label { display: block; font-size: 0.82rem; font-weight: 600; color: #374151; margin-bottom: 0.3rem; margin-top: 0.9rem; }
+    .action-modal input, .action-modal textarea, .action-modal select { width: 100%; padding: 0.55rem 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 0.875rem; color: #1e293b; background: #f9fafb; transition: border 0.15s; }
+    .action-modal input:focus, .action-modal textarea:focus, .action-modal select:focus { outline: none; border-color: #2563eb; background: #fff; }
+    .action-modal textarea { resize: vertical; min-height: 80px; }
+    .modal-actions { display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.4rem; }
+    .btn-save { padding: 0.55rem 1.4rem; background: #2563eb; color: #fff; border: none; border-radius: 0.5rem; font-weight: 600; font-size: 0.875rem; cursor: pointer; }
+    .btn-save:hover { background: #1d4ed8; }
+    .btn-discard { padding: 0.55rem 1.1rem; background: #f1f5f9; color: #374151; border: 1px solid #e2e8f0; border-radius: 0.5rem; font-weight: 600; font-size: 0.875rem; cursor: pointer; }
+    .btn-discard:hover { background: #e2e8f0; }
+    .cancel-warning { background: #fff7ed; border: 1px solid #fed7aa; border-radius: 0.5rem; padding: 0.9rem 1rem; margin-top: 0.75rem; font-size: 0.875rem; color: #92400e; }
+    .btn-confirm-cancel { background: #dc2626; } .btn-confirm-cancel:hover { background: #b91c1c; }
+
+    /* Toast */
+    #toast { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 2000; background: #1e293b; color: #fff; padding: 0.75rem 1.25rem; border-radius: 0.6rem; font-size: 0.875rem; font-weight: 500; box-shadow: 0 8px 24px rgba(0,0,0,0.2); display: none; animation: fadeIn 0.2s ease; }
+    #toast.show { display: block; }
+    #toast.success { background: #16a34a; }
+    #toast.error   { background: #dc2626; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity:1; transform: translateY(0); } }
   </style>
 </head>
 <body>
@@ -239,7 +272,7 @@
           <h1>My Requests</h1>
           <p>View and track all your document requests, blotter records, and complaints.</p>
           <p style="font-size: 0.85rem; color: #64748b; margin-top: 0.5rem">
-            Click <strong>View</strong> to see details and progress of each request.
+            Click <strong>View</strong> to see details. Pending requests can be <strong>edited</strong> or <strong>cancelled</strong>.
           </p>
         </div>
 
@@ -267,6 +300,7 @@
               <option value="ready">Ready for Pickup</option>
               <option value="released">Released</option>
               <option value="rejected">Rejected</option>
+              <option value="cancelled">Cancelled</option>
             </select>
           </div>
           <div class="filter-group">
@@ -297,7 +331,7 @@
                   <th>Tracking #</th>
                   <th>Status</th>
                   <th>Purpose/Description</th>
-                  <th>Action</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody id="requests-tbody">
@@ -334,6 +368,42 @@
     </div>
   </div>
 
+  <!-- Edit Modal -->
+  <div class="action-modal-overlay" id="edit-modal">
+    <div class="action-modal">
+      <button class="modal-close" onclick="closeEditModal()">×</button>
+      <h3>Edit Request</h3>
+      <p style="font-size:0.82rem;color:#64748b">Only the purpose / description can be edited while your request is pending.</p>
+      <input type="hidden" id="edit-request-id" />
+      <label for="edit-purpose">Purpose</label>
+      <input type="text" id="edit-purpose" placeholder="State your purpose…" />
+      <label for="edit-description">Description / Additional Notes</label>
+      <textarea id="edit-description" placeholder="Add any extra details…"></textarea>
+      <div class="modal-actions">
+        <button class="btn-discard" onclick="closeEditModal()">Discard</button>
+        <button class="btn-save" onclick="saveEdit()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cancel Modal -->
+  <div class="action-modal-overlay" id="cancel-modal">
+    <div class="action-modal">
+      <button class="modal-close" onclick="closeCancelModal()">×</button>
+      <h3>Cancel Request</h3>
+      <input type="hidden" id="cancel-request-id" />
+      <div class="cancel-warning">
+        This will mark your request as <strong>Cancelled</strong>. This action cannot be undone.
+      </div>
+      <label for="cancel-reason">Reason for cancellation</label>
+      <textarea id="cancel-reason" placeholder="Please provide a reason…" style="min-height:70px"></textarea>
+      <div class="modal-actions">
+        <button class="btn-discard" onclick="closeCancelModal()">Go Back</button>
+        <button class="btn-save btn-confirm-cancel" onclick="confirmCancel()">Yes, Cancel Request</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Notification Modal -->
   <div class="notification-modal" id="notification-modal" onclick="closeNotificationModal(event)">
     <div class="notification-panel" onclick="event.stopPropagation()">
@@ -348,13 +418,15 @@
     </div>
   </div>
 
-  <!-- Hidden dummy elements required by script.js notification helpers -->
   <span id="user-nav-name" style="display:none"></span>
   <div id="user-avatar" style="display:none"></div>
+  <div id="toast"></div>
 
   <script src="../js/script.js"></script>
   <script>
     var allRequests = [], filteredRequests = [], currentPage = 1, itemsPerPage = 5;
+    var EDITABLE_STATUSES = ['pending'];
+    var CANCELLABLE_STATUSES = ['pending'];
 
     window.toggleSection = function(id) {
       document.getElementById(id).classList.toggle("collapsed");
@@ -363,7 +435,8 @@
       document.getElementById(id).classList.remove("open");
     }
     window.doLogout = function() {
-      logAction(currentAdmin.id, "admin", "Logged out");
+      var u = getCurrentUser();
+      if (u) logAction(u.id, "admin", "Logged out");
       setCurrentUser(null);
       location.href = "../auth/login.html";
     };
@@ -388,11 +461,7 @@
 
     function loadRequests() {
       var user = getCurrentUser();
-      if (!user) {
-        document.getElementById('requests-tbody').innerHTML =
-          '<tr><td colspan="6">Please log in.</td></tr>';
-        return;
-      }
+      if (!user) { document.getElementById('requests-tbody').innerHTML = '<tr><td colspan="6">Please log in.</td></tr>'; return; }
       var requests = getData(STORAGE_KEYS.REQUESTS) || [];
       allRequests = requests
         .filter(function(r) { return r.userId === user.id; })
@@ -400,6 +469,13 @@
       filteredRequests = allRequests.slice();
       currentPage = 1;
       renderRequests();
+    }
+
+    function saveRequests(all) {
+      var user = getCurrentUser();
+      var allStored = getData(STORAGE_KEYS.REQUESTS) || [];
+      var others = allStored.filter(function(r) { return r.userId !== user.id; });
+      setData(STORAGE_KEYS.REQUESTS, others.concat(all));
     }
 
     function applyFilters() {
@@ -412,17 +488,11 @@
       filteredRequests = allRequests.filter(function(r) {
         if (typeFilter && r.type !== typeFilter && !(r.type || '').toLowerCase().includes(typeFilter.toLowerCase())) return false;
         if (statusFilter && r.status !== statusFilter) return false;
-        if (dateFrom) {
-          var created = new Date(r.createdAt).toISOString().split('T')[0];
-          if (created < dateFrom) return false;
-        }
-        if (dateTo) {
-          var created = new Date(r.createdAt).toISOString().split('T')[0];
-          if (created > dateTo) return false;
-        }
+        if (dateFrom) { var c = new Date(r.createdAt).toISOString().split('T')[0]; if (c < dateFrom) return false; }
+        if (dateTo)   { var c = new Date(r.createdAt).toISOString().split('T')[0]; if (c > dateTo)   return false; }
         if (searchTerm) {
-          var searchText = (r.id + ' ' + r.type + ' ' + (r.purpose || '') + (r.complaintDescription || '')).toLowerCase();
-          if (!searchText.includes(searchTerm)) return false;
+          var t = (r.id + ' ' + r.type + ' ' + (r.purpose || '') + (r.complaintDescription || '') + (r.incidentDescription || '')).toLowerCase();
+          if (!t.includes(searchTerm)) return false;
         }
         return true;
       });
@@ -431,11 +501,11 @@
     }
 
     function renderRequests() {
-      var tbody     = document.getElementById('requests-tbody');
-      var countEl   = document.getElementById('results-count');
+      var tbody      = document.getElementById('requests-tbody');
+      var countEl    = document.getElementById('results-count');
       var totalPages = Math.ceil(filteredRequests.length / itemsPerPage) || 1;
 
-      if (!filteredRequests || filteredRequests.length === 0) {
+      if (!filteredRequests.length) {
         tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:#6b7280">No requests found.</td></tr>';
         countEl.textContent = 'Showing 0 of 0';
         updatePagination(totalPages);
@@ -447,26 +517,29 @@
       var rows = '';
 
       pageItems.forEach(function(r) {
-        var dateStr = new Date(r.createdAt).toLocaleDateString('en-PH', {
-          year: 'numeric', month: 'short', day: 'numeric'
-        });
+        var dateStr = new Date(r.createdAt).toLocaleDateString('en-PH', { year: 'numeric', month: 'short', day: 'numeric' });
         var purpose = r.purpose || r.complaintDescription || r.incidentDescription || '-';
-        if (purpose.length > 40) purpose = purpose.substring(0, 40) + '...';
+        if (purpose.length > 40) purpose = purpose.substring(0, 40) + '\u2026';
 
-        var badgeClass = 'badge-pending';
-        if (r.status === 'approved')  badgeClass = 'badge-approved';
-        if (r.status === 'ready')     badgeClass = 'badge-ready';
-        if (r.status === 'released')  badgeClass = 'badge-released';
-        if (r.status === 'rejected')  badgeClass = 'badge-rejected';
+        var status = (r.status || 'pending').toLowerCase();
+        var badgeClass = { approved: 'badge-approved', ready: 'badge-ready', released: 'badge-released', rejected: 'badge-rejected', cancelled: 'badge-rejected' }[status] || 'badge-pending';
 
-        rows += '<tr>' +
-          '<td data-label="Document Type"><strong>' + (r.type || r.requestType || '-') + '</strong></td>' +
-          '<td data-label="Date Requested">' + dateStr + '</td>' +
-          '<td data-label="Tracking #">' + (r.trackingNumber || r.id) + '</td>' +
-          '<td data-label="Status"><span class="badge ' + badgeClass + '">' + (r.status || 'pending').toUpperCase() + '</span></td>' +
-          '<td data-label="Purpose">' + purpose + '</td>' +
-          '<td data-label="Action"><button type="button" class="btn-link" onclick="viewRequest(\'' + r.id + '\')">View</button></td>' +
-          '</tr>';
+        var canEdit   = EDITABLE_STATUSES.includes(status);
+        var canCancel = CANCELLABLE_STATUSES.includes(status);
+
+        var actionBtns = '<div class="action-btns"><button type="button" class="btn-link btn-view" onclick="viewRequest(\'' + r.id + '\')">View</button>';
+        if (canEdit)   actionBtns += '<button type="button" class="btn-link btn-edit" onclick="openEditModal(\'' + r.id + '\')">Edit</button>';
+        if (canCancel) actionBtns += '<button type="button" class="btn-link btn-cancel" onclick="openCancelModal(\'' + r.id + '\')">Cancel</button>';
+        actionBtns += '</div>';
+
+        rows += '<tr>'
+          + '<td data-label="Document Type"><strong>' + (r.type || '-') + '</strong></td>'
+          + '<td data-label="Date Requested">' + dateStr + '</td>'
+          + '<td data-label="Tracking #">' + r.id + '</td>'
+          + '<td data-label="Status"><span class="badge ' + badgeClass + '">' + status.toUpperCase() + '</span></td>'
+          + '<td data-label="Purpose">' + purpose + '</td>'
+          + '<td data-label="Actions">' + actionBtns + '</td>'
+          + '</tr>';
       });
 
       tbody.innerHTML = rows;
@@ -475,44 +548,34 @@
     }
 
     function updatePagination(totalPages) {
-      var prevBtn  = document.getElementById('prev-btn');
-      var nextBtn  = document.getElementById('next-btn');
-      var pageInfo = document.getElementById('page-info');
-      prevBtn.disabled = currentPage === 1;
-      nextBtn.disabled = currentPage === totalPages || totalPages <= 1;
-      pageInfo.textContent = 'Page ' + currentPage + ' of ' + totalPages;
+      document.getElementById('prev-btn').disabled = currentPage === 1;
+      document.getElementById('next-btn').disabled = currentPage === totalPages || totalPages <= 1;
+      document.getElementById('page-info').textContent = 'Page ' + currentPage + ' of ' + totalPages;
     }
-
-    function prevPage() {
-      if (currentPage > 1) { currentPage--; renderRequests(); }
-    }
-    function nextPage() {
-      var totalPages = Math.ceil(filteredRequests.length / itemsPerPage);
-      if (currentPage < totalPages) { currentPage++; renderRequests(); }
-    }
+    function prevPage() { if (currentPage > 1) { currentPage--; renderRequests(); } }
+    function nextPage() { var tp = Math.ceil(filteredRequests.length / itemsPerPage); if (currentPage < tp) { currentPage++; renderRequests(); } }
 
     function viewRequest(id) {
       var request = filteredRequests.find(function(r) { return r.id === id; });
       if (!request) return;
-      var status = request.status || 'pending';
+      var status = (request.status || 'pending').toLowerCase();
       var stages = getStages(status);
 
-      var details =
-        '<div class="modal-row"><div class="modal-key">Tracking #</div><div class="modal-val">' + (request.trackingNumber || request.id) + '</div></div>' +
-        '<div class="modal-row"><div class="modal-key">Type</div><div class="modal-val">' + (request.type || request.requestType) + '</div></div>' +
-        '<div class="modal-row"><div class="modal-key">Date Filed</div><div class="modal-val">' + new Date(request.createdAt).toLocaleDateString('en-PH') + '</div></div>' +
-        '<div class="modal-row"><div class="modal-key">Status</div><div class="modal-val"><span class="badge badge-' + status + '">' + status.toUpperCase() + '</span></div></div>';
+      var details = ''
+        + '<div class="modal-row"><div class="modal-key">Tracking #</div><div class="modal-val">' + request.id + '</div></div>'
+        + '<div class="modal-row"><div class="modal-key">Type</div><div class="modal-val">' + request.type + '</div></div>'
+        + '<div class="modal-row"><div class="modal-key">Date Filed</div><div class="modal-val">' + new Date(request.createdAt).toLocaleDateString('en-PH') + '</div></div>'
+        + '<div class="modal-row"><div class="modal-key">Status</div><div class="modal-val"><span class="badge badge-' + status + '">' + status.toUpperCase() + '</span></div></div>';
 
-      if (request.purpose)
-        details += '<div class="modal-row"><div class="modal-key">Purpose</div><div class="modal-val">' + request.purpose + '</div></div>';
-      if (request.complaintDescription)
-        details += '<div class="modal-row"><div class="modal-key">Description</div><div class="modal-val">' + request.complaintDescription + '</div></div>';
-      if (request.incidentDescription)
-        details += '<div class="modal-row"><div class="modal-key">Description</div><div class="modal-val">' + request.incidentDescription + '</div></div>';
-      if (request.fee !== undefined)
-        details += '<div class="modal-row"><div class="modal-key">Fee</div><div class="modal-val">₱' + (request.fee || 0) + '</div></div>';
+      if (request.purpose)              details += '<div class="modal-row"><div class="modal-key">Purpose</div><div class="modal-val">' + request.purpose + '</div></div>';
+      if (request.complaintDescription) details += '<div class="modal-row"><div class="modal-key">Description</div><div class="modal-val">' + request.complaintDescription + '</div></div>';
+      if (request.incidentDescription)  details += '<div class="modal-row"><div class="modal-key">Description</div><div class="modal-val">' + request.incidentDescription + '</div></div>';
+      if (request.cancelReason)         details += '<div class="modal-row"><div class="modal-key">Cancel Reason</div><div class="modal-val" style="color:#dc2626">' + request.cancelReason + '</div></div>';
+      if (request.editedByUser)         details += '<div class="modal-row"><div class="modal-key">Note</div><div class="modal-val" style="color:#d97706">Edited by requester</div></div>';
 
-      details += '<div class="tracker"><h4>Request Progress</h4><div class="track-steps">' + stages + '</div></div>';
+      if (status !== 'cancelled') {
+        details += '<div class="tracker"><h4>Request Progress</h4><div class="track-steps">' + stages + '</div></div>';
+      }
 
       document.getElementById('modal-content').innerHTML = details;
       document.getElementById('view-modal').classList.add('open');
@@ -523,43 +586,101 @@
       var statusOrder = { pending: 0, approved: 1, ready: 2, released: 3 };
       var currentIdx  = statusOrder[status] !== undefined ? statusOrder[status] : 0;
       var html = '';
-
       allStages.forEach(function(stage, idx) {
-        var isDone    = idx < currentIdx;
-        var isCurrent = idx === currentIdx;
-        var isLast    = idx === allStages.length - 1;
+        var isDone = idx < currentIdx, isCurrent = idx === currentIdx, isLast = idx === allStages.length - 1;
         html += '<div class="track-step"><div class="track-left">';
         html += '<div class="track-dot' + (isDone ? ' done' : '') + (isCurrent ? ' current' : '') + '"></div>';
         if (!isLast) html += '<div class="track-line' + (isDone ? ' done' : '') + '"></div>';
-        html += '</div><div class="track-content">';
-        html += '<h5>' + stage + '</h5><p>' + (isDone ? 'Completed' : isCurrent ? 'Processing...' : 'Pending') + '</p></div></div>';
+        html += '</div><div class="track-content"><h5>' + stage + '</h5><p>' + (isDone ? 'Completed' : isCurrent ? 'Processing\u2026' : 'Pending') + '</p></div></div>';
       });
       return html;
     }
+    function closeViewModal() { document.getElementById('view-modal').classList.remove('open'); }
 
-    function closeViewModal() {
-      document.getElementById('view-modal').classList.remove('open');
+    /* Edit */
+    function openEditModal(id) {
+      var request = allRequests.find(function(r) { return r.id === id; });
+      if (!request) return;
+      document.getElementById('edit-request-id').value  = id;
+      document.getElementById('edit-purpose').value     = request.purpose || '';
+      document.getElementById('edit-description').value = request.complaintDescription || request.incidentDescription || '';
+      document.getElementById('edit-modal').classList.add('open');
+    }
+    function closeEditModal() { document.getElementById('edit-modal').classList.remove('open'); }
+
+    function saveEdit() {
+      var id         = document.getElementById('edit-request-id').value;
+      var newPurpose = document.getElementById('edit-purpose').value.trim();
+      var newDesc    = document.getElementById('edit-description').value.trim();
+
+      if (!newPurpose && !newDesc) { showToast('Please fill in at least one field.', 'error'); return; }
+
+      var idx = allRequests.findIndex(function(r) { return r.id === id; });
+      if (idx === -1) return;
+
+      if (newPurpose) allRequests[idx].purpose = newPurpose;
+      if (newDesc)    { allRequests[idx].complaintDescription = newDesc; allRequests[idx].incidentDescription = newDesc; }
+      allRequests[idx].updatedAt    = new Date().toISOString();
+      allRequests[idx].editedByUser = true;
+
+      saveRequests(allRequests);
+      applyFilters();
+      closeEditModal();
+      showToast('Request updated successfully!', 'success');
+
+      var user = getCurrentUser();
+      if (user) logAction(user.id, 'admin', 'Edited own request ' + id, id);
+    }
+
+    /* Cancel */
+    function openCancelModal(id) {
+      document.getElementById('cancel-request-id').value = id;
+      document.getElementById('cancel-reason').value     = '';
+      document.getElementById('cancel-modal').classList.add('open');
+    }
+    function closeCancelModal() { document.getElementById('cancel-modal').classList.remove('open'); }
+
+    function confirmCancel() {
+      var id     = document.getElementById('cancel-request-id').value;
+      var reason = document.getElementById('cancel-reason').value.trim();
+      if (!reason) { showToast('Please provide a reason for cancellation.', 'error'); return; }
+
+      var idx = allRequests.findIndex(function(r) { return r.id === id; });
+      if (idx === -1) return;
+
+      allRequests[idx].status       = 'cancelled';
+      allRequests[idx].cancelReason = reason;
+      allRequests[idx].cancelledAt  = new Date().toISOString();
+      allRequests[idx].cancelledBy  = 'admin';
+
+      saveRequests(allRequests);
+      applyFilters();
+      closeCancelModal();
+      showToast('Request cancelled.', 'success');
+
+      var user = getCurrentUser();
+      if (user) logAction(user.id, 'admin', 'Cancelled own request ' + id + '. Reason: ' + reason, id);
+    }
+
+    /* Toast */
+    function showToast(msg, type) {
+      var t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className   = 'show ' + (type || '');
+      setTimeout(function() { t.className = ''; }, 3000);
     }
 
     function closeNotificationModal(event) {
       if (event && event.target !== event.currentTarget) return;
       document.getElementById('notification-modal').classList.remove('show');
     }
-
     function showMarkAllReadModal() {
       var user = getCurrentUser();
-      if (user && typeof markAllNotificationsRead === 'function') {
-        markAllNotificationsRead(user.id);
-        if (typeof loadNotificationBadge === 'function') loadNotificationBadge();
-      }
+      if (user && typeof markAllNotificationsRead === 'function') { markAllNotificationsRead(user.id); if (typeof loadNotificationBadge === 'function') loadNotificationBadge(); }
     }
-
     function showClearAllModal() {
       var user = getCurrentUser();
-      if (user && typeof clearNotifications === 'function') {
-        clearNotifications(user.id);
-        if (typeof loadNotificationBadge === 'function') loadNotificationBadge();
-      }
+      if (user && typeof clearNotifications === 'function') { clearNotifications(user.id); if (typeof loadNotificationBadge === 'function') loadNotificationBadge(); }
     }
 
     // confirm-modal may be injected by script.js globally
