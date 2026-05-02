@@ -1,1003 +1,560 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>User Profile | Barangay E-Request</title>
-    <link rel="stylesheet" href="../css/style.css" />
-    <link rel="stylesheet" href="../css/navbar.css" />
-    <link rel="stylesheet" href="../css/user-profile.css" />
-    <link rel="stylesheet" href="../css/user-dashboard.css" />
-  </head>
-  <body>
-    <div class="toast-msg" id="toast-msg">Profile saved successfully!</div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Profile | Barangay E-Request</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/navbar.css" />
+  <link rel="stylesheet" href="../css/user-profile.css" />
+  <link rel="stylesheet" href="../css/user-dashboard.css" />
+</head>
+<body>
+  <div class="toast-msg" id="toast-msg">Profile saved successfully!</div>
 
-    <!-- Change Password Modal -->
-    <div class="modal-overlay" id="password-modal">
-      <div class="modal">
-        <h3>Change Password</h3>
-        <p>Enter your current password and new password.</p>
-        <input
-          type="password"
-          id="current-password"
-          placeholder="Current Password"
-        />
-        <input type="password" id="new-password" placeholder="New Password" />
-        <input
-          type="password"
-          id="confirm-password"
-          placeholder="Confirm New Password"
-        />
-        <div class="btn-row">
-          <button class="btn-cancel" onclick="closePasswordModal()">
-            Cancel
-          </button>
-          <button class="btn-confirm" onclick="changePassword()">Change</button>
-        </div>
-        <p
-          style="
-            text-align: center;
-            margin-top: 0.75rem;
-            margin-bottom: 0;
-            font-size: 0.8rem;
-          "
-        >
-          <a
-            href="#"
-            onclick="
-              event.preventDefault();
-              closePasswordModal();
-              openForgotPasswordModal();
-            "
-            style="color: #2563eb; text-decoration: underline"
-            >Forgot Password?</a
-          >
-        </p>
+  <!-- Change Password Modal -->
+  <div class="modal-overlay" id="password-modal">
+    <div class="modal">
+      <h3>Change Password</h3>
+      <p>Enter your current password and new password.</p>
+      <input type="password" id="current-password" placeholder="Current Password" />
+      <input type="password" id="new-password" placeholder="New Password" />
+      <input type="password" id="confirm-password" placeholder="Confirm New Password" />
+      <div class="btn-row">
+        <button class="btn-cancel" onclick="closePasswordModal()">Cancel</button>
+        <button class="btn-confirm" onclick="changePassword()">Change</button>
       </div>
-    </div>
-
-    <!-- Forgot Password Modal -->
-    <div class="modal-overlay" id="forgot-modal">
-      <div class="modal">
-        <h3>Reset Password</h3>
-        <p>
-          Enter your email address and we'll send you a link to reset your
-          password.
-        </p>
-        <input type="email" id="reset-email" placeholder="Email Address" />
-        <div class="btn-row">
-          <button class="btn-cancel" onclick="closeForgotPasswordModal()">
-            Cancel
-          </button>
-          <button class="btn-confirm" onclick="sendResetLink()">
-            Send Link
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Civil Status Reason Modal -->
-    <div class="modal-overlay" id="reason-modal">
-      <div class="modal">
-        <h3>Reason for Change</h3>
-        <p>Please provide a reason for changing your civil status:</p>
-        <textarea
-          id="change-reason"
-          placeholder="e.g., Got married on January 15, 2026..."
-        ></textarea>
-        <div class="btn-row">
-          <button class="btn-cancel" onclick="closeReasonModal()">
-            Cancel
-          </button>
-          <button class="btn-confirm" onclick="confirmChange()">Confirm</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Change Photo Input (hidden) -->
-    <input
-      type="file"
-      id="photo-input"
-      accept="image/*"
-      style="display: none"
-      onchange="changePhoto(event)"
-    />
-
-    <nav class="navbar">
-      <a href="user-dashboard.html" class="navbar-brand">Barangay E-Request</a>
-      <input
-        type="checkbox"
-        id="nav-toggle"
-        class="nav-toggle"
-        aria-hidden="true"
-      />
-      <ul class="navbar-nav">
-        <li><a href="user-dashboard.html">Dashboard</a></li>
-        <li><a href="request.html">New Request</a></li>
-        <li><a href="blotter-complaint.html">Blotter & Complaint</a></li>
-        <li><a href="my-requests.html">My Requests</a></li>
-        <li><a href="user-profile.html" class="active">Profile</a></li>
-      </ul>
-      <div class="navbar-right">
-        <button
-          class="notification-bell"
-          id="notification-bell"
-          onclick="showNotifications()"
-        >
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-          </svg>
-          <span
-            class="notification-badge"
-            id="notification-badge"
-            style="display: none"
-            >0</span
-          >
-        </button>
-        <div class="navbar-user">
-          <div class="avatar" id="user-avatar">JD</div>
-          <span class="navbar-username" id="user-nav-name">Loading...</span>
-        </div>
-        <label for="nav-toggle" class="hamburger"
-          ><span></span><span></span><span></span
-        ></label>
-      </div>
-    </nav>
-
-    <main class="profile-content">
-      <div class="dashboard-header" style="margin-bottom: 1.25rem">
-        <h1>My Profile</h1>
-        <p>Update your personal information and account settings.</p>
-      </div>
-
-      <div class="profile-grid">
-        <div class="profile-summary">
-          <div class="profile-avatar">
-            <div class="avatar avatar-large" id="profile-avatar">JD</div>
-          </div>
-          <button
-            type="button"
-            class="change-photo-btn"
-            onclick="document.getElementById('photo-input').click()"
-          >
-            Change Photo
-          </button>
-          <h3 id="profile-name-display">Loading...</h3>
-          <p id="profile-username-display">@username</p>
-          <p id="profile-email-display">email@example.com</p>
-          <p class="member-since">
-            Member since <span id="member-since">2026</span>
-          </p>
-        </div>
-
-        <div class="profile-form">
-          <h3>Account</h3>
-          <div class="field-row" style="align-items: flex-end">
-            <div class="form-field" style="margin-bottom: 0">
-              <label>Username</label>
-              <input type="text" id="username" />
-            </div>
-            <div class="form-field" style="margin-bottom: 0; flex: 0 0 200px">
-              <label>Password</label>
-              <div style="display: flex; align-items: center; gap: 0.5rem">
-                <input
-                  type="password"
-                  value="••••••••"
-                  id="password-display"
-                  readonly
-                  style="background: #e5e7eb; cursor: default"
-                />
-                <button
-                  type="button"
-                  class="btn-password"
-                  onclick="openPasswordModal()"
-                >
-                  Change
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <h3>Personal Information</h3>
-          <div class="field-row">
-            <div class="form-field">
-              <label>Last Name <span class="field-note">Editable</span></label>
-              <input type="text" id="lastName" />
-            </div>
-            <div class="form-field">
-              <label>First Name <span class="field-note">Editable</span></label>
-              <input type="text" id="firstName" />
-            </div>
-          </div>
-          <div class="field-row">
-            <div class="form-field">
-              <label>Middle Name</label>
-              <input type="text" id="middleName" />
-            </div>
-            <div class="form-field">
-              <label>Suffix</label>
-              <input type="text" id="suffix" placeholder="Jr., Sr." />
-            </div>
-          </div>
-          <div class="field-row">
-            <div class="form-field">
-              <label
-                >Date of Birth
-                <span class="field-note read-only">Read-only</span></label
-              >
-              <input
-                type="date"
-                id="dob"
-                readonly
-                style="background: #e5e7eb"
-              />
-            </div>
-            <div class="form-field">
-              <label
-                >Gender
-                <span class="field-note read-only">Read-only</span></label
-              >
-              <select id="gender" disabled style="background: #e5e7eb">
-                <option value="">Select</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-field">
-            <label>Civil Status <span class="field-note">Editable</span></label>
-            <select id="civilStatus" onchange="checkCivilStatusChange()">
-              <option value="Single">Single</option>
-              <option value="Married">Married</option>
-              <option value="Widowed">Widowed</option>
-              <option value="Divorced">Divorced</option>
-              <option value="Separated">Separated</option>
-            </select>
-          </div>
-          <div class="form-field" id="reason-field" style="display: none">
-            <label>Reason for Change</label>
-            <textarea id="civilStatusReason" rows="2" readonly></textarea>
-          </div>
-
-          <h3>Address</h3>
-          <div class="field-row">
-            <div class="form-field">
-              <label
-                >House/Block # <span class="field-note">Editable</span></label
-              >
-              <input type="text" id="houseNumber" />
-            </div>
-            <div class="form-field">
-              <label>Purok <span class="field-note">Editable</span></label>
-              <input type="text" id="purok" />
-            </div>
-          </div>
-          <div class="field-row">
-            <div class="form-field">
-              <label>Street <span class="field-note">Editable</span></label>
-              <input type="text" id="street" />
-            </div>
-            <div class="form-field">
-              <label>Landmark <span class="field-note">Editable</span></label>
-              <input type="text" id="landmark" />
-            </div>
-          </div>
-
-          <h3>Contact</h3>
-          <div class="field-row">
-            <div class="form-field">
-              <label>Email <span class="field-note">Editable</span></label>
-              <input type="email" id="email" />
-            </div>
-            <div class="form-field">
-              <label>Mobile <span class="field-note">Editable</span></label>
-              <input type="tel" id="phone" />
-            </div>
-          </div>
-          <div class="form-field">
-            <label>Emergency Contact</label>
-            <input type="tel" id="emergencyContact" />
-          </div>
-
-          <h3>
-            ID Information <span class="field-note read-only">Read-only</span>
-          </h3>
-          <div class="field-row">
-            <div class="form-field">
-              <label>ID Type</label>
-              <input
-                type="text"
-                id="idType"
-                readonly
-                style="background: #e5e7eb"
-              />
-            </div>
-            <div class="form-field">
-              <label>ID Number</label>
-              <input
-                type="text"
-                id="idNumber"
-                readonly
-                style="background: #e5e7eb"
-              />
-            </div>
-          </div>
-          <div class="field-row">
-            <div class="form-field">
-              <label>ID Front</label>
-              <div id="id-front-preview" class="id-preview"></div>
-            </div>
-            <div class="form-field">
-              <label>ID Back</label>
-              <div id="id-back-preview" class="id-preview"></div>
-            </div>
-          </div>
-          <p class="field-note-box">
-            Your ID information cannot be changed. Contact the barangay office
-            for updates.
-          </p>
-
-          <div class="section-actions">
-            <button type="button" class="btn-logout" onclick="logout()">
-              Log Out
-            </button>
-            <button type="button" class="btn-save" onclick="saveProfile()">
-              Save Changes
-            </button>
-          </div>
-        </div>
-      </div>
-    </main>
-
-    <!-- Notification Modal -->
-    <div
-      class="notification-modal"
-      id="notification-modal"
-      onclick="closeNotificationModal(event)"
-    >
-      <div class="notification-panel" onclick="event.stopPropagation()">
-        <div class="notification-panel-header">
-          <h3>Notifications</h3>
-          <div>
-            <button onclick="showMarkAllReadModal()">Mark all read</button>
-            <button onclick="showClearAllModal()" style="margin-left: 0.75rem">
-              Clear all
-            </button>
-          </div>
-        </div>
-        <div class="notification-list" id="notification-list"></div>
-      </div>
-    </div>
-
-    <footer class="footer">
-      <p>&copy; 2026 Barangay Records System. All rights reserved.</p>
-    </footer>
-
-    <!-- Notification Modal -->
-    <div
-      class="notification-modal"
-      id="notification-modal"
-      onclick="closeNotificationModal(event)"
-    >
-      <div class="notification-panel" onclick="event.stopPropagation()">
-        <div class="notification-panel-header">
-          <h3>Notifications</h3>
-          <div>
-            <button onclick="showMarkAllReadModal()">Mark all read</button>
-            <button onclick="showClearAllModal()" style="margin-left: 0.75rem">
-              Clear all
-            </button>
-          </div>
-        </div>
-        <div class="notification-list" id="notification-list"></div>
-      </div>
-    </div>
-
-    <!-- Confirm Modal -->
-<div class="modal-overlay" id="confirm-modal">
-  <div class="modal">
-    <h3 id="confirm-title">Confirm</h3>
-    <p id="confirm-message">Are you sure?</p>
-    <div class="btn-row">
-      <button class="btn-cancel" onclick="closeConfirmModal()">Cancel</button>
-      <button class="btn-confirm" id="confirm-yes-btn">Yes</button>
+      <p style="text-align:center;margin-top:0.75rem;font-size:0.8rem">
+        <a href="#" onclick="event.preventDefault();closePasswordModal();openForgotPasswordModal()" style="color:#2563eb;text-decoration:underline">Forgot Password?</a>
+      </p>
     </div>
   </div>
-</div>
 
-    <script src="../js/script.js"></script>
-    <script>
-      var originalCivilStatus = "";
-      var pendingCivilStatus = "";
+  <!-- Forgot Password Modal -->
+  <div class="modal-overlay" id="forgot-modal">
+    <div class="modal">
+      <h3>Reset Password</h3>
+      <p>Enter your email address and we'll send you a link to reset your password.</p>
+      <input type="email" id="reset-email" placeholder="Email Address" />
+      <div class="btn-row">
+        <button class="btn-cancel" onclick="closeForgotPasswordModal()">Cancel</button>
+        <button class="btn-confirm" onclick="sendResetLink()">Send Link</button>
+      </div>
+    </div>
+  </div>
 
-      document.addEventListener("DOMContentLoaded", function () {
-        var user = getCurrentUser();
-        if (!user) {
-          window.location.href = "../auth/login.html";
-          return;
-        }
+  <!-- Civil Status Reason Modal -->
+  <div class="modal-overlay" id="reason-modal">
+    <div class="modal">
+      <h3>Reason for Change</h3>
+      <p>Please provide a reason for changing your civil status:</p>
+      <textarea id="change-reason" placeholder="e.g., Got married on January 15, 2026..."></textarea>
+      <div class="btn-row">
+        <button class="btn-cancel" onclick="closeReasonModal()">Cancel</button>
+        <button class="btn-confirm" onclick="confirmChange()">Confirm</button>
+      </div>
+    </div>
+  </div>
 
-        loadUserInfo();
-        loadProfileData();
-        loadNotificationBadge();
-      });
+  <!-- Confirm Modal -->
+  <div class="modal-overlay" id="confirm-modal">
+    <div class="modal">
+      <h3 id="confirm-title">Confirm</h3>
+      <p id="confirm-message">Are you sure?</p>
+      <div class="btn-row">
+        <button class="btn-cancel" onclick="closeConfirmModal()">Cancel</button>
+        <button class="btn-confirm" id="confirm-yes-btn">Yes</button>
+      </div>
+    </div>
+  </div>
 
-      document
-        .getElementById("confirm-modal")
-        .addEventListener("click", function (e) {
-          if (e.target === this) closeConfirmModal();
-        });
+  <input type="file" id="photo-input" accept="image/*" style="display:none" onchange="changePhoto(event)" />
 
-      function getInitials(name) {
-        if (!name) return "U";
-        return name
-          .split(" ")
-          .map(function (n) {
-            return n[0];
-          })
-          .join("")
-          .substring(0, 2)
-          .toUpperCase();
+  <nav class="navbar">
+    <a href="user-dashboard.html" class="navbar-brand">Barangay E-Request</a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-hidden="true" />
+    <ul class="navbar-nav">
+      <li><a href="user-dashboard.html">Dashboard</a></li>
+      <li><a href="request.html">New Request</a></li>
+      <li><a href="blotter-complaint.html">Blotter & Complaint</a></li>
+      <li><a href="my-requests.html">My Requests</a></li>
+      <li><a href="user-profile.html" class="active">Profile</a></li>
+    </ul>
+    <div class="navbar-right">
+      <button class="notification-bell" id="notification-bell" onclick="showNotifications()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+        </svg>
+        <span class="notification-badge" id="notification-badge" style="display:none">0</span>
+      </button>
+      <div class="navbar-user">
+        <div class="avatar" id="user-avatar">JD</div>
+        <span class="navbar-username" id="user-nav-name">Loading...</span>
+      </div>
+      <label for="nav-toggle" class="hamburger"><span></span><span></span><span></span></label>
+    </div>
+  </nav>
+
+  <main class="profile-content">
+    <div class="dashboard-header" style="margin-bottom:1.25rem">
+      <h1>My Profile</h1>
+      <p>Update your personal information and account settings.</p>
+    </div>
+
+    <div class="profile-grid">
+      <div class="profile-summary">
+        <div class="profile-avatar">
+          <div class="avatar avatar-large" id="profile-avatar">JD</div>
+        </div>
+        <button type="button" class="change-photo-btn" onclick="document.getElementById('photo-input').click()">Change Photo</button>
+        <h3 id="profile-name-display">Loading...</h3>
+        <p id="profile-username-display">@username</p>
+        <p id="profile-email-display">email@example.com</p>
+        <p class="member-since">Member since <span id="member-since">2026</span></p>
+      </div>
+
+      <div class="profile-form">
+        <h3>Account</h3>
+        <div class="field-row" style="align-items:flex-end">
+          <div class="form-field" style="margin-bottom:0">
+            <label>Username</label>
+            <input type="text" id="username" />
+          </div>
+          <div class="form-field" style="margin-bottom:0;flex:0 0 200px">
+            <label>Password</label>
+            <div style="display:flex;align-items:center;gap:0.5rem">
+              <input type="password" value="••••••••" id="password-display" readonly style="background:#e5e7eb;cursor:default" />
+              <button type="button" class="btn-password" onclick="openPasswordModal()">Change</button>
+            </div>
+          </div>
+        </div>
+
+        <h3>Personal Information</h3>
+        <div class="field-row">
+          <div class="form-field">
+            <label>Last Name <span class="field-note">Editable</span></label>
+            <input type="text" id="lastName" />
+          </div>
+          <div class="form-field">
+            <label>First Name <span class="field-note">Editable</span></label>
+            <input type="text" id="firstName" />
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="form-field">
+            <label>Middle Name</label>
+            <input type="text" id="middleName" />
+          </div>
+          <div class="form-field">
+            <label>Suffix</label>
+            <input type="text" id="suffix" placeholder="Jr., Sr." />
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="form-field">
+            <label>Date of Birth <span class="field-note read-only">Read-only</span></label>
+            <input type="date" id="dob" readonly style="background:#e5e7eb" />
+          </div>
+          <div class="form-field">
+            <label>Gender <span class="field-note read-only">Read-only</span></label>
+            <select id="gender" disabled style="background:#e5e7eb">
+              <option value="">Select</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-field">
+          <label>Civil Status <span class="field-note">Editable</span></label>
+          <select id="civilStatus" onchange="checkCivilStatusChange()">
+            <option value="Single">Single</option>
+            <option value="Married">Married</option>
+            <option value="Widowed">Widowed</option>
+            <option value="Divorced">Divorced</option>
+            <option value="Separated">Separated</option>
+          </select>
+        </div>
+        <div class="form-field" id="reason-field" style="display:none">
+          <label>Reason for Change</label>
+          <textarea id="civilStatusReason" rows="2" readonly></textarea>
+        </div>
+
+        <h3>Address</h3>
+        <div class="field-row">
+          <div class="form-field">
+            <label>House/Block # <span class="field-note">Editable</span></label>
+            <input type="text" id="houseNumber" />
+          </div>
+          <div class="form-field">
+            <label>Purok <span class="field-note">Editable</span></label>
+            <input type="text" id="purok" />
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="form-field">
+            <label>Street <span class="field-note">Editable</span></label>
+            <input type="text" id="street" />
+          </div>
+          <div class="form-field">
+            <label>Landmark <span class="field-note">Editable</span></label>
+            <input type="text" id="landmark" />
+          </div>
+        </div>
+
+        <h3>Contact</h3>
+        <div class="field-row">
+          <div class="form-field">
+            <label>Email <span class="field-note">Editable</span></label>
+            <input type="email" id="email" />
+          </div>
+          <div class="form-field">
+            <label>Mobile <span class="field-note">Editable</span></label>
+            <input type="tel" id="phone" />
+          </div>
+        </div>
+        <div class="form-field">
+          <label>Emergency Contact</label>
+          <input type="tel" id="emergencyContact" />
+        </div>
+
+        <h3>ID Information <span class="field-note read-only">Read-only</span></h3>
+        <div class="field-row">
+          <div class="form-field">
+            <label>ID Type</label>
+            <input type="text" id="idType" readonly style="background:#e5e7eb" />
+          </div>
+          <div class="form-field">
+            <label>ID Number</label>
+            <input type="text" id="idNumber" readonly style="background:#e5e7eb" />
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="form-field">
+            <label>ID Front</label>
+            <div id="id-front-preview" class="id-preview"></div>
+          </div>
+          <div class="form-field">
+            <label>ID Back</label>
+            <div id="id-back-preview" class="id-preview"></div>
+          </div>
+        </div>
+        <p class="field-note-box">Your ID information cannot be changed. Contact the barangay office for updates.</p>
+
+        <div class="section-actions">
+          <button type="button" class="btn-logout" onclick="logout()">Log Out</button>
+          <button type="button" class="btn-save" onclick="saveProfile()">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Notification Modal (single copy) -->
+  <div class="notification-modal" id="notification-modal" onclick="closeNotificationModal(event)">
+    <div class="notification-panel" onclick="event.stopPropagation()">
+      <div class="notification-panel-header">
+        <h3>Notifications</h3>
+        <div>
+          <button onclick="showMarkAllReadModal()">Mark all read</button>
+          <button onclick="showClearAllModal()" style="margin-left:0.75rem">Clear all</button>
+        </div>
+      </div>
+      <div class="notification-list" id="notification-list"></div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>&copy; 2026 Barangay Records System. All rights reserved.</p>
+  </footer>
+
+  <script src="../js/script.js"></script>
+  <script>
+    var originalCivilStatus = '';
+    var pendingCivilStatus = '';
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var user = getCurrentUser();
+      if (!user) { location.href = '../auth/login.html'; return; }
+      loadUserInfo();
+      loadProfileData();
+      if (typeof loadNotificationBadge === 'function') loadNotificationBadge();
+    });
+
+    document.getElementById('confirm-modal').addEventListener('click', function(e) {
+      if (e.target === this) closeConfirmModal();
+    });
+
+    function getInitials(name) {
+      if (!name) return 'U';
+      return name.split(' ').map(function(n){ return n[0]; }).join('').substring(0,2).toUpperCase();
+    }
+
+    function loadUserInfo() {
+      var user = getCurrentUser();
+      if (!user) return;
+      var initials = getInitials(user.fullName);
+      document.getElementById('user-nav-name').textContent = user.fullName || 'User';
+      document.getElementById('user-avatar').textContent = initials;
+      var avatarEl = document.getElementById('profile-avatar');
+      if (user.photo) {
+        avatarEl.style.backgroundImage = 'url(' + user.photo + ')';
+        avatarEl.style.backgroundSize = 'cover';
+        avatarEl.style.backgroundPosition = 'center';
+        avatarEl.textContent = '';
+      } else {
+        avatarEl.textContent = initials;
+      }
+    }
+
+    function loadProfileData() {
+      var user = getCurrentUser();
+      var allUsers = getData(STORAGE_KEYS.USERS);
+      if (user && allUsers.length > 0) {
+        var stored = allUsers.find(function(u){ return u.id === user.id; });
+        if (stored) { user = stored; setCurrentUser(user); }
+      }
+      if (!user) return;
+
+      var residents = getData(STORAGE_KEYS.RESIDENTS) || [];
+      var resident = residents.find(function(r){ return r.userId === user.id; });
+
+      var civilStatus = user.civilStatus || (resident && resident.civilStatus) || 'Single';
+
+      document.getElementById('profile-name-display').textContent = user.fullName || 'User';
+      document.getElementById('profile-username-display').textContent = '@' + (user.username || 'user');
+      document.getElementById('profile-email-display').textContent = user.email || 'No email';
+      document.getElementById('member-since').textContent = user.createdAt
+        ? new Date(user.createdAt).toLocaleDateString('en-PH', { year:'numeric', month:'long' }) : '2026';
+
+      document.getElementById('username').value = user.username || '';
+      document.getElementById('firstName').value = user.firstName || (resident && resident.firstName) || '';
+      document.getElementById('lastName').value = user.lastName || (resident && resident.lastName) || '';
+      document.getElementById('middleName').value = user.middleName || (resident && resident.middleName) || '';
+      document.getElementById('suffix').value = user.suffix || (resident && resident.suffix) || '';
+      document.getElementById('dob').value = user.birthdate || (resident && resident.birthdate) || '';
+      document.getElementById('gender').value = user.sex || user.gender || (resident && resident.sex) || '';
+      document.getElementById('civilStatus').value = civilStatus;
+      originalCivilStatus = civilStatus;
+
+      document.getElementById('houseNumber').value = user.houseNumber || (resident && (resident.houseNumber || (resident.address && resident.address.houseNumber))) || '';
+      document.getElementById('purok').value = user.purok || (resident && (resident.purok || (resident.address && resident.address.purok))) || '';
+      document.getElementById('street').value = user.street || (resident && (resident.street || (resident.address && resident.address.street))) || '';
+      document.getElementById('landmark').value = user.landmark || (resident && (resident.landmark || (resident.address && resident.address.landmark))) || '';
+      document.getElementById('email').value = user.email || '';
+      document.getElementById('phone').value = user.phone || '';
+      document.getElementById('emergencyContact').value = user.altContact || user.emergencyContact || (resident && resident.contact && resident.contact.altContact) || '';
+
+      if (user.idInfo) {
+        document.getElementById('idType').value = user.idInfo.type || '';
+        document.getElementById('idNumber').value = user.idInfo.number || '';
+        if (user.idInfo.front) document.getElementById('id-front-preview').style.backgroundImage = 'url(' + user.idInfo.front + ')';
+        if (user.idInfo.back) document.getElementById('id-back-preview').style.backgroundImage = 'url(' + user.idInfo.back + ')';
       }
 
-      function loadUserInfo() {
-        var user = getCurrentUser();
-        if (user) {
-          document.getElementById("user-nav-name").textContent =
-            user.fullName || "User";
-          var initials = getInitials(user.fullName);
-          document.getElementById("user-avatar").textContent = initials;
-
-          // Load profile picture
-          var avatarEl = document.getElementById("profile-avatar");
-          if (user.photo) {
-            avatarEl.style.backgroundImage = "url(" + user.photo + ")";
-            avatarEl.style.backgroundSize = "cover";
-            avatarEl.style.backgroundPosition = "center";
-            avatarEl.textContent = "";
-          } else {
-            avatarEl.textContent = initials;
-          }
+      if (user.changeHistory && user.changeHistory.length > 0) {
+        var last = user.changeHistory[user.changeHistory.length - 1];
+        if (last.field === 'civilStatus') {
+          document.getElementById('reason-field').style.display = 'block';
+          document.getElementById('civilStatusReason').value = last.reason;
         }
       }
+    }
 
-      function getInitials(name) {
-        if (!name) return "U";
-        return name
-          .split(" ")
-          .map(function (n) {
-            return n[0];
-          })
-          .join("")
-          .substring(0, 2)
-          .toUpperCase();
-      }
-
-      function loadProfileData() {
+    function changePhoto(event) {
+      var file = event.target.files[0];
+      if (!file) return;
+      var reader = new FileReader();
+      reader.onload = function(e) {
         var user = getCurrentUser();
-        var userId = user ? user.id : null;
-        var allUsers = getData(STORAGE_KEYS.USERS);
-        if (userId && allUsers.length > 0) {
-          var storedUser = allUsers.find(function (u) {
-            return u.id === userId;
-          });
-          if (storedUser) {
-            user = storedUser;
-            setCurrentUser(user);
-          }
-        }
         if (!user) return;
-
-        var residents = getData(STORAGE_KEYS.RESIDENTS) || [];
-        var resident = residents.find(function (r) {
-          return r.userId === user.id;
-        });
-
-        var sex = user.sex || user.gender || (resident && resident.sex) || "";
-        var houseNumber =
-          user.houseNumber ||
-          (resident && resident.houseNumber) ||
-          (resident && resident.address && resident.address.houseNumber) ||
-          "";
-        var purok =
-          user.purok ||
-          (resident && resident.purok) ||
-          (resident && resident.address && resident.address.purok) ||
-          "";
-        var street =
-          user.street ||
-          (resident && resident.street) ||
-          (resident && resident.address && resident.address.street) ||
-          "";
-        var landmark =
-          user.landmark ||
-          (resident && resident.landmark) ||
-          (resident && resident.address && resident.address.landmark) ||
-          "";
-        var civilStatus =
-          user.civilStatus || (resident && resident.civilStatus) || "Single";
-
-        document.getElementById("profile-name-display").textContent =
-          user.fullName || "User";
-        document.getElementById("profile-username-display").textContent =
-          "@" + (user.username || "user");
-        document.getElementById("profile-email-display").textContent =
-          user.email || "No email";
-        document.getElementById("member-since").textContent = user.createdAt
-          ? new Date(user.createdAt).toLocaleDateString("en-PH", {
-              year: "numeric",
-              month: "long",
-            })
-          : "2026";
-
-        document.getElementById("username").value = user.username || "";
-        document.getElementById("firstName").value =
-          user.firstName || (resident && resident.firstName) || "";
-        document.getElementById("lastName").value =
-          user.lastName || (resident && resident.lastName) || "";
-        document.getElementById("middleName").value =
-          user.middleName || (resident && resident.middleName) || "";
-        document.getElementById("suffix").value =
-          user.suffix || (resident && resident.suffix) || "";
-        document.getElementById("dob").value =
-          user.birthdate || (resident && resident.birthdate) || "";
-        document.getElementById("gender").value = sex;
-        document.getElementById("civilStatus").value = civilStatus;
-        originalCivilStatus = civilStatus;
-
-        document.getElementById("houseNumber").value = houseNumber;
-        document.getElementById("purok").value = purok;
-        document.getElementById("street").value = street;
-        document.getElementById("landmark").value = landmark;
-
-        document.getElementById("email").value = user.email || "";
-        document.getElementById("phone").value = user.phone || "";
-        document.getElementById("emergencyContact").value =
-          user.altContact ||
-          user.emergencyContact ||
-          (resident && resident.contact && resident.contact.altContact) ||
-          "";
-
-        if (user.idInfo) {
-          document.getElementById("idType").value = user.idInfo.type || "";
-          document.getElementById("idNumber").value = user.idInfo.number || "";
-          var frontPreview = document.getElementById("id-front-preview");
-          var backPreview = document.getElementById("id-back-preview");
-          if (user.idInfo.front) {
-            frontPreview.style.backgroundImage =
-              "url(" + user.idInfo.front + ")";
-          }
-          if (user.idInfo.back) {
-            backPreview.style.backgroundImage = "url(" + user.idInfo.back + ")";
-          }
-        }
-
-        if (user.changeHistory && user.changeHistory.length > 0) {
-          var lastChange = user.changeHistory[user.changeHistory.length - 1];
-          if (lastChange.field === "civilStatus") {
-            document.getElementById("reason-field").style.display = "block";
-            document.getElementById("civilStatusReason").value =
-              lastChange.reason;
-          }
-        }
-      }
-
-      function changePhoto(event) {
-        var file = event.target.files[0];
-        if (!file) return;
-
-        var reader = new FileReader();
-        reader.onload = function (e) {
-          var user = getCurrentUser();
-          if (user) {
-            user.photo = e.target.result;
-            setCurrentUser(user);
-
-            var users = getData(STORAGE_KEYS.USERS) || [];
-            var idx = users.findIndex(function (u) {
-              return u.id === user.id;
-            });
-            if (idx >= 0) {
-              users[idx] = user;
-              setData(STORAGE_KEYS.USERS, users);
-            }
-
-            var residents = getData(STORAGE_KEYS.RESIDENTS) || [];
-            var rIdx = residents.findIndex(function (r) {
-              return r.userId === user.id;
-            });
-            if (rIdx >= 0) {
-              residents[rIdx].profilePic = e.target.result;
-              setData(STORAGE_KEYS.RESIDENTS, residents);
-            }
-
-            var avatarEl = document.getElementById("profile-avatar");
-            avatarEl.style.backgroundImage = "url(" + user.photo + ")";
-            avatarEl.style.backgroundSize = "cover";
-            avatarEl.style.backgroundPosition = "center";
-            avatarEl.textContent = "";
-
-            var navAvatar = document.getElementById("user-avatar");
-            navAvatar.style.backgroundImage = "url(" + user.photo + ")";
-            navAvatar.style.backgroundSize = "cover";
-            navAvatar.style.backgroundPosition = "center";
-            navAvatar.textContent = "";
-
-            showToast("Profile photo updated!");
-          }
-        };
-        reader.readAsDataURL(file);
-      }
-
-      function openPasswordModal() {
-        document.getElementById("password-modal").classList.add("active");
-      }
-      function closePasswordModal() {
-        document.getElementById("password-modal").classList.remove("active");
-        document.getElementById("current-password").value = "";
-        document.getElementById("new-password").value = "";
-        document.getElementById("confirm-password").value = "";
-      }
-
-      function changePassword() {
-        var current = document.getElementById("current-password").value;
-        var newPass = document.getElementById("new-password").value;
-        var confirm = document.getElementById("confirm-password").value;
-        var user = getCurrentUser();
-
-        if (!current || !newPass || !confirm) {
-          alert("Please fill in all fields");
-          return;
-        }
-        if (current !== (user.password || "")) {
-          alert("Current password is incorrect");
-          return;
-        }
-        if (newPass !== confirm) {
-          alert("New passwords do not match");
-          return;
-        }
-        if (newPass.length < 6) {
-          alert("Password must be at least 6 characters");
-          return;
-        }
-
-        user.password = newPass;
-        var users = getData(STORAGE_KEYS.USERS) || [];
-        var idx = users.findIndex(function (u) {
-          return u.id === user.id;
-        });
-        if (idx >= 0) {
-          users[idx] = user;
-          setData(STORAGE_KEYS.USERS, users);
-        }
+        user.photo = e.target.result;
         setCurrentUser(user);
-
-        closePasswordModal();
-        showToast("Password changed successfully!");
-      }
-
-      function checkCivilStatusChange() {
-        var newStatus = document.getElementById("civilStatus").value;
-        if (
-          newStatus !== originalCivilStatus &&
-          (newStatus === "Married" ||
-            newStatus === "Widowed" ||
-            newStatus === "Divorced")
-        ) {
-          pendingCivilStatus = newStatus;
-          document.getElementById("reason-modal").classList.add("active");
-        }
-      }
-
-      function closeReasonModal() {
-        document.getElementById("reason-modal").classList.remove("active");
-        document.getElementById("change-reason").value = "";
-        document.getElementById("civilStatus").value = originalCivilStatus;
-      }
-
-      function confirmChange() {
-        var reason = document.getElementById("change-reason").value.trim();
-        if (!reason) {
-          alert("Please provide a reason");
-          return;
-        }
-
-        var user = getCurrentUser();
-        if (user) {
-          if (!user.changeHistory) user.changeHistory = [];
-          user.changeHistory.push({
-            field: "civilStatus",
-            from: originalCivilStatus,
-            to: pendingCivilStatus,
-            reason: reason,
-            date: new Date().toISOString(),
-          });
-        }
-
-        document.getElementById("reason-modal").classList.remove("active");
-        document.getElementById("change-reason").value = "";
-        document.getElementById("reason-field").style.display = "block";
-        document.getElementById("civilStatusReason").value = reason;
-      }
-
-      function saveProfile() {
-        document.getElementById("confirm-title").textContent = "Save Changes";
-        document.getElementById("confirm-message").textContent =
-          "Are you sure you want to save these changes?";
-        document.getElementById("confirm-yes-btn").onclick = function () {
-          doSaveProfile();
-          closeConfirmModal();
-        };
-        document.getElementById("confirm-modal").classList.add("active");
-      }
-
-      function doSaveProfile() {
-        var user = getCurrentUser();
-        if (!user) return;
-
-        user.username = document.getElementById("username").value.trim();
-        user.firstName = document.getElementById("firstName").value.trim();
-        user.lastName = document.getElementById("lastName").value.trim();
-        user.middleName = document.getElementById("middleName").value.trim();
-        user.suffix = document.getElementById("suffix").value.trim();
-        user.civilStatus = document.getElementById("civilStatus").value;
-
-        user.houseNumber = document.getElementById("houseNumber").value.trim();
-        user.purok = document.getElementById("purok").value.trim();
-        user.street = document.getElementById("street").value.trim();
-        user.landmark = document.getElementById("landmark").value.trim();
-
-        user.email = document.getElementById("email").value.trim();
-        user.phone = document.getElementById("phone").value.trim();
-        user.altContact = document
-          .getElementById("emergencyContact")
-          .value.trim();
-
-        var parts = [user.firstName, user.middleName, user.lastName].filter(
-          function (p) {
-            return p;
-          },
-        );
-        user.fullName = parts.join(" ");
-
-        setCurrentUser(user);
-
         var users = getData(STORAGE_KEYS.USERS) || [];
-        var idx = users.findIndex(function (u) {
-          return u.id === user.id;
+        var idx = users.findIndex(function(u){ return u.id === user.id; });
+        if (idx >= 0) { users[idx] = user; setData(STORAGE_KEYS.USERS, users); }
+        var avatarEl = document.getElementById('profile-avatar');
+        avatarEl.style.backgroundImage = 'url(' + user.photo + ')';
+        avatarEl.style.backgroundSize = 'cover';
+        avatarEl.style.backgroundPosition = 'center';
+        avatarEl.textContent = '';
+        document.getElementById('user-avatar').style.backgroundImage = 'url(' + user.photo + ')';
+        document.getElementById('user-avatar').textContent = '';
+        showToast('Profile photo updated!');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function openPasswordModal() { document.getElementById('password-modal').classList.add('active'); }
+    function closePasswordModal() {
+      document.getElementById('password-modal').classList.remove('active');
+      ['current-password','new-password','confirm-password'].forEach(function(id){ document.getElementById(id).value = ''; });
+    }
+
+    function changePassword() {
+      var current = document.getElementById('current-password').value;
+      var newPass = document.getElementById('new-password').value;
+      var confirm = document.getElementById('confirm-password').value;
+      var user = getCurrentUser();
+      if (!current || !newPass || !confirm) { alert('Please fill in all fields'); return; }
+      if (current !== (user.password || '')) { alert('Current password is incorrect'); return; }
+      if (newPass !== confirm) { alert('New passwords do not match'); return; }
+      if (newPass.length < 6) { alert('Password must be at least 6 characters'); return; }
+      user.password = newPass;
+      var users = getData(STORAGE_KEYS.USERS) || [];
+      var idx = users.findIndex(function(u){ return u.id === user.id; });
+      if (idx >= 0) { users[idx] = user; setData(STORAGE_KEYS.USERS, users); }
+      setCurrentUser(user);
+      closePasswordModal();
+      showToast('Password changed successfully!');
+    }
+
+    function checkCivilStatusChange() {
+      var newStatus = document.getElementById('civilStatus').value;
+      if (newStatus !== originalCivilStatus && (newStatus === 'Married' || newStatus === 'Widowed' || newStatus === 'Divorced')) {
+        pendingCivilStatus = newStatus;
+        document.getElementById('reason-modal').classList.add('active');
+      }
+    }
+    function closeReasonModal() {
+      document.getElementById('reason-modal').classList.remove('active');
+      document.getElementById('change-reason').value = '';
+      document.getElementById('civilStatus').value = originalCivilStatus;
+    }
+    function confirmChange() {
+      var reason = document.getElementById('change-reason').value.trim();
+      if (!reason) { alert('Please provide a reason'); return; }
+      var user = getCurrentUser();
+      if (user) {
+        if (!user.changeHistory) user.changeHistory = [];
+        user.changeHistory.push({ field:'civilStatus', from:originalCivilStatus, to:pendingCivilStatus, reason:reason, date:new Date().toISOString() });
+      }
+      document.getElementById('reason-modal').classList.remove('active');
+      document.getElementById('change-reason').value = '';
+      document.getElementById('reason-field').style.display = 'block';
+      document.getElementById('civilStatusReason').value = reason;
+    }
+
+    function saveProfile() {
+      document.getElementById('confirm-title').textContent = 'Save Changes';
+      document.getElementById('confirm-message').textContent = 'Are you sure you want to save these changes?';
+      document.getElementById('confirm-yes-btn').onclick = function() { doSaveProfile(); closeConfirmModal(); };
+      document.getElementById('confirm-modal').classList.add('active');
+    }
+
+    function doSaveProfile() {
+      var user = getCurrentUser();
+      if (!user) return;
+      user.username = document.getElementById('username').value.trim();
+      user.firstName = document.getElementById('firstName').value.trim();
+      user.lastName = document.getElementById('lastName').value.trim();
+      user.middleName = document.getElementById('middleName').value.trim();
+      user.suffix = document.getElementById('suffix').value.trim();
+      user.civilStatus = document.getElementById('civilStatus').value;
+      user.houseNumber = document.getElementById('houseNumber').value.trim();
+      user.purok = document.getElementById('purok').value.trim();
+      user.street = document.getElementById('street').value.trim();
+      user.landmark = document.getElementById('landmark').value.trim();
+      user.email = document.getElementById('email').value.trim();
+      user.phone = document.getElementById('phone').value.trim();
+      user.altContact = document.getElementById('emergencyContact').value.trim();
+      user.fullName = [user.firstName, user.middleName, user.lastName].filter(Boolean).join(' ');
+      setCurrentUser(user);
+      var users = getData(STORAGE_KEYS.USERS) || [];
+      var idx = users.findIndex(function(u){ return u.id === user.id; });
+      if (idx >= 0) { users[idx] = user; setData(STORAGE_KEYS.USERS, users); }
+      var residents = getData(STORAGE_KEYS.RESIDENTS) || [];
+      var rIdx = residents.findIndex(function(r){ return r.userId === user.id; });
+      if (rIdx >= 0) {
+        Object.assign(residents[rIdx], {
+          firstName:user.firstName, lastName:user.lastName, middleName:user.middleName,
+          suffix:user.suffix, name:user.fullName, fullName:user.fullName,
+          civilStatus:user.civilStatus, houseNumber:user.houseNumber,
+          purok:user.purok, street:user.street, landmark:user.landmark,
+          contact:{ phone:user.phone, email:user.email, altContact:user.altContact }
         });
-        if (idx >= 0) {
-          users[idx] = user;
-          setData(STORAGE_KEYS.USERS, users);
-        }
-
-        var residents = getData(STORAGE_KEYS.RESIDENTS) || [];
-        var rIdx = residents.findIndex(function (r) {
-          return r.userId === user.id;
-        });
-        if (rIdx >= 0) {
-          residents[rIdx].firstName = user.firstName;
-          residents[rIdx].lastName = user.lastName;
-          residents[rIdx].middleName = user.middleName;
-          residents[rIdx].suffix = user.suffix;
-          residents[rIdx].name = user.fullName;
-          residents[rIdx].fullName = user.fullName;
-          residents[rIdx].civilStatus = user.civilStatus;
-          residents[rIdx].houseNumber = user.houseNumber;
-          residents[rIdx].purok = user.purok;
-          residents[rIdx].street = user.street;
-          residents[rIdx].landmark = user.landmark;
-          residents[rIdx].contact = {
-            phone: user.phone,
-            email: user.email,
-            altContact: user.altContact,
-          };
-          setData(STORAGE_KEYS.RESIDENTS, residents);
-        }
-
-        loadUserInfo();
-        loadProfileData();
-
-        showToast("Profile saved successfully!");
+        setData(STORAGE_KEYS.RESIDENTS, residents);
       }
+      loadUserInfo();
+      loadProfileData();
+      showToast('Profile saved successfully!');
+    }
 
-      function showToast(msg) {
-        var toast = document.getElementById("toast-msg");
-        toast.textContent = msg;
-        toast.classList.add("show");
-        setTimeout(function () {
-          toast.classList.remove("show");
-        }, 3000);
+    function showToast(msg) {
+      var toast = document.getElementById('toast-msg');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(function(){ toast.classList.remove('show'); }, 3000);
+    }
+
+    function logout() {
+      document.getElementById('confirm-title').textContent = 'Log Out';
+      document.getElementById('confirm-message').textContent = 'Are you sure you want to log out?';
+      document.getElementById('confirm-yes-btn').onclick = function() {
+        setCurrentUser(null);
+        location.href = '../auth/login.html';
+      };
+      document.getElementById('confirm-modal').classList.add('active');
+    }
+
+    function openForgotPasswordModal() { document.getElementById('forgot-modal').classList.add('active'); }
+    function closeForgotPasswordModal() {
+      document.getElementById('forgot-modal').classList.remove('active');
+      document.getElementById('reset-email').value = '';
+    }
+    function sendResetLink() {
+      var email = document.getElementById('reset-email').value.trim();
+      if (!email) { showToast('Please enter your email address.'); return; }
+      showToast('Password reset link sent to ' + email);
+      closeForgotPasswordModal();
+    }
+
+    function showNotifications() {
+      var user = getCurrentUser();
+      if (!user) return;
+      var notifications = getUserNotifications(user.id);
+      var listEl = document.getElementById('notification-list');
+      if (!notifications.length) {
+        listEl.innerHTML = '<div class="notification-empty"><p>No notifications yet</p></div>';
+      } else {
+        listEl.innerHTML = notifications.map(function(n) {
+          return '<div class="notification-item ' + n.type + ' ' + (n.read ? '' : 'unread') + '" onclick="viewNotification(\'' + n.id + '\')">' +
+            '<div class="notification-item-header"><span class="notification-item-title">' + escapeHtml(n.title) + '</span>' +
+            '<span class="notification-item-time">' + getTimeAgo(n.createdAt) + '</span></div>' +
+            '<div class="notification-item-message">' + escapeHtml(n.message) + '</div></div>';
+        }).join('');
       }
+      document.getElementById('notification-modal').classList.add('show');
+      if (typeof loadNotificationBadge === 'function') loadNotificationBadge();
+    }
 
-      function logout() {
-        document.getElementById("confirm-title").textContent = "Log Out";
-        document.getElementById("confirm-message").textContent =
-          "Are you sure you want to log out?";
-        document.getElementById("confirm-yes-btn").onclick = function () {
-          localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
-          window.location.href = "../auth/login.html";
-        };
-        document.getElementById("confirm-modal").classList.add("active");
-      }
+    function viewNotification(id) { markNotificationRead(id); showNotifications(); }
+    function closeNotificationModal(event) {
+      if (event && event.target !== event.currentTarget) return;
+      document.getElementById('notification-modal').classList.remove('show');
+    }
+    function showMarkAllReadModal() {
+      var user = getCurrentUser();
+      if (user) { markAllNotificationsRead(user.id); if (typeof loadNotificationBadge === 'function') loadNotificationBadge(); showNotifications(); }
+    }
+    function showClearAllModal() {
+      var user = getCurrentUser();
+      if (user) { clearNotifications(user.id); if (typeof loadNotificationBadge === 'function') loadNotificationBadge(); showNotifications(); }
+    }
+    function closeConfirmModal() { document.getElementById('confirm-modal').classList.remove('active'); }
 
-      function openForgotPasswordModal() {
-        document.getElementById("forgot-modal").classList.add("active");
-      }
-
-      function closeForgotPasswordModal() {
-        document.getElementById("forgot-modal").classList.remove("active");
-        document.getElementById("reset-email").value = "";
-      }
-
-      function sendResetLink() {
-        var email = document.getElementById("reset-email").value.trim();
-        if (!email) {
-          showToast("Please enter your email address.");
-          return;
-        }
-        showToast("Password reset link sent to " + email);
-        closeForgotPasswordModal();
-      }
-
-      var notificationBell = document.getElementById("notification-bell");
-      if (notificationBell) {
-        loadNotificationBadge();
-      }
-      function loadNotificationBadge() {
-        var user = getCurrentUser();
-        if (!user) return;
-        var unread = getUnreadCount(user.id);
-        var badge = document.getElementById("notification-badge");
-        if (badge) {
-          if (unread > 0) {
-            badge.textContent = unread > 9 ? "9+" : unread;
-            badge.style.display = "flex";
-          } else {
-            badge.style.display = "none";
-          }
-        }
-      }
-
-      function showNotifications() {
-        var user = getCurrentUser();
-        if (!user) return;
-
-        var notifications = getUserNotifications(user.id);
-        var listEl = document.getElementById("notification-list");
-
-        if (notifications.length === 0) {
-          listEl.innerHTML =
-            '<div class="notification-empty">' +
-            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">' +
-            '<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>' +
-            '<path d="M13.73 21a2 2 0 0 1-3.46 0"></path>' +
-            "</svg>" +
-            "<p>No notifications yet</p></div>";
-        } else {
-          var html = "";
-          notifications.forEach(function (n) {
-            var timeAgo = getTimeAgo(n.createdAt);
-            html +=
-              '<div class="notification-item ' +
-              n.type +
-              " " +
-              (n.read ? "" : "unread") +
-              '" ' +
-              "onclick=\"viewNotification('" +
-              n.id +
-              "')\">" +
-              '<div class="notification-item-header">' +
-              '<span class="notification-item-title">' +
-              escapeHtml(n.title) +
-              "</span>" +
-              '<span class="notification-item-time">' +
-              timeAgo +
-              "</span>" +
-              "</div>" +
-              '<div class="notification-item-message">' +
-              escapeHtml(n.message) +
-              "</div>" +
-              "</div>";
-          });
-          listEl.innerHTML = html;
-        }
-
-        document.getElementById("notification-modal").classList.add("show");
-        loadNotificationBadge();
-      }
-
-      function viewNotification(id) {
-        markNotificationRead(id);
-        loadNotificationBadge();
-        showNotifications();
-      }
-
-      function closeNotificationModal(event) {
-        if (event && event.target !== event.currentTarget) return;
-        document.getElementById("notification-modal").classList.remove("show");
-      }
-
-      function markAllRead() {
-        var user = getCurrentUser();
-        if (user) {
-          markAllNotificationsRead(user.id);
-          loadNotificationBadge();
-          showNotifications();
-        }
-      }
-
-      function showMarkAllReadModal() {
-        document.getElementById("confirm-title").textContent =
-          "Mark All as Read";
-        document.getElementById("confirm-message").textContent =
-          "Are you sure you want to mark all notifications as read?";
-        document.getElementById("confirm-yes-btn").onclick = function () {
-          markAllNotificationsRead(getCurrentUser().id);
-          loadNotificationBadge();
-          showNotifications();
-          closeConfirmModal();
-        };
-        document.getElementById("confirm-modal").classList.add("active");
-      }
-
-      function showClearAllModal() {
-        document.getElementById("confirm-title").textContent =
-          "Clear All Notifications";
-        document.getElementById("confirm-message").textContent =
-          "Are you sure you want to clear all notifications? This action cannot be undone.";
-        document.getElementById("confirm-yes-btn").onclick = function () {
-          clearNotifications(getCurrentUser().id);
-          loadNotificationBadge();
-          showNotifications();
-          closeConfirmModal();
-        };
-        document.getElementById("confirm-modal").classList.add("active");
-      }
-
-      function closeConfirmModal() {
-        document.getElementById("confirm-modal").classList.remove("active");
-      }
-
-      document
-        .getElementById("confirm-modal")
-        .addEventListener("click", function (e) {
-          if (e.target === this) closeConfirmModal();
-        });
-
-      function getTimeAgo(timestamp) {
-        var now = new Date();
-        var then = new Date(timestamp);
-        var diff = Math.floor((now - then) / 1000);
-
-        if (diff < 60) return "Just now";
-        if (diff < 3600) return Math.floor(diff / 60) + "m ago";
-        if (diff < 86400) return Math.floor(diff / 3600) + "h ago";
-        if (diff < 604800) return Math.floor(diff / 86400) + "d ago";
-        return then.toLocaleDateString("en-PH", {
-          month: "short",
-          day: "numeric",
-        });
-      }
-
-      function escapeHtml(str) {
-        if (!str) return "";
-        return str
-          .toString()
-          .replace(/&/g, "&amp;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;");
-      }
-    </script>
-  </body>
+    function getTimeAgo(timestamp) {
+      var diff = Math.floor((new Date() - new Date(timestamp)) / 1000);
+      if (diff < 60) return 'Just now';
+      if (diff < 3600) return Math.floor(diff/60) + 'm ago';
+      if (diff < 86400) return Math.floor(diff/3600) + 'h ago';
+      if (diff < 604800) return Math.floor(diff/86400) + 'd ago';
+      return new Date(timestamp).toLocaleDateString('en-PH', { month:'short', day:'numeric' });
+    }
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+  </script>
+</body>
 </html>

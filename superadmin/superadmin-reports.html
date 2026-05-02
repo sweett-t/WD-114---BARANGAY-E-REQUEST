@@ -17,8 +17,6 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: "Segoe UI", sans-serif; background: var(--gray-100); }
     .sa-layout { display: flex; min-height: 100vh; }
-
-    /* ── Sidebar ── */
     .sa-sidebar { width: 240px; flex-shrink: 0; background: #fff; border-right: 1px solid var(--gray-200); position: sticky; top: 0; height: 100vh; overflow-y: auto; display: flex; flex-direction: column; }
     .sb-brand { display: flex; align-items: center; gap: 0.5rem; padding: 1.25rem 1rem; border-bottom: 1px solid var(--gray-200); font-weight: 800; font-size: 0.95rem; color: var(--primary); text-decoration: none; }
     .sb-user { display: flex; align-items: center; gap: 0.65rem; padding: 1rem; border-bottom: 1px solid var(--gray-100); }
@@ -40,13 +38,9 @@
     .sb-divider { border: none; border-top: 1px solid var(--gray-100); margin: 0.5rem; }
     .sb-logout { margin-top: auto; padding: 0.75rem 0.5rem; border-top: 1px solid var(--gray-200); }
     .sb-logout-btn { width: 100%; padding: 0.5rem; background: var(--danger-light); color: var(--danger); border: 1px solid #fecaca; border-radius: 0.5rem; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
-
-    /* ── Main ── */
     .sa-body { flex: 1; display: flex; flex-direction: column; min-width: 0; }
     .sa-main { flex: 1; padding: 2rem; max-width: 1400px; width: 100%; margin: 0 auto; }
     .sa-footer { background: var(--gray-50); border-top: 1px solid var(--gray-200); padding: 1rem; text-align: center; color: var(--gray-500); font-size: 0.85rem; }
-
-    /* ── Page header ── */
     .page-hdr { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1.75rem; flex-wrap: wrap; gap: 1rem; }
     .page-hdr h1 { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700; color: var(--gray-900); }
     .page-hdr p { color: var(--gray-500); font-size: 0.95rem; }
@@ -56,59 +50,41 @@
     .btn-primary:hover { background: var(--primary-dark); }
     .btn-outline { background: #fff; color: var(--gray-700); border-color: var(--gray-200); }
     .btn-outline:hover { background: var(--gray-100); }
-
-    /* ── Date filter bar ── */
     .filter-card { background: #fff; border: 1px solid var(--gray-200); border-radius: 0.5rem; padding: 1rem 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: flex-end; gap: 1rem; flex-wrap: wrap; }
     .filter-group { display: flex; flex-direction: column; gap: 0.25rem; }
     .filter-group label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: var(--gray-500); }
     .filter-group input, .filter-group select { padding: 0.45rem 0.65rem; border: 1.5px solid var(--gray-200); border-radius: 0.375rem; font-size: 0.875rem; font-family: inherit; }
-    .filter-group input:focus, .filter-group select:focus { outline: none; border-color: var(--primary); }
-
-    /* ── KPI cards ── */
-    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
     .kpi-card { background: #fff; border: 1px solid var(--gray-200); border-radius: 0.5rem; padding: 1.25rem 1rem; position: relative; overflow: hidden; }
     .kpi-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--accent, var(--primary)); }
     .kpi-card .kpi-num { font-size: 2rem; font-weight: 800; color: var(--gray-900); line-height: 1; margin-bottom: 0.35rem; }
     .kpi-card .kpi-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: var(--gray-500); }
     .kpi-card .kpi-sub { font-size: 0.75rem; color: var(--gray-400); margin-top: 0.25rem; }
-    .kpi-total { --accent: var(--primary); }
-    .kpi-pending { --accent: var(--warning); }
-    .kpi-approved { --accent: var(--success); }
-    .kpi-released { --accent: var(--info); }
-    .kpi-rejected { --accent: var(--danger); }
-    .kpi-revenue { --accent: #0891b2; }
-
-    /* ── Section card ── */
+    .kpi-total    { --accent: var(--primary); }   .kpi-pending  { --accent: var(--warning); }
+    .kpi-approved { --accent: var(--success); }   .kpi-released { --accent: var(--info); }
+    .kpi-rejected { --accent: var(--danger); }    .kpi-revenue  { --accent: #0891b2; }
+    .kpi-cancelled{ --accent: #6b7280; }          .kpi-edited   { --accent: #d97706; }
     .section-card { background: #fff; border: 1px solid var(--gray-200); border-radius: 0.5rem; margin-bottom: 1.5rem; overflow: hidden; }
     .section-hdr { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; border-bottom: 1px solid var(--gray-200); flex-wrap: wrap; gap: 0.5rem; }
     .section-hdr h3 { font-size: 0.95rem; font-weight: 700; color: var(--gray-900); }
     .section-body { padding: 1.25rem; }
-
-    /* ── Charts grid ── */
     .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
     .chart-card { background: #fff; border: 1px solid var(--gray-200); border-radius: 0.5rem; padding: 1.25rem; }
     .chart-card h4 { font-size: 0.875rem; font-weight: 700; color: var(--gray-900); margin-bottom: 1rem; }
-    canvas { width: 100% !important; }
-
-    /* ── SVG bar chart ── */
     .bar-wrap { overflow-x: auto; }
     .bar-chart { display: flex; align-items: flex-end; gap: 0.5rem; height: 180px; padding-bottom: 1.5rem; position: relative; }
     .bar-chart::after { content: ''; position: absolute; bottom: 1.5rem; left: 0; right: 0; height: 1px; background: var(--gray-200); }
     .bar-item { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; flex: 1; min-width: 40px; }
-    .bar { width: 100%; border-radius: 4px 4px 0 0; transition: opacity 0.2s; cursor: default; position: relative; }
+    .bar { width: 100%; border-radius: 4px 4px 0 0; cursor: default; }
     .bar:hover { opacity: 0.8; }
     .bar-val { font-size: 0.68rem; font-weight: 700; color: var(--gray-700); }
     .bar-label { font-size: 0.62rem; color: var(--gray-400); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 60px; }
-
-    /* ── Donut chart ── */
     .donut-wrap { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
     .donut-svg { flex-shrink: 0; }
     .donut-legend { display: flex; flex-direction: column; gap: 0.5rem; }
     .legend-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: var(--gray-700); }
     .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
     .legend-pct { font-weight: 700; color: var(--gray-900); margin-left: auto; padding-left: 1rem; }
-
-    /* ── Table ── */
     .sa-table { width: 100%; border-collapse: collapse; font-size: 0.855rem; }
     .sa-table thead tr { background: var(--gray-50); }
     .sa-table th { padding: 0.7rem 1rem; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: var(--gray-500); border-bottom: 1px solid var(--gray-200); text-align: left; }
@@ -119,30 +95,21 @@
     .badge-approved { background: var(--success-light); color: var(--success); }
     .badge-rejected { background: var(--danger-light); color: var(--danger); }
     .badge-released { background: var(--primary-light); color: var(--primary); }
-
-    /* ── Progress bars ── */
+    .badge-cancelled { background: #f3f4f6; color: #6b7280; }
     .progress-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
     .progress-label { font-size: 0.8rem; color: var(--gray-700); flex: 0 0 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .progress-bar-wrap { flex: 1; background: var(--gray-100); border-radius: 9999px; height: 8px; overflow: hidden; }
     .progress-bar-fill { height: 100%; border-radius: 9999px; transition: width 0.8s ease; }
     .progress-count { font-size: 0.8rem; font-weight: 700; color: var(--gray-900); flex: 0 0 32px; text-align: right; }
-
-    /* ── Timeline ── */
     .timeline-wrap { overflow-x: auto; }
     .timeline-chart { display: flex; align-items: flex-end; gap: 2px; height: 120px; }
     .tl-bar { flex: 1; min-width: 8px; border-radius: 2px 2px 0 0; cursor: default; position: relative; }
     .tl-bar:hover::after { content: attr(data-tip); position: absolute; bottom: calc(100% + 4px); left: 50%; transform: translateX(-50%); background: var(--gray-900); color: #fff; font-size: 0.65rem; padding: 0.2rem 0.4rem; border-radius: 4px; white-space: nowrap; z-index: 10; }
-
-    /* ── Export row ── */
-    .export-row { display: flex; gap: 0.75rem; flex-wrap: wrap; }
-
-    /* ── Tab nav ── */
     .tab-nav { display: flex; gap: 0.25rem; border-bottom: 2px solid var(--gray-200); margin-bottom: 1.25rem; overflow-x: auto; }
     .tab-btn { padding: 0.55rem 1rem; font-size: 0.85rem; font-weight: 600; color: var(--gray-500); background: none; border: none; border-bottom: 2px solid transparent; margin-bottom: -2px; cursor: pointer; white-space: nowrap; }
     .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
-
     @media (max-width: 1024px) { .charts-grid { grid-template-columns: 1fr; } }
     @media (max-width: 768px) { .sa-layout { flex-direction: column; } .sa-sidebar { width: 100%; height: auto; position: relative; } .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
   </style>
@@ -188,37 +155,23 @@
 
   <div class="sa-body">
     <main class="sa-main">
-
       <div class="page-hdr">
-        <div>
-          <h1>Reports & Analytics</h1>
-          <p>Detailed breakdown of requests, users, revenue, and system activity.</p>
-        </div>
+        <div><h1>Reports & Analytics</h1><p>Detailed breakdown of requests, users, revenue, edits, and cancellations.</p></div>
         <div class="hdr-actions">
           <button class="btn btn-outline" onclick="exportCSV()">⬇ Export CSV</button>
           <button class="btn btn-primary" onclick="window.print()">🖨 Print Report</button>
         </div>
       </div>
 
-      <!-- Date Filter -->
       <div class="filter-card">
-        <div class="filter-group">
-          <label>Date From</label>
-          <input type="date" id="dateFrom">
-        </div>
-        <div class="filter-group">
-          <label>Date To</label>
-          <input type="date" id="dateTo">
-        </div>
+        <div class="filter-group"><label>Date From</label><input type="date" id="dateFrom"></div>
+        <div class="filter-group"><label>Date To</label><input type="date" id="dateTo"></div>
         <div class="filter-group">
           <label>Quick Range</label>
           <select id="quickRange" onchange="applyQuickRange()">
-            <option value="">Custom</option>
-            <option value="today">Today</option>
-            <option value="week">Last 7 Days</option>
-            <option value="month">This Month</option>
-            <option value="3month">Last 3 Months</option>
-            <option value="year">This Year</option>
+            <option value="">Custom</option><option value="today">Today</option>
+            <option value="week">Last 7 Days</option><option value="month">This Month</option>
+            <option value="3month">Last 3 Months</option><option value="year">This Year</option>
             <option value="all">All Time</option>
           </select>
         </div>
@@ -227,131 +180,85 @@
 
       <!-- KPI Cards -->
       <div class="kpi-grid">
-        <div class="kpi-card kpi-total">
-          <div class="kpi-num" id="kpi-total">0</div>
-          <div class="kpi-label">Total Requests</div>
-          <div class="kpi-sub" id="kpi-total-sub"></div>
-        </div>
-        <div class="kpi-card kpi-pending">
-          <div class="kpi-num" id="kpi-pending">0</div>
-          <div class="kpi-label">Pending</div>
-          <div class="kpi-sub" id="kpi-pending-sub"></div>
-        </div>
-        <div class="kpi-card kpi-approved">
-          <div class="kpi-num" id="kpi-approved">0</div>
-          <div class="kpi-label">Approved</div>
-          <div class="kpi-sub" id="kpi-approved-sub"></div>
-        </div>
-        <div class="kpi-card kpi-released">
-          <div class="kpi-num" id="kpi-released">0</div>
-          <div class="kpi-label">Released</div>
-          <div class="kpi-sub" id="kpi-released-sub"></div>
-        </div>
-        <div class="kpi-card kpi-rejected">
-          <div class="kpi-num" id="kpi-rejected">0</div>
-          <div class="kpi-label">Rejected</div>
-          <div class="kpi-sub" id="kpi-rejected-sub"></div>
-        </div>
-        <div class="kpi-card kpi-revenue">
-          <div class="kpi-num" id="kpi-revenue">₱0</div>
-          <div class="kpi-label">Total Revenue</div>
-          <div class="kpi-sub" id="kpi-revenue-sub"></div>
-        </div>
+        <div class="kpi-card kpi-total">   <div class="kpi-num" id="kpi-total">0</div>    <div class="kpi-label">Total</div>    <div class="kpi-sub" id="kpi-total-sub"></div></div>
+        <div class="kpi-card kpi-pending"> <div class="kpi-num" id="kpi-pending">0</div>  <div class="kpi-label">Pending</div>  <div class="kpi-sub" id="kpi-pending-sub"></div></div>
+        <div class="kpi-card kpi-approved"><div class="kpi-num" id="kpi-approved">0</div> <div class="kpi-label">Approved</div> <div class="kpi-sub" id="kpi-approved-sub"></div></div>
+        <div class="kpi-card kpi-released"><div class="kpi-num" id="kpi-released">0</div> <div class="kpi-label">Released</div> <div class="kpi-sub" id="kpi-released-sub"></div></div>
+        <div class="kpi-card kpi-rejected"><div class="kpi-num" id="kpi-rejected">0</div> <div class="kpi-label">Rejected</div> <div class="kpi-sub" id="kpi-rejected-sub"></div></div>
+        <div class="kpi-card kpi-cancelled"><div class="kpi-num" id="kpi-cancelled">0</div><div class="kpi-label">Cancelled</div><div class="kpi-sub" id="kpi-cancelled-sub"></div></div>
+        <div class="kpi-card kpi-edited">  <div class="kpi-num" id="kpi-edited">0</div>   <div class="kpi-label">Edited</div>  <div class="kpi-sub" id="kpi-edited-sub"></div></div>
+        <div class="kpi-card kpi-revenue"> <div class="kpi-num" id="kpi-revenue">₱0</div> <div class="kpi-label">Revenue</div> <div class="kpi-sub" id="kpi-revenue-sub"></div></div>
       </div>
 
-      <!-- Charts Row -->
       <div class="charts-grid">
-        <!-- Status Donut -->
-        <div class="chart-card">
-          <h4>Request Status Breakdown</h4>
-          <div class="donut-wrap" id="donutWrap">
-            <svg class="donut-svg" id="donutSvg" width="140" height="140" viewBox="0 0 140 140"></svg>
-            <div class="donut-legend" id="donutLegend"></div>
-          </div>
-        </div>
-
-        <!-- Document Type Bar -->
-        <div class="chart-card">
-          <h4>Requests by Document Type</h4>
-          <div class="bar-wrap">
-            <div class="bar-chart" id="typeBarChart"></div>
-          </div>
-        </div>
+        <div class="chart-card"><h4>Request Status Breakdown</h4><div class="donut-wrap" id="donutWrap"><svg class="donut-svg" id="donutSvg" width="140" height="140" viewBox="0 0 140 140"></svg><div class="donut-legend" id="donutLegend"></div></div></div>
+        <div class="chart-card"><h4>Requests by Document Type</h4><div class="bar-wrap"><div class="bar-chart" id="typeBarChart"></div></div></div>
       </div>
 
-      <!-- Daily Trend -->
       <div class="section-card">
-        <div class="section-hdr">
-          <h3>Daily Request Trend (Last 30 Days)</h3>
-        </div>
+        <div class="section-hdr"><h3>Daily Request Trend (Last 30 Days)</h3></div>
         <div class="section-body">
-          <div class="timeline-wrap">
-            <div class="timeline-chart" id="timelineChart"></div>
-          </div>
-          <div style="display:flex;justify-content:space-between;font-size:0.68rem;color:var(--gray-400);margin-top:0.25rem;">
-            <span id="tl-start"></span><span id="tl-end"></span>
-          </div>
+          <div class="timeline-wrap"><div class="timeline-chart" id="timelineChart"></div></div>
+          <div style="display:flex;justify-content:space-between;font-size:0.68rem;color:var(--gray-400);margin-top:0.25rem;"><span id="tl-start"></span><span id="tl-end"></span></div>
         </div>
       </div>
 
-      <!-- Tabs: Requests | Users | Revenue | Blotter -->
       <div class="section-card">
         <div class="section-hdr"><h3>Detailed Reports</h3></div>
         <div class="section-body">
           <div class="tab-nav">
             <button class="tab-btn active" onclick="switchTab('requests', this)">📄 Requests</button>
             <button class="tab-btn" onclick="switchTab('bytype', this)">📊 By Type</button>
+            <button class="tab-btn" onclick="switchTab('cancelled', this)">🚫 Cancelled</button>
+            <button class="tab-btn" onclick="switchTab('edited', this)">✏️ Edited</button>
             <button class="tab-btn" onclick="switchTab('users', this)">👥 Users</button>
             <button class="tab-btn" onclick="switchTab('revenue', this)">💰 Revenue</button>
             <button class="tab-btn" onclick="switchTab('blotter', this)">🛡 Blotter</button>
           </div>
 
-          <!-- Requests Tab -->
           <div class="tab-panel active" id="tab-requests">
             <table class="sa-table" id="requestsTable">
-              <thead><tr>
-                <th>#</th><th>Tracking ID</th><th>Resident</th><th>Document Type</th>
-                <th>Purpose</th><th>Fee</th><th>Status</th><th>Date Filed</th><th>Processed By</th>
-              </tr></thead>
+              <thead><tr><th>#</th><th>Tracking ID</th><th>Resident</th><th>Document Type</th><th>Purpose</th><th>Fee</th><th>Status</th><th>Edited?</th><th>Date Filed</th><th>Processed By</th></tr></thead>
               <tbody id="requestsBody"></tbody>
             </table>
           </div>
 
-          <!-- By Type Tab -->
-          <div class="tab-panel" id="tab-bytype">
-            <div id="byTypeContent"></div>
+          <div class="tab-panel" id="tab-bytype"><div id="byTypeContent"></div></div>
+
+          <!-- Cancelled tab -->
+          <div class="tab-panel" id="tab-cancelled">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:1.25rem;" id="cancelledSummary"></div>
+            <table class="sa-table">
+              <thead><tr><th>#</th><th>Tracking ID</th><th>Resident</th><th>Type</th><th>Cancelled By</th><th>Reason</th><th>Cancelled At</th></tr></thead>
+              <tbody id="cancelledBody"></tbody>
+            </table>
           </div>
 
-          <!-- Users Tab -->
+          <!-- Edited tab -->
+          <div class="tab-panel" id="tab-edited">
+            <table class="sa-table">
+              <thead><tr><th>#</th><th>Tracking ID</th><th>Resident</th><th>Type</th><th>Status</th><th>Edited By</th><th>Date Filed</th></tr></thead>
+              <tbody id="editedBody"></tbody>
+            </table>
+          </div>
+
           <div class="tab-panel" id="tab-users">
             <table class="sa-table">
-              <thead><tr>
-                <th>#</th><th>Name</th><th>Email</th><th>Phone</th>
-                <th>Purok</th><th>Status</th><th>Requests</th><th>Joined</th>
-              </tr></thead>
+              <thead><tr><th>#</th><th>Name</th><th>Email</th><th>Phone</th><th>Purok</th><th>Status</th><th>Requests</th><th>Joined</th></tr></thead>
               <tbody id="usersBody"></tbody>
             </table>
           </div>
 
-          <!-- Revenue Tab -->
-          <div class="tab-panel" id="tab-revenue">
-            <div id="revenueContent"></div>
-          </div>
+          <div class="tab-panel" id="tab-revenue"><div id="revenueContent"></div></div>
 
-          <!-- Blotter Tab -->
           <div class="tab-panel" id="tab-blotter">
             <table class="sa-table">
-              <thead><tr>
-                <th>#</th><th>ID</th><th>Type</th><th>Complainant</th>
-                <th>Status</th><th>Date Filed</th>
-              </tr></thead>
+              <thead><tr><th>#</th><th>ID</th><th>Type</th><th>Complainant</th><th>Status</th><th>Date Filed</th></tr></thead>
               <tbody id="blotterBody"></tbody>
             </table>
           </div>
-
         </div>
       </div>
-
     </main>
     <footer class="sa-footer"><p id="footer-year"></p></footer>
   </div>
@@ -362,15 +269,7 @@
 window.toggleSection = function(id) { document.getElementById(id).classList.toggle('collapsed'); };
 window.doLogout = function() { setCurrentUser(null); location.href = '../auth/login.html'; };
 
-const COLORS = {
-  pending:  '#d97706',
-  approved: '#059669',
-  released: '#2563eb',
-  rejected: '#dc2626',
-  'pending-review': '#7c3aed',
-  'pending-approval': '#0891b2',
-};
-
+const COLORS = { pending:'#d97706', approved:'#059669', released:'#2563eb', rejected:'#dc2626', cancelled:'#9ca3af', 'pending-review':'#7c3aed', 'pending-approval':'#0891b2' };
 const TYPE_COLORS = ['#2563eb','#059669','#d97706','#dc2626','#7c3aed','#0891b2','#db2777','#65a30d','#ea580c','#6366f1'];
 
 let allRequests = [], allUsers = [], allBlotter = [], filteredRequests = [];
@@ -383,52 +282,31 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('sb-name').textContent = admin.firstName || admin.fullName;
   document.getElementById('sb-avatar').textContent = (admin.firstName || 'SA').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
 
-  // Default: all time
   const today = new Date().toISOString().split('T')[0];
-  const yearStart = new Date().getFullYear() + '-01-01';
-  document.getElementById('dateFrom').value = yearStart;
+  document.getElementById('dateFrom').value = new Date().getFullYear() + '-01-01';
   document.getElementById('dateTo').value = today;
 
   allRequests = getData(STORAGE_KEYS.REQUESTS) || [];
-  allUsers = (getData(STORAGE_KEYS.USERS) || []).filter(u => (u.roles || []).includes('user'));
-  allBlotter = getData(STORAGE_KEYS.BLOTTER) || [];
+  allUsers    = (getData(STORAGE_KEYS.USERS) || []).filter(u => (u.roles || []).includes('user'));
+  allBlotter  = getData(STORAGE_KEYS.BLOTTER) || [];
 
   refreshAll();
 });
 
 function applyQuickRange() {
   const val = document.getElementById('quickRange').value;
-  const today = new Date();
-  const fmt = d => d.toISOString().split('T')[0];
-  const from = new Date();
-
-  if (val === 'today') {
-    document.getElementById('dateFrom').value = fmt(today);
-    document.getElementById('dateTo').value = fmt(today);
-  } else if (val === 'week') {
-    from.setDate(today.getDate() - 7);
-    document.getElementById('dateFrom').value = fmt(from);
-    document.getElementById('dateTo').value = fmt(today);
-  } else if (val === 'month') {
-    document.getElementById('dateFrom').value = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-01';
-    document.getElementById('dateTo').value = fmt(today);
-  } else if (val === '3month') {
-    from.setMonth(today.getMonth() - 3);
-    document.getElementById('dateFrom').value = fmt(from);
-    document.getElementById('dateTo').value = fmt(today);
-  } else if (val === 'year') {
-    document.getElementById('dateFrom').value = today.getFullYear() + '-01-01';
-    document.getElementById('dateTo').value = fmt(today);
-  } else if (val === 'all') {
-    document.getElementById('dateFrom').value = '2020-01-01';
-    document.getElementById('dateTo').value = fmt(today);
-  }
+  const today = new Date(), fmt = d => d.toISOString().split('T')[0], from = new Date();
+  if (val === 'today')  { document.getElementById('dateFrom').value = fmt(today); document.getElementById('dateTo').value = fmt(today); }
+  else if (val === 'week')   { from.setDate(today.getDate()-7); document.getElementById('dateFrom').value = fmt(from); document.getElementById('dateTo').value = fmt(today); }
+  else if (val === 'month')  { document.getElementById('dateFrom').value = today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-01'; document.getElementById('dateTo').value = fmt(today); }
+  else if (val === '3month') { from.setMonth(today.getMonth()-3); document.getElementById('dateFrom').value = fmt(from); document.getElementById('dateTo').value = fmt(today); }
+  else if (val === 'year')   { document.getElementById('dateFrom').value = today.getFullYear()+'-01-01'; document.getElementById('dateTo').value = fmt(today); }
+  else if (val === 'all')    { document.getElementById('dateFrom').value = '2020-01-01'; document.getElementById('dateTo').value = fmt(today); }
   if (val) refreshAll();
 }
 
 function inRange(dateStr) {
-  const from = document.getElementById('dateFrom').value;
-  const to = document.getElementById('dateTo').value;
+  const from = document.getElementById('dateFrom').value, to = document.getElementById('dateTo').value;
   if (!dateStr) return false;
   const d = dateStr.split('T')[0];
   return (!from || d >= from) && (!to || d <= to);
@@ -438,7 +316,6 @@ function refreshAll() {
   filteredRequests = allRequests.filter(r => !['blotter','complaint'].includes(r.typeKey) && inRange(r.createdAt));
   const filteredBlotter = allBlotter.filter(b => inRange(b.createdAt));
   const filteredBlotterReqs = allRequests.filter(r => ['blotter','complaint'].includes(r.typeKey) && inRange(r.createdAt));
-  const combined = [...filteredBlotter, ...filteredBlotterReqs];
 
   updateKPIs(filteredRequests);
   drawDonut(filteredRequests);
@@ -446,323 +323,217 @@ function refreshAll() {
   drawTimeline(allRequests);
   renderRequestsTable(filteredRequests);
   renderByType(filteredRequests);
+  renderCancelledTab(filteredRequests);
+  renderEditedTab(filteredRequests);
   renderUsersTable();
   renderRevenue(filteredRequests);
-  renderBlotterTable(combined);
+  renderBlotterTable([...filteredBlotter, ...filteredBlotterReqs]);
 }
 
 function updateKPIs(reqs) {
-  const total = reqs.length;
-  const pending = reqs.filter(r => r.status === 'pending' || r.status === 'pending-review' || r.status === 'pending-approval').length;
-  const approved = reqs.filter(r => r.status === 'approved').length;
-  const released = reqs.filter(r => r.status === 'released').length;
-  const rejected = reqs.filter(r => r.status === 'rejected').length;
-  const revenue = reqs.reduce((s, r) => s + (Number(r.fee) || 0), 0);
+  const total     = reqs.length;
+  const pending   = reqs.filter(r => r.status === 'pending' || r.status === 'pending-review').length;
+  const approved  = reqs.filter(r => r.status === 'approved').length;
+  const released  = reqs.filter(r => r.status === 'released').length;
+  const rejected  = reqs.filter(r => r.status === 'rejected').length;
+  const cancelled = reqs.filter(r => r.status === 'cancelled').length;
+  const cancelledByAdmin = reqs.filter(r => r.status === 'cancelled' && r.cancelledBy === 'admin').length;
+  const cancelledByUser  = reqs.filter(r => r.status === 'cancelled' && r.cancelledBy !== 'admin').length;
+  const edited    = reqs.filter(r => r.editedByUser || r.editedByAdmin).length;
+  const editedByAdmin = reqs.filter(r => r.editedByAdmin).length;
+  const revenue   = reqs.reduce((s,r) => s + (Number(r.fee)||0), 0);
 
-  document.getElementById('kpi-total').textContent = total;
-  document.getElementById('kpi-pending').textContent = pending;
+  document.getElementById('kpi-total').textContent    = total;
+  document.getElementById('kpi-pending').textContent  = pending;
   document.getElementById('kpi-approved').textContent = approved;
   document.getElementById('kpi-released').textContent = released;
   document.getElementById('kpi-rejected').textContent = rejected;
-  document.getElementById('kpi-revenue').textContent = '₱' + revenue.toLocaleString();
+  document.getElementById('kpi-cancelled').textContent= cancelled;
+  document.getElementById('kpi-edited').textContent   = edited;
+  document.getElementById('kpi-revenue').textContent  = '₱' + revenue.toLocaleString();
 
-  const pct = n => total ? Math.round(n / total * 100) + '%' : '0%';
-  document.getElementById('kpi-total-sub').textContent = 'in selected period';
-  document.getElementById('kpi-pending-sub').textContent = pct(pending) + ' of total';
-  document.getElementById('kpi-approved-sub').textContent = pct(approved) + ' of total';
-  document.getElementById('kpi-released-sub').textContent = pct(released) + ' of total';
-  document.getElementById('kpi-rejected-sub').textContent = pct(rejected) + ' of total';
-  document.getElementById('kpi-revenue-sub').textContent = 'from ' + reqs.filter(r => (r.fee || 0) > 0).length + ' paid requests';
+  const pct = n => total ? Math.round(n/total*100)+'%' : '0%';
+  document.getElementById('kpi-total-sub').textContent     = 'in selected period';
+  document.getElementById('kpi-pending-sub').textContent   = pct(pending) + ' of total';
+  document.getElementById('kpi-approved-sub').textContent  = pct(approved) + ' of total';
+  document.getElementById('kpi-released-sub').textContent  = pct(released) + ' of total';
+  document.getElementById('kpi-rejected-sub').textContent  = pct(rejected) + ' of total';
+  document.getElementById('kpi-cancelled-sub').textContent = cancelledByUser + ' user · ' + cancelledByAdmin + ' admin';
+  document.getElementById('kpi-edited-sub').textContent    = editedByAdmin + ' by admin · ' + (edited - editedByAdmin) + ' by user';
+  document.getElementById('kpi-revenue-sub').textContent   = 'from ' + reqs.filter(r => (r.fee||0)>0).length + ' paid requests';
 }
 
 function drawDonut(reqs) {
   const counts = {};
-  reqs.forEach(r => { counts[r.status] = (counts[r.status] || 0) + 1; });
+  reqs.forEach(r => { counts[r.status] = (counts[r.status]||0)+1; });
   const total = reqs.length;
-  const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]);
-
-  const svg = document.getElementById('donutSvg');
-  const legend = document.getElementById('donutLegend');
-  const cx = 70, cy = 70, r = 55, inner = 32;
-
-  if (!total) {
-    svg.innerHTML = '<text x="70" y="75" text-anchor="middle" fill="#94a3b8" font-size="12">No data</text>';
-    legend.innerHTML = '';
-    return;
-  }
-
-  let angle = -Math.PI / 2;
-  let paths = '';
-
-  entries.forEach(([status, count], i) => {
-    const slice = (count / total) * Math.PI * 2;
-    const x1 = cx + r * Math.cos(angle);
-    const y1 = cy + r * Math.sin(angle);
-    angle += slice;
-    const x2 = cx + r * Math.cos(angle);
-    const y2 = cy + r * Math.sin(angle);
-    const ix1 = cx + inner * Math.cos(angle - slice);
-    const iy1 = cy + inner * Math.sin(angle - slice);
-    const ix2 = cx + inner * Math.cos(angle);
-    const iy2 = cy + inner * Math.sin(angle);
-    const large = slice > Math.PI ? 1 : 0;
-    const color = COLORS[status] || TYPE_COLORS[i % TYPE_COLORS.length];
-    paths += `<path d="M${x1},${y1} A${r},${r} 0 ${large},1 ${x2},${y2} L${ix2},${iy2} A${inner},${inner} 0 ${large},0 ${ix1},${iy1} Z" fill="${color}" opacity="0.9"/>`;
+  const entries = Object.entries(counts).sort((a,b) => b[1]-a[1]);
+  const svg = document.getElementById('donutSvg'), legend = document.getElementById('donutLegend');
+  const cx=70,cy=70,r=55,inner=32;
+  if (!total) { svg.innerHTML='<text x="70" y="75" text-anchor="middle" fill="#94a3b8" font-size="12">No data</text>'; legend.innerHTML=''; return; }
+  let angle=-Math.PI/2, paths='';
+  entries.forEach(([status,count],i) => {
+    const slice=(count/total)*Math.PI*2;
+    const x1=cx+r*Math.cos(angle),y1=cy+r*Math.sin(angle); angle+=slice;
+    const x2=cx+r*Math.cos(angle),y2=cy+r*Math.sin(angle);
+    const ix1=cx+inner*Math.cos(angle-slice),iy1=cy+inner*Math.sin(angle-slice);
+    const ix2=cx+inner*Math.cos(angle),iy2=cy+inner*Math.sin(angle);
+    const large=slice>Math.PI?1:0;
+    const color=COLORS[status]||TYPE_COLORS[i%TYPE_COLORS.length];
+    paths+=`<path d="M${x1},${y1} A${r},${r} 0 ${large},1 ${x2},${y2} L${ix2},${iy2} A${inner},${inner} 0 ${large},0 ${ix1},${iy1} Z" fill="${color}" opacity="0.9"/>`;
   });
-
-  svg.innerHTML = paths +
-    `<text x="${cx}" y="${cy - 6}" text-anchor="middle" font-size="20" font-weight="800" fill="#1e293b">${total}</text>` +
-    `<text x="${cx}" y="${cy + 12}" text-anchor="middle" font-size="9" fill="#64748b">REQUESTS</text>`;
-
-  legend.innerHTML = entries.map(([status, count], i) => {
-    const color = COLORS[status] || TYPE_COLORS[i % TYPE_COLORS.length];
-    const pct = Math.round(count / total * 100);
-    return `<div class="legend-item">
-      <span class="legend-dot" style="background:${color}"></span>
-      <span>${status.charAt(0).toUpperCase() + status.slice(1)}</span>
-      <span class="legend-pct">${count} (${pct}%)</span>
-    </div>`;
+  svg.innerHTML=paths+`<text x="${cx}" y="${cy-6}" text-anchor="middle" font-size="20" font-weight="800" fill="#1e293b">${total}</text><text x="${cx}" y="${cy+12}" text-anchor="middle" font-size="9" fill="#64748b">REQUESTS</text>`;
+  legend.innerHTML=entries.map(([status,count],i) => {
+    const color=COLORS[status]||TYPE_COLORS[i%TYPE_COLORS.length];
+    return `<div class="legend-item"><span class="legend-dot" style="background:${color}"></span><span>${status.charAt(0).toUpperCase()+status.slice(1)}</span><span class="legend-pct">${count} (${Math.round(count/total*100)}%)</span></div>`;
   }).join('');
 }
 
 function drawTypeBar(reqs) {
   const counts = {};
-  reqs.forEach(r => { const t = r.type || r.typeKey || 'Unknown'; counts[t] = (counts[t] || 0) + 1; });
-  const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 10);
-  const max = Math.max(...entries.map(e => e[1]), 1);
-  const container = document.getElementById('typeBarChart');
-
-  if (!entries.length) { container.innerHTML = '<span style="color:var(--gray-400);font-size:0.85rem;margin:auto;">No data</span>'; return; }
-
-  container.innerHTML = entries.map(([type, count], i) => {
-    const h = Math.max(8, Math.round((count / max) * 150));
-    const color = TYPE_COLORS[i % TYPE_COLORS.length];
-    const short = type.replace('Certificate of ', '').replace('Barangay ', '').substring(0, 12);
-    return `<div class="bar-item">
-      <span class="bar-val">${count}</span>
-      <div class="bar" style="height:${h}px;background:${color};" title="${type}: ${count}"></div>
-      <span class="bar-label">${short}</span>
-    </div>`;
+  reqs.forEach(r => { const t=r.type||r.typeKey||'Unknown'; counts[t]=(counts[t]||0)+1; });
+  const entries = Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  const max=Math.max(...entries.map(e=>e[1]),1);
+  const container=document.getElementById('typeBarChart');
+  if (!entries.length) { container.innerHTML='<span style="color:var(--gray-400);font-size:0.85rem;margin:auto;">No data</span>'; return; }
+  container.innerHTML=entries.map(([type,count],i) => {
+    const h=Math.max(8,Math.round((count/max)*150)), color=TYPE_COLORS[i%TYPE_COLORS.length];
+    const short=type.replace('Certificate of ','').replace('Barangay ','').substring(0,12);
+    return `<div class="bar-item"><span class="bar-val">${count}</span><div class="bar" style="height:${h}px;background:${color};" title="${type}: ${count}"></div><span class="bar-label">${short}</span></div>`;
   }).join('');
 }
 
 function drawTimeline(reqs) {
-  const days = 30;
-  const counts = {};
-  for (let i = 0; i < days; i++) {
-    const d = new Date(); d.setDate(d.getDate() - (days - 1 - i));
-    counts[d.toISOString().split('T')[0]] = 0;
-  }
-  reqs.filter(r => !['blotter','complaint'].includes(r.typeKey)).forEach(r => {
-    const d = (r.createdAt || '').split('T')[0];
-    if (d in counts) counts[d]++;
-  });
-
-  const entries = Object.entries(counts);
-  const max = Math.max(...entries.map(e => e[1]), 1);
-  const container = document.getElementById('timelineChart');
-
-  container.innerHTML = entries.map(([date, count]) => {
-    const h = Math.max(2, Math.round((count / max) * 110));
-    const tip = date + ': ' + count + ' request' + (count !== 1 ? 's' : '');
-    const color = count === 0 ? '#e5e7eb' : '#2563eb';
-    return `<div class="tl-bar" style="height:${h}px;background:${color};opacity:${count === 0 ? 0.4 : 0.8};" data-tip="${tip}" title="${tip}"></div>`;
+  const days=30, counts={};
+  for (let i=0;i<days;i++) { const d=new Date(); d.setDate(d.getDate()-(days-1-i)); counts[d.toISOString().split('T')[0]]=0; }
+  reqs.filter(r => !['blotter','complaint'].includes(r.typeKey)).forEach(r => { const d=(r.createdAt||'').split('T')[0]; if (d in counts) counts[d]++; });
+  const entries=Object.entries(counts), max=Math.max(...entries.map(e=>e[1]),1);
+  document.getElementById('timelineChart').innerHTML=entries.map(([date,count]) => {
+    const h=Math.max(2,Math.round((count/max)*110));
+    return `<div class="tl-bar" style="height:${h}px;background:${count===0?'#e5e7eb':'#2563eb'};opacity:${count===0?0.4:0.8};" data-tip="${date}: ${count}" title="${date}: ${count}"></div>`;
   }).join('');
-
-  const dates = entries.map(e => e[0]);
+  const dates=entries.map(e=>e[0]);
   if (dates.length) {
-    document.getElementById('tl-start').textContent = new Date(dates[0]).toLocaleDateString('en-PH', {month:'short',day:'numeric'});
-    document.getElementById('tl-end').textContent = new Date(dates[dates.length-1]).toLocaleDateString('en-PH', {month:'short',day:'numeric'});
+    document.getElementById('tl-start').textContent=new Date(dates[0]).toLocaleDateString('en-PH',{month:'short',day:'numeric'});
+    document.getElementById('tl-end').textContent=new Date(dates[dates.length-1]).toLocaleDateString('en-PH',{month:'short',day:'numeric'});
   }
 }
 
 function displayName(u) {
   if (!u) return 'Unknown';
-  if (u.lastName) return [u.lastName + ',', u.firstName, u.middleName].filter(Boolean).join(' ');
-  return u.fullName || u.name || 'Unknown';
+  if (u.lastName) return [u.lastName+',',u.firstName,u.middleName].filter(Boolean).join(' ');
+  return u.fullName||u.name||'Unknown';
 }
-
-function fmt(d) { return d ? new Date(d).toLocaleDateString('en-PH', {year:'numeric',month:'short',day:'numeric'}) : '-'; }
+function fmt(d) { return d ? new Date(d).toLocaleDateString('en-PH',{year:'numeric',month:'short',day:'numeric'}) : '-'; }
 
 function renderRequestsTable(reqs) {
-  const users = getData(STORAGE_KEYS.USERS) || [];
-  const body = document.getElementById('requestsBody');
-  if (!reqs.length) { body.innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--gray-400);padding:2rem;">No requests in this period.</td></tr>'; return; }
-  body.innerHTML = reqs.slice(0, 200).map((r, i) => {
-    const u = users.find(x => x.id === r.userId);
-    const name = displayName(u) || r.requesterName || '-';
-    const processed = r.approvedBy || r.rejectedBy || r.releasedBy || '-';
-    return `<tr>
-      <td style="color:var(--gray-400);">${i+1}</td>
-      <td style="font-family:monospace;font-size:0.78rem;">${(r.id||'').substring(0,10).toUpperCase()}</td>
-      <td>${name}</td>
-      <td>${r.type || r.typeKey || '-'}</td>
-      <td>${r.purpose || '-'}</td>
-      <td>${r.fee > 0 ? '₱'+r.fee : 'FREE'}</td>
-      <td><span class="badge badge-${r.status}">${r.status||'-'}</span></td>
-      <td>${fmt(r.createdAt)}</td>
-      <td>${processed}</td>
-    </tr>`;
+  const users=getData(STORAGE_KEYS.USERS)||[], body=document.getElementById('requestsBody');
+  if (!reqs.length) { body.innerHTML='<tr><td colspan="10" style="text-align:center;color:var(--gray-400);padding:2rem;">No requests in this period.</td></tr>'; return; }
+  body.innerHTML=reqs.slice(0,200).map((r,i) => {
+    const u=users.find(x=>x.id===r.userId);
+    const processed=r.approvedBy||r.rejectedBy||r.releasedBy||r.cancelledByAdmin||'-';
+    const editedLabel = r.editedByAdmin ? '<span style="font-size:0.68rem;background:#dbeafe;color:#1e40af;border-radius:4px;padding:0.1rem 0.35rem;">Admin</span>'
+                      : r.editedByUser  ? '<span style="font-size:0.68rem;background:#fef3c7;color:#92400e;border-radius:4px;padding:0.1rem 0.35rem;">User</span>' : '-';
+    return `<tr><td style="color:var(--gray-400);">${i+1}</td><td style="font-family:monospace;font-size:0.78rem;">${(r.id||'').substring(0,10).toUpperCase()}</td><td>${displayName(u)||r.requesterName||'-'}</td><td>${r.type||r.typeKey||'-'}</td><td>${r.purpose||'-'}</td><td>${r.fee>0?'₱'+r.fee:'FREE'}</td><td><span class="badge badge-${r.status||'pending'}">${r.status||'-'}</span></td><td>${editedLabel}</td><td>${fmt(r.createdAt)}</td><td>${processed}</td></tr>`;
   }).join('');
 }
 
 function renderByType(reqs) {
-  const counts = {};
+  const counts={};
   reqs.forEach(r => {
-    const t = r.type || r.typeKey || 'Unknown';
-    if (!counts[t]) counts[t] = { total:0, pending:0, approved:0, released:0, rejected:0, revenue:0 };
+    const t=r.type||r.typeKey||'Unknown';
+    if (!counts[t]) counts[t]={total:0,pending:0,approved:0,released:0,rejected:0,cancelled:0,revenue:0};
     counts[t].total++;
-    if (r.status === 'pending' || r.status === 'pending-review') counts[t].pending++;
-    else if (r.status === 'approved') counts[t].approved++;
-    else if (r.status === 'released') counts[t].released++;
-    else if (r.status === 'rejected') counts[t].rejected++;
-    counts[t].revenue += Number(r.fee) || 0;
+    if (r.status==='pending'||r.status==='pending-review') counts[t].pending++;
+    else if (r.status==='approved')  counts[t].approved++;
+    else if (r.status==='released')  counts[t].released++;
+    else if (r.status==='rejected')  counts[t].rejected++;
+    else if (r.status==='cancelled') counts[t].cancelled++;
+    counts[t].revenue+=Number(r.fee)||0;
   });
-
-  const entries = Object.entries(counts).sort((a, b) => b[1].total - a[1].total);
-  const max = Math.max(...entries.map(e => e[1].total), 1);
-
-  document.getElementById('byTypeContent').innerHTML = entries.length
-    ? entries.map(([type, s], i) => `
-      <div class="progress-row" style="margin-bottom:1rem;">
-        <span class="progress-label" title="${type}">${type}</span>
-        <div style="flex:1;">
-          <div class="progress-bar-wrap">
-            <div class="progress-bar-fill" style="width:${Math.round(s.total/max*100)}%;background:${TYPE_COLORS[i%TYPE_COLORS.length]};"></div>
-          </div>
-          <div style="display:flex;gap:0.75rem;margin-top:0.35rem;font-size:0.72rem;color:var(--gray-500);">
-            <span>⏳ ${s.pending} pending</span>
-            <span>✓ ${s.approved} approved</span>
-            <span>📦 ${s.released} released</span>
-            <span>✗ ${s.rejected} rejected</span>
-            <span style="margin-left:auto;font-weight:700;color:var(--gray-900);">₱${s.revenue.toLocaleString()}</span>
-          </div>
-        </div>
-        <span class="progress-count">${s.total}</span>
-      </div>`)
-      .join('')
+  const entries=Object.entries(counts).sort((a,b)=>b[1].total-a[1].total), max=Math.max(...entries.map(e=>e[1].total),1);
+  document.getElementById('byTypeContent').innerHTML=entries.length
+    ? entries.map(([type,s],i) => `<div class="progress-row" style="margin-bottom:1rem;"><span class="progress-label" title="${type}">${type}</span><div style="flex:1;"><div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${Math.round(s.total/max*100)}%;background:${TYPE_COLORS[i%TYPE_COLORS.length]};"></div></div><div style="display:flex;gap:0.75rem;margin-top:0.35rem;font-size:0.72rem;color:var(--gray-500);"><span>⏳ ${s.pending}</span><span>✓ ${s.approved}</span><span>📦 ${s.released}</span><span>✗ ${s.rejected}</span><span>🚫 ${s.cancelled}</span><span style="margin-left:auto;font-weight:700;color:var(--gray-900);">₱${s.revenue.toLocaleString()}</span></div></div><span class="progress-count">${s.total}</span></div>`).join('')
     : '<p style="color:var(--gray-400);text-align:center;padding:2rem;">No data.</p>';
 }
 
+function renderCancelledTab(reqs) {
+  const cancelled = reqs.filter(r => r.status === 'cancelled');
+  const byUser  = cancelled.filter(r => r.cancelledBy !== 'admin').length;
+  const byAdmin = cancelled.filter(r => r.cancelledBy === 'admin').length;
+  document.getElementById('cancelledSummary').innerHTML = [
+    { label: 'Total Cancelled', value: cancelled.length, color: '#9ca3af' },
+    { label: 'By Resident',     value: byUser,           color: '#d97706' },
+    { label: 'By Admin/Staff',  value: byAdmin,          color: '#dc2626' },
+  ].map(({label,value,color}) => `<div style="background:var(--gray-50);border:1px solid var(--gray-200);border-left:4px solid ${color};border-radius:0.5rem;padding:1rem;"><div style="font-size:1.75rem;font-weight:800;color:${color};">${value}</div><div style="font-size:0.72rem;text-transform:uppercase;color:var(--gray-500);font-weight:700;margin-top:0.25rem;">${label}</div></div>`).join('');
+
+  const users=getData(STORAGE_KEYS.USERS)||[], body=document.getElementById('cancelledBody');
+  if (!cancelled.length) { body.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--gray-400);padding:2rem;">No cancelled requests in this period.</td></tr>'; return; }
+  body.innerHTML=cancelled.map((r,i) => {
+    const u=users.find(x=>x.id===r.userId);
+    const who = r.cancelledBy==='admin' ? (r.cancelledByAdmin||'Admin') + ' <span style="font-size:0.68rem;background:#fee2e2;color:#991b1b;border-radius:4px;padding:0.1rem 0.35rem;">Staff</span>' : 'Resident';
+    return `<tr><td style="color:var(--gray-400);">${i+1}</td><td style="font-family:monospace;font-size:0.78rem;">${(r.id||'').substring(0,10).toUpperCase()}</td><td>${displayName(u)||r.requesterName||'-'}</td><td>${r.type||'-'}</td><td>${who}</td><td>${r.cancelReason||'-'}</td><td>${fmt(r.cancelledAt)}</td></tr>`;
+  }).join('');
+}
+
+function renderEditedTab(reqs) {
+  const edited = reqs.filter(r => r.editedByUser || r.editedByAdmin);
+  const users=getData(STORAGE_KEYS.USERS)||[], body=document.getElementById('editedBody');
+  if (!edited.length) { body.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--gray-400);padding:2rem;">No edited requests in this period.</td></tr>'; return; }
+  body.innerHTML=edited.map((r,i) => {
+    const u=users.find(x=>x.id===r.userId);
+    const editedBy = r.editedByAdmin
+      ? '<span style="font-size:0.68rem;background:#dbeafe;color:#1e40af;border-radius:4px;padding:0.1rem 0.35rem;">Admin</span>'
+      : '<span style="font-size:0.68rem;background:#fef3c7;color:#92400e;border-radius:4px;padding:0.1rem 0.35rem;">User</span>';
+    return `<tr><td style="color:var(--gray-400);">${i+1}</td><td style="font-family:monospace;font-size:0.78rem;">${(r.id||'').substring(0,10).toUpperCase()}</td><td>${displayName(u)||r.requesterName||'-'}</td><td>${r.type||'-'}</td><td><span class="badge badge-${r.status||'pending'}">${r.status||'-'}</span></td><td>${editedBy}</td><td>${fmt(r.createdAt)}</td></tr>`;
+  }).join('');
+}
+
 function renderUsersTable() {
-  const requests = allRequests;
-  const body = document.getElementById('usersBody');
-  const filtered = allUsers.filter(u => inRange(u.createdAt));
-  if (!filtered.length) { body.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--gray-400);padding:2rem;">No users in this period.</td></tr>'; return; }
-  body.innerHTML = filtered.slice(0, 100).map((u, i) => {
-    const userReqs = requests.filter(r => r.userId === u.id);
-    const name = displayName(u);
-    const statusColor = { active:'badge-approved', suspended:'badge-pending', deactivated:'badge-rejected' }[u.status] || 'badge-pending';
-    return `<tr>
-      <td style="color:var(--gray-400);">${i+1}</td>
-      <td>${name}</td>
-      <td>${u.email || '-'}</td>
-      <td>${u.phone || '-'}</td>
-      <td>${u.purok ? 'Purok ' + u.purok : '-'}</td>
-      <td><span class="badge ${statusColor}">${u.status || 'active'}</span></td>
-      <td>${userReqs.length}</td>
-      <td>${fmt(u.createdAt)}</td>
-    </tr>`;
+  const body=document.getElementById('usersBody'), filtered=allUsers.filter(u=>inRange(u.createdAt));
+  if (!filtered.length) { body.innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--gray-400);padding:2rem;">No users in this period.</td></tr>'; return; }
+  body.innerHTML=filtered.slice(0,100).map((u,i) => {
+    const userReqs=allRequests.filter(r=>r.userId===u.id);
+    const sc={active:'badge-approved',suspended:'badge-pending',deactivated:'badge-rejected'}[u.status]||'badge-pending';
+    return `<tr><td style="color:var(--gray-400);">${i+1}</td><td>${displayName(u)}</td><td>${u.email||'-'}</td><td>${u.phone||'-'}</td><td>${u.purok?'Purok '+u.purok:'-'}</td><td><span class="badge ${sc}">${u.status||'active'}</span></td><td>${userReqs.length}</td><td>${fmt(u.createdAt)}</td></tr>`;
   }).join('');
 }
 
 function renderRevenue(reqs) {
-  const paid = reqs.filter(r => (r.fee || 0) > 0);
-  const total = paid.reduce((s, r) => s + Number(r.fee), 0);
-  const byType = {};
-  paid.forEach(r => {
-    const t = r.type || r.typeKey || 'Unknown';
-    byType[t] = (byType[t] || 0) + Number(r.fee);
-  });
-  const entries = Object.entries(byType).sort((a, b) => b[1] - a[1]);
-
-  document.getElementById('revenueContent').innerHTML = `
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:1.5rem;">
-      <div style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:0.5rem;padding:1rem;text-align:center;">
-        <div style="font-size:1.75rem;font-weight:800;color:#0891b2;">₱${total.toLocaleString()}</div>
-        <div style="font-size:0.72rem;text-transform:uppercase;color:var(--gray-500);font-weight:700;">Total Revenue</div>
-      </div>
-      <div style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:0.5rem;padding:1rem;text-align:center;">
-        <div style="font-size:1.75rem;font-weight:800;color:var(--success);">${paid.length}</div>
-        <div style="font-size:0.72rem;text-transform:uppercase;color:var(--gray-500);font-weight:700;">Paid Requests</div>
-      </div>
-      <div style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:0.5rem;padding:1rem;text-align:center;">
-        <div style="font-size:1.75rem;font-weight:800;color:var(--primary);">${reqs.filter(r => !(r.fee > 0)).length}</div>
-        <div style="font-size:0.72rem;text-transform:uppercase;color:var(--gray-500);font-weight:700;">Free Requests</div>
-      </div>
-      <div style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:0.5rem;padding:1rem;text-align:center;">
-        <div style="font-size:1.75rem;font-weight:800;color:var(--warning);">₱${paid.length ? Math.round(total/paid.length).toLocaleString() : 0}</div>
-        <div style="font-size:0.72rem;text-transform:uppercase;color:var(--gray-500);font-weight:700;">Avg per Paid Request</div>
-      </div>
-    </div>
-    <table class="sa-table">
-      <thead><tr><th>Document Type</th><th>Count</th><th>Revenue</th><th>Share</th></tr></thead>
-      <tbody>${entries.length ? entries.map(([type, rev], i) => `
-        <tr>
-          <td>${type}</td>
-          <td>${paid.filter(r => (r.type||r.typeKey) === type).length}</td>
-          <td style="font-weight:700;">₱${rev.toLocaleString()}</td>
-          <td>
-            <div style="display:flex;align-items:center;gap:0.5rem;">
-              <div style="flex:1;background:var(--gray-100);border-radius:9999px;height:6px;overflow:hidden;">
-                <div style="height:100%;border-radius:9999px;background:${TYPE_COLORS[i%TYPE_COLORS.length]};width:${total ? Math.round(rev/total*100) : 0}%;"></div>
-              </div>
-              <span style="font-size:0.75rem;font-weight:700;color:var(--gray-700);">${total ? Math.round(rev/total*100) : 0}%</span>
-            </div>
-          </td>
-        </tr>`).join('') : '<tr><td colspan="4" style="text-align:center;color:var(--gray-400);">No revenue data.</td></tr>'}</tbody>
-    </table>`;
+  const paid=reqs.filter(r=>(r.fee||0)>0), total=paid.reduce((s,r)=>s+Number(r.fee),0);
+  const byType={};
+  paid.forEach(r => { const t=r.type||r.typeKey||'Unknown'; byType[t]=(byType[t]||0)+Number(r.fee); });
+  const entries=Object.entries(byType).sort((a,b)=>b[1]-a[1]);
+  document.getElementById('revenueContent').innerHTML=`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:1.5rem;"><div style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:0.5rem;padding:1rem;text-align:center;"><div style="font-size:1.75rem;font-weight:800;color:#0891b2;">₱${total.toLocaleString()}</div><div style="font-size:0.72rem;text-transform:uppercase;color:var(--gray-500);font-weight:700;">Total Revenue</div></div><div style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:0.5rem;padding:1rem;text-align:center;"><div style="font-size:1.75rem;font-weight:800;color:var(--success);">${paid.length}</div><div style="font-size:0.72rem;text-transform:uppercase;color:var(--gray-500);font-weight:700;">Paid Requests</div></div><div style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:0.5rem;padding:1rem;text-align:center;"><div style="font-size:1.75rem;font-weight:800;color:var(--primary);">${reqs.filter(r=>!(r.fee>0)).length}</div><div style="font-size:0.72rem;text-transform:uppercase;color:var(--gray-500);font-weight:700;">Free Requests</div></div><div style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:0.5rem;padding:1rem;text-align:center;"><div style="font-size:1.75rem;font-weight:800;color:var(--warning);">₱${paid.length?Math.round(total/paid.length).toLocaleString():0}</div><div style="font-size:0.72rem;text-transform:uppercase;color:var(--gray-500);font-weight:700;">Avg per Paid</div></div></div><table class="sa-table"><thead><tr><th>Document Type</th><th>Count</th><th>Revenue</th><th>Share</th></tr></thead><tbody>${entries.length?entries.map(([type,rev],i)=>`<tr><td>${type}</td><td>${paid.filter(r=>(r.type||r.typeKey)===type).length}</td><td style="font-weight:700;">₱${rev.toLocaleString()}</td><td><div style="display:flex;align-items:center;gap:0.5rem;"><div style="flex:1;background:var(--gray-100);border-radius:9999px;height:6px;overflow:hidden;"><div style="height:100%;border-radius:9999px;background:${TYPE_COLORS[i%TYPE_COLORS.length]};width:${total?Math.round(rev/total*100):0}%;"></div></div><span style="font-size:0.75rem;font-weight:700;color:var(--gray-700);">${total?Math.round(rev/total*100):0}%</span></div></td></tr>`).join(''):'<tr><td colspan="4" style="text-align:center;color:var(--gray-400);">No revenue data.</td></tr>'}</tbody></table>`;
 }
 
 function renderBlotterTable(items) {
-  const body = document.getElementById('blotterBody');
-  if (!items.length) { body.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--gray-400);padding:2rem;">No blotter records in this period.</td></tr>'; return; }
-  body.innerHTML = items.map((b, i) => {
-    const type = b.typeKey === 'complaint' ? 'Complaint' : 'Blotter';
-    const complainant = b.complainantName || b.requesterName || '-';
-    const status = b.status || '-';
-    const statusClass = { Pending:'badge-pending', Ongoing:'badge-pending', Resolved:'badge-approved', Escalated:'badge-rejected', pending:'badge-pending', resolved:'badge-approved', rejected:'badge-rejected' }[status] || 'badge-pending';
-    return `<tr>
-      <td style="color:var(--gray-400);">${i+1}</td>
-      <td style="font-family:monospace;font-size:0.78rem;">${(b.id||'').substring(0,10).toUpperCase()}</td>
-      <td>${type}</td>
-      <td>${complainant}</td>
-      <td><span class="badge ${statusClass}">${status}</span></td>
-      <td>${fmt(b.createdAt || b.date)}</td>
-    </tr>`;
+  const body=document.getElementById('blotterBody');
+  if (!items.length) { body.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--gray-400);padding:2rem;">No blotter records.</td></tr>'; return; }
+  body.innerHTML=items.map((b,i) => {
+    const type=b.typeKey==='complaint'?'Complaint':'Blotter', status=b.status||'-';
+    const sc={Pending:'badge-pending',Ongoing:'badge-pending',Resolved:'badge-approved',Escalated:'badge-rejected',pending:'badge-pending',resolved:'badge-approved',rejected:'badge-rejected',cancelled:'badge-cancelled'}[status]||'badge-pending';
+    return `<tr><td style="color:var(--gray-400);">${i+1}</td><td style="font-family:monospace;font-size:0.78rem;">${(b.id||'').substring(0,10).toUpperCase()}</td><td>${type}</td><td>${b.complainantName||b.requesterName||'-'}</td><td><span class="badge ${sc}">${status}</span></td><td>${fmt(b.createdAt||b.date)}</td></tr>`;
   }).join('');
 }
 
 function switchTab(name, btn) {
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('tab-' + name).classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
 }
 
 function exportCSV() {
-  const rows = [['Tracking ID','Resident','Document Type','Purpose','Fee','Status','Date Filed','Approved By','Rejected By','Released By']];
-  const users = getData(STORAGE_KEYS.USERS) || [];
+  const rows=[['Tracking ID','Resident','Document Type','Purpose','Fee','Status','Edited By','Cancelled By','Cancel Reason','Date Filed','Processed By']];
+  const users=getData(STORAGE_KEYS.USERS)||[];
   filteredRequests.forEach(r => {
-    const u = users.find(x => x.id === r.userId);
-    rows.push([
-      (r.id||'').toUpperCase(),
-      displayName(u) || r.requesterName || '',
-      r.type || r.typeKey || '',
-      r.purpose || '',
-      r.fee || 0,
-      r.status || '',
-      r.createdAt ? new Date(r.createdAt).toLocaleDateString('en-PH') : '',
-      r.approvedBy || '',
-      r.rejectedBy || '',
-      r.releasedBy || '',
-    ]);
+    const u=users.find(x=>x.id===r.userId);
+    rows.push([(r.id||'').toUpperCase(),displayName(u)||r.requesterName||'',r.type||r.typeKey||'',r.purpose||'',r.fee||0,r.status||'',r.editedByAdmin?'Admin':r.editedByUser?'User':'',r.cancelledBy==='admin'?(r.cancelledByAdmin||'Admin'):r.cancelledBy==='user'?'User':'',r.cancelReason||'',r.createdAt?new Date(r.createdAt).toLocaleDateString('en-PH'):'',r.approvedBy||r.rejectedBy||r.releasedBy||'']);
   });
-  const csv = rows.map(r => r.map(v => '"' + String(v).replace(/"/g, '""') + '"').join(',')).join('\n');
-  const a = document.createElement('a');
-  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
-  a.download = 'requests_report_' + new Date().toISOString().split('T')[0] + '.csv';
-  a.click();
+  const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const a=document.createElement('a'); a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download='requests_report_'+new Date().toISOString().split('T')[0]+'.csv'; a.click();
 }
 </script>
 </body>

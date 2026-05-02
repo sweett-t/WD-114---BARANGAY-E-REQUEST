@@ -47,12 +47,16 @@
         <form id="loginForm" novalidate>
           <!-- Username -->
           <div class="auth-field">
-            <label for="login-username">Username or Email Address</label>
+            <!-- Change the label -->
+<label for="login-username">Username, Email, or Phone Number</label>
+
+<!-- Change the placeholder -->
             <input
               type="text"
               id="login-username"
               name="username"
-              placeholder="Enter your username or email"
+              placeholder="Enter your username, email, or phone"
+
               autocomplete="username"
               required
             />
@@ -113,46 +117,38 @@
 
   <script src="../js/script.js"></script>
   <script>
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const identifier = document.getElementById('login-username').value.trim();
-      const password = document.getElementById('login-password').value;
-      
-      if (!identifier || !password) {
-        alert('Please enter username and password');
-        return;
-      }
-      
-      // Check by email directly
-      const users = JSON.parse(localStorage.getItem('barangay_users') || '[]');
-      const user = users.find(u => (u.email === identifier || u.username === identifier || u.phone === identifier) && u.password === password);
-      
-      if (user) {
-        if (user.status !== 'active') {
-          alert('Account is not active');
-          return;
-        }
-        // Set current user
-        localStorage.setItem('barangay_current_user', JSON.stringify(user));
-        localStorage.setItem('barangay_current_mode', user.roles[0] || 'user');
-        
-        // Log action
-        const logs = JSON.parse(localStorage.getItem('barangay_logs') || '[]');
-        logs.push({ id: 'log_' + Date.now(), userId: user.id, fullName: user.fullName, role: user.roles[0], action: 'Logged in', timestamp: new Date().toISOString() });
-        localStorage.setItem('barangay_logs', JSON.stringify(logs));
-        
-        const role = user.roles[0];
-        if (role === 'super_admin') {
-          window.location.href = '../superadmin/superadmin-dashboard.html';
-        } else if (role === 'admin') {
-          window.location.href = '../admin/admin-dashboard.html';
-        } else {
-          window.location.href = '../user/user-dashboard.html';
-        }
+  document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    let identifier = document.getElementById('login-username').value.trim();
+    const password = document.getElementById('login-password').value;
+
+    if (!identifier || !password) {
+      showToast('Please enter your credentials', 'error');
+      return;
+    }
+
+    // Normalize phone input (strip spaces/dashes so "0912 345 6789" still matches)
+    if (/^[0-9\s\-+]+$/.test(identifier)) {
+      identifier = identifier.replace(/[\s\-]/g, '');
+    }
+
+    const result = login(identifier, password);
+
+    if (result.success) {
+      showToast('Login successful!');
+      const role = result.user.roles?.[0];
+      if (role === 'super_admin') {
+        window.location.href = '../superadmin/superadmin-dashboard.html';
+      } else if (role === 'admin') {
+        window.location.href = '../admin/admin-dashboard.html';
       } else {
-        alert('Invalid credentials. Make sure you ran seed.html first!');
+        window.location.href = '../user/user-dashboard.html';
       }
-    });
+    } else {
+      showToast(result.message || 'Invalid credentials', 'error');
+    }
+  });
   </script>
 </body>
 </html>

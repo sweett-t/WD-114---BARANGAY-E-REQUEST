@@ -8,16 +8,89 @@
     <link rel="stylesheet" href="../css/navbar.css" />
     <link rel="stylesheet" href="../css/user-requests.css" />
     <link rel="stylesheet" href="../css/user-dashboard.css" />
+    <style>
+      /* ── Action buttons in table ── */
+      .action-btns { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+      .btn-link {
+        background: none; border: none; cursor: pointer;
+        font-size: 0.82rem; font-weight: 600; padding: 0.28rem 0.65rem;
+        border-radius: 0.375rem; transition: background 0.15s, color 0.15s;
+      }
+      .btn-view   { color: #2563eb; }
+      .btn-view:hover { background: #dbeafe; }
+      .btn-edit   { color: #0891b2; }
+      .btn-edit:hover { background: #cffafe; }
+      .btn-cancel { color: #dc2626; }
+      .btn-cancel:hover { background: #fee2e2; }
+
+      /* ── Edit/Cancel Modal ── */
+      .action-modal-overlay {
+        display: none; position: fixed; inset: 0;
+        background: rgba(0,0,0,0.45); z-index: 1100;
+        align-items: center; justify-content: center;
+      }
+      .action-modal-overlay.open { display: flex; }
+      .action-modal {
+        background: #fff; border-radius: 1rem; padding: 2rem;
+        width: 100%; max-width: 480px; box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+        position: relative; animation: slideUp 0.2s ease;
+      }
+      @keyframes slideUp {
+        from { transform: translateY(16px); opacity: 0; }
+        to   { transform: translateY(0);    opacity: 1; }
+      }
+      .action-modal h3 { font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem; }
+      .action-modal .modal-close {
+        position: absolute; top: 1rem; right: 1rem;
+        background: none; border: none; font-size: 1.4rem; cursor: pointer; color: #6b7280;
+      }
+      .action-modal label { display: block; font-size: 0.82rem; font-weight: 600; color: #374151; margin-bottom: 0.3rem; margin-top: 0.9rem; }
+      .action-modal input,
+      .action-modal textarea,
+      .action-modal select {
+        width: 100%; padding: 0.55rem 0.75rem; border: 1px solid #d1d5db;
+        border-radius: 0.5rem; font-size: 0.875rem; color: #1e293b;
+        background: #f9fafb; transition: border 0.15s;
+      }
+      .action-modal input:focus,
+      .action-modal textarea:focus,
+      .action-modal select:focus { outline: none; border-color: #2563eb; background: #fff; }
+      .action-modal textarea { resize: vertical; min-height: 80px; }
+      .modal-actions { display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.4rem; }
+      .btn-save {
+        padding: 0.55rem 1.4rem; background: #2563eb; color: #fff;
+        border: none; border-radius: 0.5rem; font-weight: 600; font-size: 0.875rem; cursor: pointer;
+      }
+      .btn-save:hover { background: #1d4ed8; }
+      .btn-discard {
+        padding: 0.55rem 1.1rem; background: #f1f5f9; color: #374151;
+        border: 1px solid #e2e8f0; border-radius: 0.5rem; font-weight: 600; font-size: 0.875rem; cursor: pointer;
+      }
+      .btn-discard:hover { background: #e2e8f0; }
+
+      /* Cancel confirmation */
+      .cancel-warning { background: #fff7ed; border: 1px solid #fed7aa; border-radius: 0.5rem; padding: 0.9rem 1rem; margin-top: 0.75rem; font-size: 0.875rem; color: #92400e; }
+      .btn-confirm-cancel { background: #dc2626; }
+      .btn-confirm-cancel:hover { background: #b91c1c; }
+
+      /* Toast */
+      #toast {
+        position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 2000;
+        background: #1e293b; color: #fff; padding: 0.75rem 1.25rem;
+        border-radius: 0.6rem; font-size: 0.875rem; font-weight: 500;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.2); display: none;
+        animation: fadeIn 0.2s ease;
+      }
+      #toast.show { display: block; }
+      #toast.success { background: #16a34a; }
+      #toast.error   { background: #dc2626; }
+      @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity:1; transform: translateY(0); } }
+    </style>
   </head>
   <body>
     <nav class="navbar">
       <a href="user-dashboard.html" class="navbar-brand">Barangay E-Request</a>
-      <input
-        type="checkbox"
-        id="nav-toggle"
-        class="nav-toggle"
-        aria-hidden="true"
-      />
+      <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-hidden="true" />
       <ul class="navbar-nav">
         <li><a href="user-dashboard.html">Dashboard</a></li>
         <li><a href="request.html">New Request</a></li>
@@ -26,49 +99,27 @@
         <li><a href="user-profile.html">Profile</a></li>
       </ul>
       <div class="navbar-right">
-        <button
-          class="notification-bell"
-          id="notification-bell"
-          onclick="showNotifications()"
-        >
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
+        <button class="notification-bell" id="notification-bell" onclick="showNotifications()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
             <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
           </svg>
-          <span
-            class="notification-badge"
-            id="notification-badge"
-            style="display: none"
-            >0</span
-          >
+          <span class="notification-badge" id="notification-badge" style="display: none">0</span>
         </button>
         <div class="navbar-user">
           <div class="avatar" id="user-avatar">JD</div>
           <span class="navbar-username" id="user-nav-name">Loading...</span>
         </div>
-        <label for="nav-toggle" class="hamburger"
-          ><span></span><span></span><span></span
-        ></label>
+        <label for="nav-toggle" class="hamburger"><span></span><span></span><span></span></label>
       </div>
     </nav>
 
     <main>
       <div class="page-header">
         <h1>My Requests</h1>
-        <p>
-          View and track all your document requests, blotter records, and
-          complaints.
-        </p>
+        <p>View and track all your document requests, blotter records, and complaints.</p>
         <p style="font-size: 0.85rem; color: #64748b; margin-top: 0.5rem">
-          Click <strong>View</strong> to see details and progress of each
-          request.
+          Click <strong>View</strong> to see details. Pending requests can be <strong>edited</strong> or <strong>cancelled</strong>.
         </p>
       </div>
 
@@ -80,9 +131,7 @@
             <option value="Barangay Clearance">Barangay Clearance</option>
             <option value="Barangay ID">Barangay ID</option>
             <option value="Business Clearance">Business Clearance</option>
-            <option value="Certificate of Indigency">
-              Certificate of Indigency
-            </option>
+            <option value="Certificate of Indigency">Certificate of Indigency</option>
             <option value="Solo Parent">Solo Parent Certificate</option>
             <option value="Senior Citizen">Senior Citizen Certificate</option>
             <option value="Blotter">Blotter</option>
@@ -98,6 +147,7 @@
             <option value="ready">Ready for Pickup</option>
             <option value="released">Released</option>
             <option value="rejected">Rejected</option>
+            <option value="cancelled">Cancelled</option>
           </select>
         </div>
         <div class="filter-group">
@@ -110,12 +160,7 @@
         </div>
         <div class="filter-group">
           <label for="filter-search">Search</label>
-          <input
-            type="text"
-            id="filter-search"
-            placeholder="Tracking # or type…"
-            onkeyup="applyFilters()"
-          />
+          <input type="text" id="filter-search" placeholder="Tracking # or type…" onkeyup="applyFilters()" />
         </div>
       </div>
 
@@ -133,152 +178,146 @@
                 <th>Tracking #</th>
                 <th>Status</th>
                 <th>Purpose/Description</th>
-                <th>Action</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody id="requests-tbody">
-              <tr>
-                <td
-                  colspan="6"
-                  style="text-align: center; padding: 2rem; color: #6b7280"
-                >
-                  Loading...
-                </td>
-              </tr>
+              <tr><td colspan="6" style="text-align:center;padding:2rem;color:#6b7280">Loading...</td></tr>
             </tbody>
           </table>
         </div>
         <div class="pagination" id="pagination">
-          <button type="button" id="prev-btn" onclick="prevPage()">
-            ← Previous
-          </button>
+          <button type="button" id="prev-btn" onclick="prevPage()">← Previous</button>
           <span class="page-info" id="page-info">Page 1 of 1</span>
-          <button type="button" id="next-btn" onclick="nextPage()">
-            Next →
-          </button>
+          <button type="button" id="next-btn" onclick="nextPage()">Next →</button>
         </div>
       </div>
     </main>
 
+    <!-- ── View Modal ── -->
     <div class="modal-overlay" id="view-modal">
       <div class="modal">
         <div class="modal-header">
           <h3>Request Details</h3>
-          <button type="button" class="modal-close" onclick="closeViewModal()">
-            ×
-          </button>
+          <button type="button" class="modal-close" onclick="closeViewModal()">×</button>
         </div>
         <div id="modal-content"></div>
       </div>
     </div>
 
+    <!-- ── Edit Modal ── -->
+    <div class="action-modal-overlay" id="edit-modal">
+      <div class="action-modal">
+        <button class="modal-close" onclick="closeEditModal()">×</button>
+        <h3>✏️ Edit Request</h3>
+        <p style="font-size:0.82rem;color:#64748b">Only the purpose / description can be edited while your request is pending.</p>
+        <input type="hidden" id="edit-request-id" />
+        <label for="edit-purpose">Purpose</label>
+        <input type="text" id="edit-purpose" placeholder="State your purpose…" />
+        <label for="edit-description">Description / Additional Notes</label>
+        <textarea id="edit-description" placeholder="Add any extra details…"></textarea>
+        <div class="modal-actions">
+          <button class="btn-discard" onclick="closeEditModal()">Discard</button>
+          <button class="btn-save" onclick="saveEdit()">Save Changes</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Cancel Confirmation Modal ── -->
+    <div class="action-modal-overlay" id="cancel-modal">
+      <div class="action-modal">
+        <button class="modal-close" onclick="closeCancelModal()">×</button>
+        <h3>🗑️ Cancel Request</h3>
+        <input type="hidden" id="cancel-request-id" />
+        <div class="cancel-warning">
+          ⚠️ This will mark your request as <strong>Cancelled</strong>. Admins will be notified. This action cannot be undone.
+        </div>
+        <label for="cancel-reason">Reason for cancellation</label>
+        <textarea id="cancel-reason" placeholder="Please provide a reason…" style="min-height:70px"></textarea>
+        <div class="modal-actions">
+          <button class="btn-discard" onclick="closeCancelModal()">Go Back</button>
+          <button class="btn-save btn-confirm-cancel" onclick="confirmCancel()">Yes, Cancel Request</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Notification Modal -->
-    <div
-      class="notification-modal"
-      id="notification-modal"
-      onclick="closeNotificationModal(event)"
-    >
+    <div class="notification-modal" id="notification-modal" onclick="closeNotificationModal(event)">
       <div class="notification-panel" onclick="event.stopPropagation()">
         <div class="notification-panel-header">
           <h3>Notifications</h3>
           <div>
             <button onclick="showMarkAllReadModal()">Mark all read</button>
-            <button onclick="showClearAllModal()" style="margin-left: 0.75rem">
-              Clear all
-            </button>
+            <button onclick="showClearAllModal()" style="margin-left: 0.75rem">Clear all</button>
           </div>
         </div>
         <div class="notification-list" id="notification-list"></div>
       </div>
     </div>
 
+    <!-- Toast -->
+    <div id="toast"></div>
+
     <footer class="footer">
       <p>&copy; 2026 Barangay Records System. All rights reserved.</p>
     </footer>
 
-
     <script src="../js/script.js"></script>
     <script>
-      var allRequests = [],
-        filteredRequests = [],
-        currentPage = 1,
-        itemsPerPage = 5;
+      var allRequests = [], filteredRequests = [], currentPage = 1, itemsPerPage = 5;
 
-      document.addEventListener("DOMContentLoaded", function () {
+      /* ── Editable statuses ── */
+      var EDITABLE_STATUSES = ['pending'];
+      var CANCELLABLE_STATUSES = ['pending'];
+
+      document.addEventListener('DOMContentLoaded', function () {
         var user = getCurrentUser();
         if (user) {
-          document.getElementById("user-nav-name").textContent =
-            user.fullName || "User";
-          document.getElementById("user-avatar").textContent = (
-            user.fullName || "U"
-          )
-            .split(" ")
-            .map(function (n) {
-              return n[0];
-            })
-            .join("")
-            .substring(0, 2)
-            .toUpperCase();
+          document.getElementById('user-nav-name').textContent = user.fullName || 'User';
+          document.getElementById('user-avatar').textContent = (user.fullName || 'U')
+            .split(' ').map(function (n) { return n[0]; }).join('').substring(0, 2).toUpperCase();
         }
         loadRequests();
         loadNotificationBadge();
       });
 
+      /* ────────────────────────────── Data ────────────────────────────── */
       function loadRequests() {
         var user = getCurrentUser();
-        if (!user) {
-          document.getElementById("requests-tbody").innerHTML =
-            '<tr><td colspan="6">Please log in.</td></tr>';
-          return;
-        }
+        if (!user) { document.getElementById('requests-tbody').innerHTML = '<tr><td colspan="6">Please log in.</td></tr>'; return; }
         var requests = getData(STORAGE_KEYS.REQUESTS) || [];
         allRequests = requests
-          .filter(function (r) {
-            return r.userId === user.id;
-          })
-          .sort(function (a, b) {
-            return new Date(b.createdAt) - new Date(a.createdAt);
-          });
+          .filter(function (r) { return r.userId === user.id; })
+          .sort(function (a, b) { return new Date(b.createdAt) - new Date(a.createdAt); });
         filteredRequests = allRequests.slice();
         currentPage = 1;
         renderRequests();
       }
 
+      function saveRequests(all) {
+        /* Merge back only the current user's requests into the full store */
+        var user = getCurrentUser();
+        var allStored = getData(STORAGE_KEYS.REQUESTS) || [];
+        var others = allStored.filter(function (r) { return r.userId !== user.id; });
+        setData(STORAGE_KEYS.REQUESTS, others.concat(all));
+      }
+
+      /* ─────────────────────────── Filters ───────────────────────────── */
       function applyFilters() {
-        var typeFilter = document.getElementById("filter-type").value;
-        var statusFilter = document.getElementById("filter-status").value;
-        var dateFrom = document.getElementById("filter-date-from").value;
-        var dateTo = document.getElementById("filter-date-to").value;
-        var searchTerm = document
-          .getElementById("filter-search")
-          .value.toLowerCase();
+        var typeFilter   = document.getElementById('filter-type').value;
+        var statusFilter = document.getElementById('filter-status').value;
+        var dateFrom     = document.getElementById('filter-date-from').value;
+        var dateTo       = document.getElementById('filter-date-to').value;
+        var searchTerm   = document.getElementById('filter-search').value.toLowerCase();
 
         filteredRequests = allRequests.filter(function (r) {
-          if (
-            typeFilter &&
-            r.type !== typeFilter &&
-            !r.type.toLowerCase().includes(typeFilter.toLowerCase())
-          )
-            return false;
+          if (typeFilter && r.type !== typeFilter && !(r.type || '').toLowerCase().includes(typeFilter.toLowerCase())) return false;
           if (statusFilter && r.status !== statusFilter) return false;
-          if (dateFrom) {
-            var created = new Date(r.createdAt).toISOString().split("T")[0];
-            if (created < dateFrom) return false;
-          }
-          if (dateTo) {
-            var created = new Date(r.createdAt).toISOString().split("T")[0];
-            if (created > dateTo) return false;
-          }
+          if (dateFrom) { var c = new Date(r.createdAt).toISOString().split('T')[0]; if (c < dateFrom) return false; }
+          if (dateTo)   { var c = new Date(r.createdAt).toISOString().split('T')[0]; if (c > dateTo)   return false; }
           if (searchTerm) {
-            var searchText = (
-              r.id +
-              " " +
-              r.type +
-              " " +
-              (r.purpose || "") +
-              (r.complaintDescription || "")
-            ).toLowerCase();
-            if (!searchText.includes(searchTerm)) return false;
+            var t = (r.id + ' ' + r.type + ' ' + (r.purpose || '') + (r.complaintDescription || '') + (r.incidentDescription || '')).toLowerCase();
+            if (!t.includes(searchTerm)) return false;
           }
           return true;
         });
@@ -286,189 +325,210 @@
         renderRequests();
       }
 
+      /* ──────────────────────────── Render ───────────────────────────── */
       function renderRequests() {
-        var tbody = document.getElementById("requests-tbody");
-        var countEl = document.getElementById("results-count");
+        var tbody      = document.getElementById('requests-tbody');
+        var countEl    = document.getElementById('results-count');
         var totalPages = Math.ceil(filteredRequests.length / itemsPerPage) || 1;
 
-        if (!filteredRequests || filteredRequests.length === 0) {
-          tbody.innerHTML =
-            '<tr><td colspan="6" style="text-align:center;padding:2rem;color:#6b7280">No requests found.</td></tr>';
-          countEl.textContent = "Showing 0 of 0";
+        if (!filteredRequests.length) {
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:#6b7280">No requests found.</td></tr>';
+          countEl.textContent = 'Showing 0 of 0';
           updatePagination(totalPages);
           return;
         }
 
-        var startIdx = (currentPage - 1) * itemsPerPage;
-        var pageItems = filteredRequests.slice(
-          startIdx,
-          startIdx + itemsPerPage,
-        );
-        var rows = "";
+        var startIdx  = (currentPage - 1) * itemsPerPage;
+        var pageItems = filteredRequests.slice(startIdx, startIdx + itemsPerPage);
+        var rows = '';
 
         pageItems.forEach(function (r) {
-          var dateStr = new Date(r.createdAt).toLocaleDateString("en-PH", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-          });
-          var purpose =
-            r.purpose || r.complaintDescription || r.incidentDescription || "-";
-          if (purpose.length > 40) purpose = purpose.substring(0, 40) + "...";
-          var badgeClass = "badge-pending";
-          if (r.status === "approved") badgeClass = "badge-approved";
-          if (r.status === "ready") badgeClass = "badge-ready";
-          if (r.status === "released") badgeClass = "badge-released";
-          if (r.status === "rejected") badgeClass = "badge-rejected";
+          var dateStr = new Date(r.createdAt).toLocaleDateString('en-PH', { year: 'numeric', month: 'short', day: 'numeric' });
+          var purpose = r.purpose || r.complaintDescription || r.incidentDescription || '-';
+          if (purpose.length > 40) purpose = purpose.substring(0, 40) + '…';
 
-          rows +=
-            "<tr>" +
-            '<td data-label="Document Type"><strong>' +
-            r.type +
-            "</strong></td>" +
-            '<td data-label="Date Requested">' +
-            dateStr +
-            "</td>" +
-            '<td data-label="Tracking #">' +
-            r.id +
-            "</td>" +
-            '<td data-label="Status"><span class="badge ' +
-            badgeClass +
-            '">' +
-            (r.status || "pending").toUpperCase() +
-            "</span></td>" +
-            '<td data-label="Purpose">' +
-            purpose +
-            "</td>" +
-            '<td data-label="Action"><button type="button" class="btn-link" onclick="viewRequest(\'' +
-            r.id +
-            "')\">View</button></td></tr>";
+          var status = (r.status || 'pending').toLowerCase();
+          var badgeClass = {
+            approved: 'badge-approved', ready: 'badge-ready',
+            released: 'badge-released', rejected: 'badge-rejected',
+            cancelled: 'badge-rejected'
+          }[status] || 'badge-pending';
+
+          var canEdit   = EDITABLE_STATUSES.includes(status);
+          var canCancel = CANCELLABLE_STATUSES.includes(status);
+
+          var actionBtns = '<div class="action-btns">'
+            + '<button type="button" class="btn-link btn-view" onclick="viewRequest(\'' + r.id + '\')">View</button>';
+          if (canEdit)
+            actionBtns += '<button type="button" class="btn-link btn-edit" onclick="openEditModal(\'' + r.id + '\')">Edit</button>';
+          if (canCancel)
+            actionBtns += '<button type="button" class="btn-link btn-cancel" onclick="openCancelModal(\'' + r.id + '\')">Cancel</button>';
+          actionBtns += '</div>';
+
+          rows += '<tr>'
+            + '<td data-label="Document Type"><strong>' + (r.type || '-') + '</strong></td>'
+            + '<td data-label="Date Requested">' + dateStr + '</td>'
+            + '<td data-label="Tracking #">' + r.id + '</td>'
+            + '<td data-label="Status"><span class="badge ' + badgeClass + '">' + status.toUpperCase() + '</span></td>'
+            + '<td data-label="Purpose">' + purpose + '</td>'
+            + '<td data-label="Actions">' + actionBtns + '</td>'
+            + '</tr>';
         });
 
         tbody.innerHTML = rows;
-        countEl.textContent =
-          "Showing " + filteredRequests.length + " request(s)";
+        countEl.textContent = 'Showing ' + filteredRequests.length + ' request(s)';
         updatePagination(totalPages);
       }
 
       function updatePagination(totalPages) {
-        var prevBtn = document.getElementById("prev-btn");
-        var nextBtn = document.getElementById("next-btn");
-        var pageInfo = document.getElementById("page-info");
-        if (totalPages <= 1) {
-          prevBtn.disabled = true;
-          nextBtn.disabled = true;
-        } else {
-          prevBtn.disabled = currentPage === 1;
-          nextBtn.disabled = currentPage === totalPages;
-        }
-        pageInfo.textContent = "Page " + currentPage + " of " + totalPages;
+        document.getElementById('prev-btn').disabled = currentPage === 1;
+        document.getElementById('next-btn').disabled = currentPage === totalPages || totalPages <= 1;
+        document.getElementById('page-info').textContent = 'Page ' + currentPage + ' of ' + totalPages;
       }
+      function prevPage() { if (currentPage > 1) { currentPage--; renderRequests(); } }
+      function nextPage() { var tp = Math.ceil(filteredRequests.length / itemsPerPage); if (currentPage < tp) { currentPage++; renderRequests(); } }
 
-      function prevPage() {
-        if (currentPage > 1) {
-          currentPage--;
-          renderRequests();
-        }
-      }
-      function nextPage() {
-        var totalPages = Math.ceil(filteredRequests.length / itemsPerPage);
-        if (currentPage < totalPages) {
-          currentPage++;
-          renderRequests();
-        }
-      }
-
+      /* ─────────────────────── View Modal ────────────────────────────── */
       function viewRequest(id) {
-        var request = filteredRequests.find(function (r) {
-          return r.id === id;
-        });
+        var request = filteredRequests.find(function (r) { return r.id === id; });
         if (!request) return;
-        var status = request.status || "pending";
+        var status = (request.status || 'pending').toLowerCase();
         var stages = getStages(status);
 
-        var details =
-          '<div class="modal-row"><div class="modal-key">Tracking #</div><div class="modal-val">' +
-          request.id +
-          "</div></div>";
-        details +=
-          '<div class="modal-row"><div class="modal-key">Type</div><div class="modal-val">' +
-          request.type +
-          "</div></div>";
-        details +=
-          '<div class="modal-row"><div class="modal-key">Date Filed</div><div class="modal-val">' +
-          new Date(request.createdAt).toLocaleDateString("en-PH") +
-          "</div></div>";
-        details +=
-          '<div class="modal-row"><div class="modal-key">Status</div><div class="modal-val"><span class="badge badge-' +
-          status +
-          '">' +
-          status.toUpperCase() +
-          "</span></div></div>";
-        if (request.purpose)
-          details +=
-            '<div class="modal-row"><div class="modal-key">Purpose</div><div class="modal-val">' +
-            request.purpose +
-            "</div></div>";
-        if (request.complaintDescription)
-          details +=
-            '<div class="modal-row"><div class="modal-key">Description</div><div class="modal-val">' +
-            request.complaintDescription +
-            "</div></div>";
-        if (request.incidentDescription)
-          details +=
-            '<div class="modal-row"><div class="modal-key">Description</div><div class="modal-val">' +
-            request.incidentDescription +
-            "</div></div>";
-        details +=
-          '<div class="tracker"><h4>Request Progress</h4><div class="track-steps">' +
-          stages +
-          "</div></div>";
+        var details = ''
+          + '<div class="modal-row"><div class="modal-key">Tracking #</div><div class="modal-val">' + request.id + '</div></div>'
+          + '<div class="modal-row"><div class="modal-key">Type</div><div class="modal-val">' + request.type + '</div></div>'
+          + '<div class="modal-row"><div class="modal-key">Date Filed</div><div class="modal-val">' + new Date(request.createdAt).toLocaleDateString('en-PH') + '</div></div>'
+          + '<div class="modal-row"><div class="modal-key">Status</div><div class="modal-val"><span class="badge badge-' + status + '">' + status.toUpperCase() + '</span></div></div>';
 
-        document.getElementById("modal-content").innerHTML = details;
-        document.getElementById("view-modal").classList.add("open");
+        if (request.purpose)              details += '<div class="modal-row"><div class="modal-key">Purpose</div><div class="modal-val">'     + request.purpose              + '</div></div>';
+        if (request.complaintDescription) details += '<div class="modal-row"><div class="modal-key">Description</div><div class="modal-val">' + request.complaintDescription + '</div></div>';
+        if (request.incidentDescription)  details += '<div class="modal-row"><div class="modal-key">Description</div><div class="modal-val">' + request.incidentDescription  + '</div></div>';
+        if (request.cancelReason)         details += '<div class="modal-row"><div class="modal-key">Cancel Reason</div><div class="modal-val" style="color:#dc2626">' + request.cancelReason + '</div></div>';
+
+        if (status !== 'cancelled') {
+          details += '<div class="tracker"><h4>Request Progress</h4><div class="track-steps">' + stages + '</div></div>';
+        }
+
+        document.getElementById('modal-content').innerHTML = details;
+        document.getElementById('view-modal').classList.add('open');
       }
 
       function getStages(status) {
-        var allStages = ["Pending", "Approved", "Ready", "Released"];
+        var allStages   = ['Pending', 'Approved', 'Ready', 'Released'];
         var statusOrder = { pending: 0, approved: 1, ready: 2, released: 3 };
-        var currentIdx = statusOrder[status] || 0;
-        var html = "";
-
+        var currentIdx  = statusOrder[status] !== undefined ? statusOrder[status] : 0;
+        var html = '';
         allStages.forEach(function (stage, idx) {
-          var isDone = idx < currentIdx;
-          var isCurrent = idx === currentIdx;
-          var isLast = idx === allStages.length - 1;
+          var isDone = idx < currentIdx, isCurrent = idx === currentIdx, isLast = idx === allStages.length - 1;
           html += '<div class="track-step"><div class="track-left">';
-          html +=
-            '<div class="track-dot' +
-            (isDone ? " done" : "") +
-            (isCurrent ? " current" : "") +
-            '"></div>';
-          if (!isLast)
-            html +=
-              '<div class="track-line' + (isDone ? " done" : "") + '"></div>';
-          html += '</div><div class="track-content">';
-          html +=
-            "<h5>" +
-            stage +
-            "</h5><p>" +
-            (isDone ? "Completed" : isCurrent ? "Processing..." : "Pending") +
-            "</p></div></div>";
+          html += '<div class="track-dot' + (isDone ? ' done' : '') + (isCurrent ? ' current' : '') + '"></div>';
+          if (!isLast) html += '<div class="track-line' + (isDone ? ' done' : '') + '"></div>';
+          html += '</div><div class="track-content"><h5>' + stage + '</h5><p>' + (isDone ? 'Completed' : isCurrent ? 'Processing…' : 'Pending') + '</p></div></div>';
         });
         return html;
       }
+      function closeViewModal() { document.getElementById('view-modal').classList.remove('open'); }
 
-      function closeViewModal() {
-        document.getElementById("view-modal").classList.remove("open");
+      /* ──────────────────────── Edit Modal ───────────────────────────── */
+      function openEditModal(id) {
+        var request = allRequests.find(function (r) { return r.id === id; });
+        if (!request) return;
+        document.getElementById('edit-request-id').value    = id;
+        document.getElementById('edit-purpose').value       = request.purpose || '';
+        document.getElementById('edit-description').value   = request.complaintDescription || request.incidentDescription || '';
+        document.getElementById('edit-modal').classList.add('open');
+      }
+      function closeEditModal() { document.getElementById('edit-modal').classList.remove('open'); }
+
+      function saveEdit() {
+        var id          = document.getElementById('edit-request-id').value;
+        var newPurpose  = document.getElementById('edit-purpose').value.trim();
+        var newDesc     = document.getElementById('edit-description').value.trim();
+
+        if (!newPurpose && !newDesc) { showToast('Please fill in at least one field.', 'error'); return; }
+
+        var idx = allRequests.findIndex(function (r) { return r.id === id; });
+        if (idx === -1) return;
+
+        allRequests[idx].purpose              = newPurpose || allRequests[idx].purpose;
+        allRequests[idx].complaintDescription = newDesc    || allRequests[idx].complaintDescription;
+        allRequests[idx].incidentDescription  = newDesc    || allRequests[idx].incidentDescription;
+        allRequests[idx].updatedAt            = new Date().toISOString();
+        allRequests[idx].editedByUser         = true;
+
+        saveRequests(allRequests);
+        applyFilters();
+        closeEditModal();
+        showToast('Request updated successfully!', 'success');
+
+        /* Notify admins */
+        notifyAdmins('Request #' + id + ' was edited by the resident. Please review.', id);
       }
 
-      // Use global notification functions
-      document
-        .getElementById("confirm-modal")
-        .addEventListener("click", function (e) {
-          if (e.target === this) closeConfirmModal();
+      /* ─────────────────────── Cancel Modal ──────────────────────────── */
+      function openCancelModal(id) {
+        document.getElementById('cancel-request-id').value = id;
+        document.getElementById('cancel-reason').value     = '';
+        document.getElementById('cancel-modal').classList.add('open');
+      }
+      function closeCancelModal() { document.getElementById('cancel-modal').classList.remove('open'); }
+
+      function confirmCancel() {
+        var id     = document.getElementById('cancel-request-id').value;
+        var reason = document.getElementById('cancel-reason').value.trim();
+        if (!reason) { showToast('Please provide a reason for cancellation.', 'error'); return; }
+
+        var idx = allRequests.findIndex(function (r) { return r.id === id; });
+        if (idx === -1) return;
+
+        allRequests[idx].status       = 'cancelled';
+        allRequests[idx].cancelReason = reason;
+        allRequests[idx].cancelledAt  = new Date().toISOString();
+        allRequests[idx].cancelledBy  = 'user';
+
+        saveRequests(allRequests);
+        applyFilters();
+        closeCancelModal();
+        showToast('Request cancelled.', 'success');
+
+        /* Notify admins */
+        notifyAdmins('Request #' + id + ' was cancelled by the resident. Reason: ' + reason, id);
+      }
+
+      /* ─────────────────────── Notify Admins ─────────────────────────── */
+      function notifyAdmins(message, requestId) {
+        if (typeof getData !== 'function' || typeof setData !== 'function') return;
+        var notifications = getData('notifications') || [];
+        var admins = (getData(STORAGE_KEYS.ADMINS) || []).concat(getData(STORAGE_KEYS.USERS) || [])
+          .filter(function (u) { return u.roles && (u.roles.includes('admin') || u.roles.includes('super_admin')); });
+
+        admins.forEach(function (admin) {
+          notifications.push({
+            id:        'notif-' + Date.now() + '-' + admin.id,
+            userId:    admin.id,
+            message:   message,
+            requestId: requestId,
+            type:      'request_update',
+            read:      false,
+            createdAt: new Date().toISOString()
+          });
         });
+        setData('notifications', notifications);
+      }
+
+      /* ──────────────────────────── Toast ────────────────────────────── */
+      function showToast(msg, type) {
+        var t = document.getElementById('toast');
+        t.textContent = msg;
+        t.className   = 'show ' + (type || '');
+        setTimeout(function () { t.className = ''; }, 3000);
+      }
+
+      /* Notification modal helpers */
+      document.getElementById('confirm-modal') && document.getElementById('confirm-modal').addEventListener('click', function (e) {
+        if (e.target === this) closeConfirmModal();
+      });
     </script>
   </body>
 </html>
