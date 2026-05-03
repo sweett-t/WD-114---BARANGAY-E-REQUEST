@@ -16,34 +16,9 @@
     }
     * { box-sizing: border-box; margin:0; padding:0; }
     body { font-family: "Segoe UI", sans-serif; background: var(--gray-100); }
-    .sa-layout { display: flex; min-height: 100vh; }
-
-    /* ── Sidebar ── */
-    .sa-sidebar { width: 240px; flex-shrink: 0; background: #fff; border-right: 1px solid var(--gray-200); position: sticky; top: 0; height: 100vh; overflow-y: auto; display: flex; flex-direction: column; }
-    .sb-brand { display: flex; align-items: center; gap: 0.5rem; padding: 1.25rem 1rem; border-bottom: 1px solid var(--gray-200); font-weight: 800; font-size: 0.95rem; color: var(--primary); text-decoration: none; }
-    .sb-user { display: flex; align-items: center; gap: 0.65rem; padding: 1rem; border-bottom: 1px solid var(--gray-100); }
-    .sb-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--primary); color: #fff; font-size: 0.8rem; font-weight: 700; display: flex; align-items: center; justify-content: center; }
-    .sb-name { font-size: 0.85rem; font-weight: 600; color: var(--gray-900); }
-    .sb-role { font-size: 0.7rem; color: var(--gray-500); }
-    .sb-section { padding: 0 0.5rem; margin-top: 0.5rem; }
-    .sb-section-header { display: flex; align-items: center; justify-content: space-between; padding: 0.35rem 0.5rem; cursor: pointer; user-select: none; border-radius: 0.375rem; }
-    .sb-section-header:hover { background: var(--gray-50); }
-    .sb-label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--gray-400); }
-    .sb-chevron { font-size: 0.6rem; color: var(--gray-400); transition: transform 0.2s; }
-    .sb-section.collapsed .sb-chevron { transform: rotate(-90deg); }
-    .sb-section.collapsed .sb-links { display: none; }
-    .sb-links { display: flex; flex-direction: column; gap: 1px; padding: 0.25rem 0; }
-    .sb-link { display: flex; align-items: center; gap: 0.6rem; padding: 0.5rem 0.75rem; border-radius: 0.5rem; text-decoration: none; font-size: 0.875rem; color: var(--gray-700); white-space: nowrap; }
-    .sb-link:hover { background: var(--gray-100); }
-    .sb-link.active { background: var(--primary-light); color: var(--primary); font-weight: 600; }
-    .sb-link svg { width: 15px; height: 15px; flex-shrink: 0; opacity: 0.7; }
-    .sb-divider { border: none; border-top: 1px solid var(--gray-100); margin: 0.5rem; }
-    .sb-logout { margin-top: auto; padding: 0.75rem 0.5rem; border-top: 1px solid var(--gray-200); }
-    .sb-logout-btn { width: 100%; padding: 0.5rem; background: var(--danger-light); color: var(--danger); border: 1px solid #fecaca; border-radius: 0.5rem; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
 
     /* ── Main ── */
-    .sa-body { flex: 1; display: flex; flex-direction: column; min-width: 0; }
-    .sa-main { flex: 1; padding: 2rem; max-width: 1400px; width: 100%; margin: 0 auto; }
+    .sa-main { flex: 1; padding: 2rem; max-width: 1200px; width: 100%; margin: 0 auto; }
     .sa-footer { background: var(--gray-50); border-top: 1px solid var(--gray-200); padding: 1rem; text-align: center; color: var(--gray-500); font-size: 0.85rem; }
 
     /* ── Page header ── */
@@ -65,12 +40,14 @@
     .filter-group input:focus, .filter-group select:focus { outline: none; border-color: var(--primary); }
 
     /* ── KPI cards ── */
-    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
-    .kpi-card { background: #fff; border: 1px solid var(--gray-200); border-radius: 0.5rem; padding: 1.25rem 1rem; position: relative; overflow: hidden; }
+    .kpi-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.75rem; margin-bottom: 1.25rem; }
+    .kpi-card { background: #fff; border: 1px solid var(--gray-200); border-radius: 0.5rem; padding: 0.9rem 1rem; position: relative; overflow: hidden; }
     .kpi-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--accent, var(--primary)); }
-    .kpi-card .kpi-num { font-size: 2rem; font-weight: 800; color: var(--gray-900); line-height: 1; margin-bottom: 0.35rem; }
-    .kpi-card .kpi-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: var(--gray-500); }
-    .kpi-card .kpi-sub { font-size: 0.75rem; color: var(--gray-400); margin-top: 0.25rem; }
+    .kpi-card .kpi-num { font-size: 1.6rem; font-weight: 800; color: var(--gray-900); line-height: 1; margin-bottom: 0.25rem; }
+    .kpi-card .kpi-label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: var(--gray-500); }
+    .kpi-card .kpi-sub { font-size: 0.72rem; color: var(--gray-400); margin-top: 0.2rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    @media (max-width: 900px) { .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 560px) { .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
     .kpi-total { --accent: var(--primary); }
     .kpi-pending { --accent: var(--warning); }
     .kpi-approved { --accent: var(--success); }
@@ -139,6 +116,15 @@
     /* ── Export row ── */
     .export-row { display: flex; gap: 0.75rem; flex-wrap: wrap; }
 
+    /* ── Pagination ── */
+    .tbl-footer { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1rem; border-top: 1px solid var(--gray-200); background: var(--gray-50); flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+    .tbl-info { font-size: 0.8rem; color: var(--gray-500); }
+    .pagination { display: flex; gap: 0.25rem; }
+    .page-btn { min-width: 32px; height: 32px; padding: 0 0.5rem; border: 1px solid var(--gray-200); border-radius: 0.375rem; background: #fff; font-size: 0.8rem; font-weight: 600; color: var(--gray-700); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: background 0.15s; }
+    .page-btn:hover { background: var(--gray-100); }
+    .page-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .page-btn:disabled { opacity: 0.4; cursor: default; }
+
     /* ── Tab nav ── */
     .tab-nav { display: flex; gap: 0.25rem; border-bottom: 2px solid var(--gray-200); margin-bottom: 1.25rem; overflow-x: auto; }
     .tab-btn { padding: 0.55rem 1rem; font-size: 0.85rem; font-weight: 600; color: var(--gray-500); background: none; border: none; border-bottom: 2px solid transparent; margin-bottom: -2px; cursor: pointer; white-space: nowrap; }
@@ -147,42 +133,192 @@
     .tab-panel.active { display: block; }
 
     @media (max-width: 1024px) { .charts-grid { grid-template-columns: 1fr; } }
-    @media (max-width: 768px) { .sa-layout { flex-direction: column; } .sa-sidebar { width: 100%; height: auto; position: relative; } .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 768px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+  </style>
+  <style>
+
+    /* ══ Sidebar (shared) ══ */
+    .sb-hamburger {
+      display: none;
+      position: fixed;
+      top: 0.75rem;
+      left: 0.75rem;
+      z-index: 1200;
+      width: 40px;
+      height: 40px;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 0.5rem;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      flex-direction: column;
+      gap: 5px;
+      padding: 10px;
+    }
+    .sb-hamburger span { display:block; width:100%; height:2px; background:#374151; border-radius:2px; transition:all 0.2s; }
+    .sb-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.35); z-index:1100; }
+    .sb-overlay.open { display:block; }
+    .sa-layout { display:flex; min-height:100vh; }
+    .sa-sidebar {
+      width:240px; flex-shrink:0; background:#fff; border-right:1px solid #e5e7eb;
+      display:flex; flex-direction:column; position:sticky; top:0; height:100vh;
+      overflow-y:auto; z-index:1150; transition:transform 0.25s ease;
+    }
+    .sa-body { flex:1; min-width:0; display:flex; flex-direction:column; }
+    .sb-brand {
+      display:flex; align-items:center; gap:0.5rem; padding:1.25rem 1rem;
+      border-bottom:1px solid #e5e7eb; font-weight:800; font-size:0.95rem;
+      color:#2563eb; text-decoration:none;
+    }
+    .sb-brand svg { width:18px; height:18px; flex-shrink:0; }
+    .sb-user { display:flex; align-items:center; gap:0.65rem; padding:1rem; border-bottom:1px solid #f1f5f9; }
+    .sb-avatar {
+      width:38px; height:38px; border-radius:50%; background:#2563eb; color:#fff;
+      font-size:0.8rem; font-weight:700; display:flex; align-items:center;
+      justify-content:center; flex-shrink:0;
+    }
+    .sb-name { font-size:0.85rem; font-weight:600; color:#1e293b; }
+    .sb-role { font-size:0.7rem; color:#64748b; }
+    .sb-section { padding:0 0.5rem; margin-top:0.5rem; }
+    .sb-section-header {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0.35rem 0.5rem; cursor:pointer; user-select:none; border-radius:0.375rem;
+    }
+    .sb-section-header:hover { background:#f8fafc; }
+    .sb-label { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; color:#94a3b8; }
+    .sb-chevron { font-size:0.6rem; color:#94a3b8; transition:transform 0.2s; }
+    .sb-section.collapsed .sb-chevron { transform:rotate(-90deg); }
+    .sb-section.collapsed .sb-links { display:none; }
+    .sb-links { display:flex; flex-direction:column; gap:1px; padding:0.25rem 0; }
+    .sb-link {
+      display:flex; align-items:center; gap:0.6rem; padding:0.5rem 0.75rem;
+      border-radius:0.5rem; text-decoration:none; font-size:0.875rem;
+      color:#374151; white-space:nowrap; transition:background 0.15s, color 0.15s;
+    }
+    .sb-link:hover { background:#f1f5f9; color:#1e293b; }
+    .sb-link.active { background:#dbeafe; color:#2563eb; font-weight:600; }
+    .sb-link svg { width:15px; height:15px; flex-shrink:0; opacity:0.7; }
+    .sb-divider { border:none; border-top:1px solid #f1f5f9; margin:0.5rem; }
+    .sb-logout { margin-top:auto; padding:0.75rem 0.5rem; border-top:1px solid #e5e7eb; }
+    .sb-logout-btn {
+      width:100%; padding:0.5rem; background:#fee2e2; color:#991b1b;
+      border:1px solid #fecaca; border-radius:0.5rem; font-size:0.85rem;
+      font-weight:600; cursor:pointer; display:flex; align-items:center;
+      justify-content:center; gap:0.4rem;
+    }
+    .sb-logout-btn:hover { background:#fecaca; }
+    @media (max-width:768px) {
+      .sb-hamburger { display:flex; }
+      .sa-sidebar { position:fixed; top:0; left:0; height:100vh; transform:translateX(-100%); }
+      .sa-sidebar.open { transform:translateX(0); }
+      .sa-body > main, .sa-body > .sa-main, .main-area { padding-top:3.75rem !important; }
+    }
+
+  </style>
+
+  <style>
+    /* ══ Shared Sidebar + Hamburger ══ */
+    .sb-hamburger {
+      display: none; position: fixed; top: 0.75rem; left: 0.75rem; z-index: 1200;
+      width: 40px; height: 40px; background: #fff; border: 1px solid #e5e7eb;
+      border-radius: 0.5rem; align-items: center; justify-content: center;
+      cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      flex-direction: column; gap: 5px; padding: 10px;
+    }
+    .sb-hamburger span { display:block; width:100%; height:2px; background:#374151; border-radius:2px; transition:all 0.2s; }
+    .sb-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.35); z-index:1100; }
+    .sb-overlay.open { display:block; }
+    .sa-layout { display:flex; min-height:100vh; }
+    .sa-sidebar {
+      width:240px; flex-shrink:0; background:#fff; border-right:1px solid #e5e7eb;
+      display:flex; flex-direction:column; position:sticky; top:0; height:100vh;
+      overflow-y:auto; z-index:1150; transition:transform 0.25s ease;
+    }
+    .sa-body { flex:1; min-width:0; display:flex; flex-direction:column; }
+    .sb-brand {
+      display:flex; align-items:center; gap:0.5rem; padding:1.25rem 1rem;
+      border-bottom:1px solid #e5e7eb; font-weight:800; font-size:0.95rem;
+      color:#2563eb; text-decoration:none;
+    }
+    .sb-brand svg { width:18px; height:18px; flex-shrink:0; }
+    .sb-user { display:flex; align-items:center; gap:0.65rem; padding:1rem; border-bottom:1px solid #f1f5f9; }
+    .sb-avatar { width:38px; height:38px; border-radius:50%; background:#2563eb; color:#fff; font-size:0.8rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .sb-name { font-size:0.85rem; font-weight:600; color:#1e293b; }
+    .sb-role { font-size:0.7rem; color:#64748b; }
+    .sb-section { padding:0 0.5rem; margin-top:0.5rem; }
+    .sb-section-header { display:flex; align-items:center; justify-content:space-between; padding:0.35rem 0.5rem; cursor:pointer; user-select:none; border-radius:0.375rem; }
+    .sb-section-header:hover { background:#f8fafc; }
+    .sb-label { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; color:#94a3b8; }
+    .sb-chevron { font-size:0.6rem; color:#94a3b8; transition:transform 0.2s; }
+    .sb-section.collapsed .sb-chevron { transform:rotate(-90deg); }
+    .sb-section.collapsed .sb-links { display:none; }
+    .sb-links { display:flex; flex-direction:column; gap:1px; padding:0.25rem 0; }
+    .sb-link { display:flex; align-items:center; gap:0.6rem; padding:0.5rem 0.75rem; border-radius:0.5rem; text-decoration:none; font-size:0.875rem; color:#374151; white-space:nowrap; transition:background 0.15s, color 0.15s; }
+    .sb-link:hover { background:#f1f5f9; color:#1e293b; }
+    .sb-link.active { background:#dbeafe; color:#2563eb; font-weight:600; }
+    .sb-link svg { width:15px; height:15px; flex-shrink:0; opacity:0.7; }
+    .sb-divider { border:none; border-top:1px solid #f1f5f9; margin:0.5rem; }
+    .sb-logout { margin-top:auto; padding:0.75rem 0.5rem; border-top:1px solid #e5e7eb; }
+    .sb-logout-btn { width:100%; padding:0.5rem; background:#fee2e2; color:#991b1b; border:1px solid #fecaca; border-radius:0.5rem; font-size:0.85rem; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:0.4rem; }
+    .sb-logout-btn:hover { background:#fecaca; }
+    @media (max-width:768px) {
+      .sb-hamburger { display:flex; }
+      .sa-sidebar { position:fixed; top:0; left:0; height:100vh; transform:translateX(-100%); }
+      .sa-sidebar.open { transform:translateX(0); }
+      .sa-body > main, .sa-body > .sa-main, .main-area, .sidebar-body > main { padding-top:3.75rem !important; }
+    }
   </style>
 </head>
 <body>
+
+  <button class="sb-hamburger" id="sb-hamburger" aria-label="Open menu" onclick="toggleSidebar()">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="sb-overlay" id="sb-overlay" onclick="closeSidebar()"></div>
+
 <div class="sa-layout">
-  <aside class="sa-sidebar">
-    <a href="admin-dashboard.html" class="sb-brand">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
-      Barangay E-Request
-    </a>
-    <div class="sb-user">
-      <div class="sb-avatar" id="sb-avatar">SA</div>
-      <div><div class="sb-name" id="sb-name">Loading...</div><div class="sb-role">Admin</div></div>
-    </div>
-    <div class="sb-section" id="sec-sa">
-      <div class="sb-section-header" onclick="toggleSection('sec-sa')"><span class="sb-label">Admin</span><span class="sb-chevron">▼</span></div>
-      <div class="sb-links">
-        <a href="admin-dashboard.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</a>
-        <a href="admin-requests.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Requests</a>
-        <a href="admin-blotter.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Blotter & Complaints</a>
-        <a href="admin-reports.html" class="sb-link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Reports</a>
+  <aside class="sa-sidebar" id="sa-sidebar">
+      <a href="admin-dashboard.html" class="sb-brand">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Barangay E-Request
+      </a>
+      <div class="sb-user">
+        <div class="sb-avatar" id="sb-avatar">SA</div>
+        <div>
+          <div class="sb-name" id="sb-name">Loading...</div>
+          <div class="sb-role">Admin</div>
+        </div>
       </div>
-    </div>
-    <hr class="sb-divider">
-    <div class="sb-section" id="sec-user">
-      <div class="sb-section-header" onclick="toggleSection('sec-user')"><span class="sb-label">My User Area</span><span class="sb-chevron">▼</span></div>
-      <div class="sb-links">
-        <a href="sa-dashboard.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>My Dashboard</a>
-        <a href="sa-new-request.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>New Request</a>
-        <a href="sa-my-requests.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12"/></svg>My Requests</a>
-        <a href="sa-blotter.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Blotter & Complaint</a>
-        <a href="admin-profile.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>My Profile</a>
+      <div class="sb-section" id="sec-sa">
+        <div class="sb-section-header" onclick="toggleSection('sec-sa')">
+          <span class="sb-label">Admin</span><span class="sb-chevron">▼</span>
+        </div>
+        <div class="sb-links">
+          <a href="admin-dashboard.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg> Dashboard</a>
+          <a href="admin-requests.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> All Requests</a>
+          <a href="admin-blotter.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Blotter</a>
+          <a href="admin-reports.html" class="sb-link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Reports</a>
+        </div>
       </div>
-    </div>
-    <div class="sb-logout"><button class="sb-logout-btn" onclick="doLogout()">Logout</button></div>
-  </aside>
+      <hr class="sb-divider">
+      <div class="sb-section" id="sec-user">
+        <div class="sb-section-header" onclick="toggleSection('sec-user')">
+          <span class="sb-label">My User Area</span><span class="sb-chevron">▼</span>
+        </div>
+        <div class="sb-links">
+          <a href="sa-dashboard.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg> Dashboard</a>
+          <a href="sa-new-request.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> New Request</a>
+          <a href="sa-my-requests.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg> My Requests</a>
+          <a href="sa-blotter.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Blotter</a>
+          <a href="admin-profile.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Profile</a>
+        </div>
+      </div>
+      <div class="sb-logout">
+        <button class="sb-logout-btn" onclick="doLogout()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Logout</button>
+      </div>
+    </aside>
 
   <div class="sa-body">
     <main class="sa-main">
@@ -324,13 +460,19 @@
 
           <!-- Requests Tab -->
           <div class="tab-panel active" id="tab-requests">
-            <table class="sa-table" id="requestsTable">
-              <thead><tr>
-                <th>#</th><th>Tracking ID</th><th>Resident</th><th>Document Type</th>
-                <th>Purpose</th><th>Fee</th><th>Status</th><th>Edited?</th><th>Date Filed</th><th>Processed By</th>
-              </tr></thead>
-              <tbody id="requestsBody"></tbody>
-            </table>
+            <div style="overflow-x:auto;">
+              <table class="sa-table" id="requestsTable">
+                <thead><tr>
+                  <th>#</th><th>Tracking ID</th><th>Resident</th><th>Document Type</th>
+                  <th>Purpose</th><th>Fee</th><th>Status</th><th>Edited?</th><th>Date Filed</th><th>Processed By</th>
+                </tr></thead>
+                <tbody id="requestsBody"></tbody>
+              </table>
+            </div>
+            <div class="tbl-footer">
+              <span class="tbl-info" id="req-info"></span>
+              <div class="pagination" id="req-pagination"></div>
+            </div>
           </div>
 
           <!-- By Type Tab -->
@@ -341,29 +483,47 @@
           <!-- Cancelled Tab -->
           <div class="tab-panel" id="tab-cancelled">
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:1.25rem;" id="cancelledSummary"></div>
-            <table class="sa-table">
-              <thead><tr><th>#</th><th>Tracking ID</th><th>Resident</th><th>Type</th><th>Cancelled By</th><th>Reason</th><th>Cancelled At</th></tr></thead>
-              <tbody id="cancelledBody"></tbody>
-            </table>
+            <div style="overflow-x:auto;">
+              <table class="sa-table">
+                <thead><tr><th>#</th><th>Tracking ID</th><th>Resident</th><th>Type</th><th>Cancelled By</th><th>Reason</th><th>Cancelled At</th></tr></thead>
+                <tbody id="cancelledBody"></tbody>
+              </table>
+            </div>
+            <div class="tbl-footer">
+              <span class="tbl-info" id="cancelled-info"></span>
+              <div class="pagination" id="cancelled-pagination"></div>
+            </div>
           </div>
 
           <!-- Edited Tab -->
           <div class="tab-panel" id="tab-edited">
-            <table class="sa-table">
-              <thead><tr><th>#</th><th>Tracking ID</th><th>Resident</th><th>Type</th><th>Status</th><th>Edited By</th><th>Date Filed</th></tr></thead>
-              <tbody id="editedBody"></tbody>
-            </table>
+            <div style="overflow-x:auto;">
+              <table class="sa-table">
+                <thead><tr><th>#</th><th>Tracking ID</th><th>Resident</th><th>Type</th><th>Status</th><th>Edited By</th><th>Date Filed</th></tr></thead>
+                <tbody id="editedBody"></tbody>
+              </table>
+            </div>
+            <div class="tbl-footer">
+              <span class="tbl-info" id="edited-info"></span>
+              <div class="pagination" id="edited-pagination"></div>
+            </div>
           </div>
 
           <!-- Users Tab -->
           <div class="tab-panel" id="tab-users">
-            <table class="sa-table">
-              <thead><tr>
-                <th>#</th><th>Name</th><th>Email</th><th>Phone</th>
-                <th>Purok</th><th>Status</th><th>Requests</th><th>Joined</th>
-              </tr></thead>
-              <tbody id="usersBody"></tbody>
-            </table>
+            <div style="overflow-x:auto;">
+              <table class="sa-table">
+                <thead><tr>
+                  <th>#</th><th>Name</th><th>Email</th><th>Phone</th>
+                  <th>Purok</th><th>Status</th><th>Requests</th><th>Joined</th>
+                </tr></thead>
+                <tbody id="usersBody"></tbody>
+              </table>
+            </div>
+            <div class="tbl-footer">
+              <span class="tbl-info" id="users-info"></span>
+              <div class="pagination" id="users-pagination"></div>
+            </div>
           </div>
 
           <!-- Revenue Tab -->
@@ -373,13 +533,19 @@
 
           <!-- Blotter Tab -->
           <div class="tab-panel" id="tab-blotter">
-            <table class="sa-table">
-              <thead><tr>
-                <th>#</th><th>ID</th><th>Type</th><th>Complainant</th>
-                <th>Status</th><th>Date Filed</th>
-              </tr></thead>
-              <tbody id="blotterBody"></tbody>
-            </table>
+            <div style="overflow-x:auto;">
+              <table class="sa-table">
+                <thead><tr>
+                  <th>#</th><th>ID</th><th>Type</th><th>Complainant</th>
+                  <th>Status</th><th>Date Filed</th>
+                </tr></thead>
+                <tbody id="blotterBody"></tbody>
+              </table>
+            </div>
+            <div class="tbl-footer">
+              <span class="tbl-info" id="blotter-info"></span>
+              <div class="pagination" id="blotter-pagination"></div>
+            </div>
           </div>
 
         </div>
@@ -649,29 +815,77 @@ function displayName(u) {
 
 function fmt(d) { return d ? new Date(d).toLocaleDateString('en-PH', {year:'numeric',month:'short',day:'numeric'}) : '-'; }
 
+// ── Shared paginator ──────────────────────────────────────────────────────
+const PAGE_SIZE = 10;
+function makePaginator(items, renderRowFn, bodyId, infoId, paginationId, emptyMsg, colspan) {
+  let currentPage = 1;
+  const totalPages = () => Math.max(1, Math.ceil(items.length / PAGE_SIZE));
+
+  function render() {
+    const start = (currentPage - 1) * PAGE_SIZE;
+    const slice = items.slice(start, start + PAGE_SIZE);
+    const body = document.getElementById(bodyId);
+    const info = document.getElementById(infoId);
+    const pg = document.getElementById(paginationId);
+    if (!body) return;
+    const tp = totalPages();
+
+    body.innerHTML = items.length
+      ? renderRowFn(slice, start)
+      : `<tr><td colspan="${colspan||10}" style="text-align:center;color:var(--gray-400);padding:2rem;">${emptyMsg}</td></tr>`;
+
+    if (info) info.textContent = items.length ? `Showing ${start+1}–${Math.min(start+PAGE_SIZE, items.length)} of ${items.length} entries` : '';
+    if (pg) {
+      pg.innerHTML = '';
+      if (tp <= 1) return;
+      const mkBtn = (label, page, disabled, active) => {
+        const b = document.createElement('button');
+        b.className = 'page-btn' + (active ? ' active' : '');
+        b.textContent = label; b.disabled = disabled;
+        b.onclick = () => { currentPage = page; render(); };
+        return b;
+      };
+      pg.appendChild(mkBtn('‹', currentPage-1, currentPage===1, false));
+      for (let i=1; i<=tp; i++) {
+        if (tp>7 && i>2 && i<tp-1 && Math.abs(i-currentPage)>1) {
+          if (i===3||i===tp-2) { const s=document.createElement('span'); s.textContent='…'; s.style.cssText='padding:0 0.25rem;color:var(--gray-400);line-height:32px;font-size:0.8rem;'; pg.appendChild(s); }
+          continue;
+        }
+        pg.appendChild(mkBtn(i, i, false, i===currentPage));
+      }
+      pg.appendChild(mkBtn('›', currentPage+1, currentPage===tp, false));
+    }
+  }
+  render();
+  return { reset: () => { currentPage = 1; render(); } };
+}
+
 function renderRequestsTable(reqs) {
   const users = getData(STORAGE_KEYS.USERS) || [];
-  const body = document.getElementById('requestsBody');
-  if (!reqs.length) { body.innerHTML = '<tr><td colspan="10" style="text-align:center;color:var(--gray-400);padding:2rem;">No requests in this period.</td></tr>'; return; }
-  body.innerHTML = reqs.slice(0, 200).map((r, i) => {
-    const u = users.find(x => x.id === r.userId);
-    const name = displayName(u) || r.requesterName || '-';
-    const processed = r.approvedBy || r.rejectedBy || r.releasedBy || r.cancelledByAdmin || '-';
-    const editedLabel = r.editedByAdmin ? '<span style="font-size:0.68rem;background:#dbeafe;color:#1e40af;border-radius:4px;padding:0.1rem 0.35rem;">Admin</span>'
-                      : r.editedByUser  ? '<span style="font-size:0.68rem;background:#fef3c7;color:#92400e;border-radius:4px;padding:0.1rem 0.35rem;">User</span>' : '-';
-    return `<tr>
-      <td style="color:var(--gray-400);">${i+1}</td>
-      <td style="font-family:monospace;font-size:0.78rem;">${(r.id||'').substring(0,10).toUpperCase()}</td>
-      <td>${name}</td>
-      <td>${r.type || r.typeKey || '-'}</td>
-      <td>${r.purpose || '-'}</td>
-      <td>${r.fee > 0 ? '₱'+r.fee : 'FREE'}</td>
-      <td><span class="badge badge-${r.status||'pending'}">${r.status||'-'}</span></td>
-      <td>${editedLabel}</td>
-      <td>${fmt(r.createdAt)}</td>
-      <td>${processed}</td>
-    </tr>`;
-  }).join('');
+  makePaginator(
+    reqs,
+    (slice, offset) => slice.map((r, idx) => {
+      const u = users.find(x => x.id === r.userId);
+      const name = displayName(u) || r.requesterName || '-';
+      const processed = r.approvedBy || r.rejectedBy || r.releasedBy || r.cancelledByAdmin || '-';
+      const editedLabel = r.editedByAdmin ? '<span style="font-size:0.68rem;background:#dbeafe;color:#1e40af;border-radius:4px;padding:0.1rem 0.35rem;">Admin</span>'
+                        : r.editedByUser  ? '<span style="font-size:0.68rem;background:#fef3c7;color:#92400e;border-radius:4px;padding:0.1rem 0.35rem;">User</span>' : '-';
+      return `<tr>
+        <td style="color:var(--gray-400);">${offset+idx+1}</td>
+        <td style="font-family:monospace;font-size:0.78rem;">${(r.id||'').substring(0,10).toUpperCase()}</td>
+        <td>${name}</td>
+        <td>${r.type || r.typeKey || '-'}</td>
+        <td>${r.purpose || '-'}</td>
+        <td>${r.fee > 0 ? '₱'+r.fee : 'FREE'}</td>
+        <td><span class="badge badge-${r.status||'pending'}">${r.status||'-'}</span></td>
+        <td>${editedLabel}</td>
+        <td>${fmt(r.createdAt)}</td>
+        <td>${processed}</td>
+      </tr>`;
+    }).join(''),
+    'requestsBody', 'req-info', 'req-pagination',
+    'No requests in this period.', 10
+  );
 }
 
 function renderByType(reqs) {
@@ -724,48 +938,59 @@ function renderCancelledTab(reqs) {
     { label: 'By Admin/Staff',  value: byAdmin,          color: '#dc2626' },
   ].map(({label,value,color}) => `<div style="background:var(--gray-50);border:1px solid var(--gray-200);border-left:4px solid ${color};border-radius:0.5rem;padding:1rem;"><div style="font-size:1.75rem;font-weight:800;color:${color};">${value}</div><div style="font-size:0.72rem;text-transform:uppercase;color:var(--gray-500);font-weight:700;margin-top:0.25rem;">${label}</div></div>`).join('');
 
-  const users=getData(STORAGE_KEYS.USERS)||[], body=document.getElementById('cancelledBody');
-  if (!cancelled.length) { body.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--gray-400);padding:2rem;">No cancelled requests in this period.</td></tr>'; return; }
-  body.innerHTML=cancelled.map((r,i) => {
-    const u=users.find(x=>x.id===r.userId);
-    const who = r.cancelledBy==='admin' ? (r.cancelledByAdmin||'Admin') + ' <span style="font-size:0.68rem;background:#fee2e2;color:#991b1b;border-radius:4px;padding:0.1rem 0.35rem;">Staff</span>' : 'Resident';
-    return `<tr><td style="color:var(--gray-400);">${i+1}</td><td style="font-family:monospace;font-size:0.78rem;">${(r.id||'').substring(0,10).toUpperCase()}</td><td>${displayName(u)||r.requesterName||'-'}</td><td>${r.type||'-'}</td><td>${who}</td><td>${r.cancelReason||'-'}</td><td>${fmt(r.cancelledAt)}</td></tr>`;
-  }).join('');
+  const users = getData(STORAGE_KEYS.USERS) || [];
+  makePaginator(
+    cancelled,
+    (slice, offset) => slice.map((r, idx) => {
+      const u = users.find(x => x.id === r.userId);
+      const who = r.cancelledBy==='admin' ? (r.cancelledByAdmin||'Admin') + ' <span style="font-size:0.68rem;background:#fee2e2;color:#991b1b;border-radius:4px;padding:0.1rem 0.35rem;">Staff</span>' : 'Resident';
+      return `<tr><td style="color:var(--gray-400);">${offset+idx+1}</td><td style="font-family:monospace;font-size:0.78rem;">${(r.id||'').substring(0,10).toUpperCase()}</td><td>${displayName(u)||r.requesterName||'-'}</td><td>${r.type||'-'}</td><td>${who}</td><td>${r.cancelReason||'-'}</td><td>${fmt(r.cancelledAt)}</td></tr>`;
+    }).join(''),
+    'cancelledBody', 'cancelled-info', 'cancelled-pagination',
+    'No cancelled requests in this period.', 7
+  );
 }
 
 function renderEditedTab(reqs) {
   const edited = reqs.filter(r => r.editedByUser || r.editedByAdmin);
-  const users=getData(STORAGE_KEYS.USERS)||[], body=document.getElementById('editedBody');
-  if (!edited.length) { body.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--gray-400);padding:2rem;">No edited requests in this period.</td></tr>'; return; }
-  body.innerHTML=edited.map((r,i) => {
-    const u=users.find(x=>x.id===r.userId);
-    const editedBy = r.editedByAdmin
-      ? '<span style="font-size:0.68rem;background:#dbeafe;color:#1e40af;border-radius:4px;padding:0.1rem 0.35rem;">Admin</span>'
-      : '<span style="font-size:0.68rem;background:#fef3c7;color:#92400e;border-radius:4px;padding:0.1rem 0.35rem;">User</span>';
-    return `<tr><td style="color:var(--gray-400);">${i+1}</td><td style="font-family:monospace;font-size:0.78rem;">${(r.id||'').substring(0,10).toUpperCase()}</td><td>${displayName(u)||r.requesterName||'-'}</td><td>${r.type||'-'}</td><td><span class="badge badge-${r.status||'pending'}">${r.status||'-'}</span></td><td>${editedBy}</td><td>${fmt(r.createdAt)}</td></tr>`;
-  }).join('');
+  const users = getData(STORAGE_KEYS.USERS) || [];
+  makePaginator(
+    edited,
+    (slice, offset) => slice.map((r, idx) => {
+      const u = users.find(x => x.id === r.userId);
+      const editedBy = r.editedByAdmin
+        ? '<span style="font-size:0.68rem;background:#dbeafe;color:#1e40af;border-radius:4px;padding:0.1rem 0.35rem;">Admin</span>'
+        : '<span style="font-size:0.68rem;background:#fef3c7;color:#92400e;border-radius:4px;padding:0.1rem 0.35rem;">User</span>';
+      return `<tr><td style="color:var(--gray-400);">${offset+idx+1}</td><td style="font-family:monospace;font-size:0.78rem;">${(r.id||'').substring(0,10).toUpperCase()}</td><td>${displayName(u)||r.requesterName||'-'}</td><td>${r.type||'-'}</td><td><span class="badge badge-${r.status||'pending'}">${r.status||'-'}</span></td><td>${editedBy}</td><td>${fmt(r.createdAt)}</td></tr>`;
+    }).join(''),
+    'editedBody', 'edited-info', 'edited-pagination',
+    'No edited requests in this period.', 7
+  );
 }
 
 function renderUsersTable() {
   const requests = allRequests;
-  const body = document.getElementById('usersBody');
   const filtered = allUsers.filter(u => inRange(u.createdAt));
-  if (!filtered.length) { body.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--gray-400);padding:2rem;">No users in this period.</td></tr>'; return; }
-  body.innerHTML = filtered.slice(0, 100).map((u, i) => {
-    const userReqs = requests.filter(r => r.userId === u.id);
-    const name = displayName(u);
-    const statusColor = { active:'badge-approved', suspended:'badge-pending', deactivated:'badge-rejected' }[u.status] || 'badge-pending';
-    return `<tr>
-      <td style="color:var(--gray-400);">${i+1}</td>
-      <td>${name}</td>
-      <td>${u.email || '-'}</td>
-      <td>${u.phone || '-'}</td>
-      <td>${u.purok ? 'Purok ' + u.purok : '-'}</td>
-      <td><span class="badge ${statusColor}">${u.status || 'active'}</span></td>
-      <td>${userReqs.length}</td>
-      <td>${fmt(u.createdAt)}</td>
-    </tr>`;
-  }).join('');
+  makePaginator(
+    filtered,
+    (slice, offset) => slice.map((u, idx) => {
+      const userReqs = requests.filter(r => r.userId === u.id);
+      const name = displayName(u);
+      const statusColor = { active:'badge-approved', suspended:'badge-pending', deactivated:'badge-rejected' }[u.status] || 'badge-pending';
+      return `<tr>
+        <td style="color:var(--gray-400);">${offset+idx+1}</td>
+        <td>${name}</td>
+        <td>${u.email || '-'}</td>
+        <td>${u.phone || '-'}</td>
+        <td>${u.purok ? 'Purok ' + u.purok : '-'}</td>
+        <td><span class="badge ${statusColor}">${u.status || 'active'}</span></td>
+        <td>${userReqs.length}</td>
+        <td>${fmt(u.createdAt)}</td>
+      </tr>`;
+    }).join(''),
+    'usersBody', 'users-info', 'users-pagination',
+    'No users in this period.', 8
+  );
 }
 
 function renderRevenue(reqs) {
@@ -817,22 +1042,25 @@ function renderRevenue(reqs) {
 }
 
 function renderBlotterTable(items) {
-  const body = document.getElementById('blotterBody');
-  if (!items.length) { body.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--gray-400);padding:2rem;">No blotter records in this period.</td></tr>'; return; }
-  body.innerHTML = items.map((b, i) => {
-    const type = b.typeKey === 'complaint' ? 'Complaint' : 'Blotter';
-    const complainant = b.complainantName || b.requesterName || '-';
-    const status = b.status || '-';
-    const statusClass = { Pending:'badge-pending', Ongoing:'badge-pending', Resolved:'badge-approved', Escalated:'badge-rejected', pending:'badge-pending', resolved:'badge-approved', rejected:'badge-rejected', cancelled:'badge-cancelled' }[status] || 'badge-pending';
-    return `<tr>
-      <td style="color:var(--gray-400);">${i+1}</td>
-      <td style="font-family:monospace;font-size:0.78rem;">${(b.id||'').substring(0,10).toUpperCase()}</td>
-      <td>${type}</td>
-      <td>${complainant}</td>
-      <td><span class="badge ${statusClass}">${status}</span></td>
-      <td>${fmt(b.createdAt || b.date)}</td>
-    </tr>`;
-  }).join('');
+  makePaginator(
+    items,
+    (slice, offset) => slice.map((b, idx) => {
+      const type = b.typeKey === 'complaint' ? 'Complaint' : 'Blotter';
+      const complainant = b.complainantName || b.requesterName || '-';
+      const status = b.status || '-';
+      const statusClass = { Pending:'badge-pending', Ongoing:'badge-pending', Resolved:'badge-approved', Escalated:'badge-rejected', pending:'badge-pending', resolved:'badge-approved', rejected:'badge-rejected', cancelled:'badge-cancelled' }[status] || 'badge-pending';
+      return `<tr>
+        <td style="color:var(--gray-400);">${offset+idx+1}</td>
+        <td style="font-family:monospace;font-size:0.78rem;">${(b.id||'').substring(0,10).toUpperCase()}</td>
+        <td>${type}</td>
+        <td>${complainant}</td>
+        <td><span class="badge ${statusClass}">${status}</span></td>
+        <td>${fmt(b.createdAt || b.date)}</td>
+      </tr>`;
+    }).join(''),
+    'blotterBody', 'blotter-info', 'blotter-pagination',
+    'No blotter records in this period.', 6
+  );
 }
 
 function switchTab(name, btn) {

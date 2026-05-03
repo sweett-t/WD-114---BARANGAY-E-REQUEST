@@ -35,39 +35,108 @@
     .logout-btn:hover { background:#fecaca }
     @media (max-width:768px) { .layout { flex-direction:column } .sidebar { width:100%;height:auto;position:relative } }
   </style>
+
+  <style>
+    /* ══ Shared Sidebar + Hamburger ══ */
+    .sb-hamburger {
+      display: none; position: fixed; top: 0.75rem; left: 0.75rem; z-index: 1200;
+      width: 40px; height: 40px; background: #fff; border: 1px solid #e5e7eb;
+      border-radius: 0.5rem; align-items: center; justify-content: center;
+      cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      flex-direction: column; gap: 5px; padding: 10px;
+    }
+    .sb-hamburger span { display:block; width:100%; height:2px; background:#374151; border-radius:2px; transition:all 0.2s; }
+    .sb-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.35); z-index:1100; }
+    .sb-overlay.open { display:block; }
+    .sa-layout { display:flex; min-height:100vh; }
+    .sa-sidebar {
+      width:240px; flex-shrink:0; background:#fff; border-right:1px solid #e5e7eb;
+      display:flex; flex-direction:column; position:sticky; top:0; height:100vh;
+      overflow-y:auto; z-index:1150; transition:transform 0.25s ease;
+    }
+    .sa-body { flex:1; min-width:0; display:flex; flex-direction:column; }
+    .sb-brand {
+      display:flex; align-items:center; gap:0.5rem; padding:1.25rem 1rem;
+      border-bottom:1px solid #e5e7eb; font-weight:800; font-size:0.95rem;
+      color:#2563eb; text-decoration:none;
+    }
+    .sb-brand svg { width:18px; height:18px; flex-shrink:0; }
+    .sb-user { display:flex; align-items:center; gap:0.65rem; padding:1rem; border-bottom:1px solid #f1f5f9; }
+    .sb-avatar { width:38px; height:38px; border-radius:50%; background:#2563eb; color:#fff; font-size:0.8rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .sb-name { font-size:0.85rem; font-weight:600; color:#1e293b; }
+    .sb-role { font-size:0.7rem; color:#64748b; }
+    .sb-section { padding:0 0.5rem; margin-top:0.5rem; }
+    .sb-section-header { display:flex; align-items:center; justify-content:space-between; padding:0.35rem 0.5rem; cursor:pointer; user-select:none; border-radius:0.375rem; }
+    .sb-section-header:hover { background:#f8fafc; }
+    .sb-label { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; color:#94a3b8; }
+    .sb-chevron { font-size:0.6rem; color:#94a3b8; transition:transform 0.2s; }
+    .sb-section.collapsed .sb-chevron { transform:rotate(-90deg); }
+    .sb-section.collapsed .sb-links { display:none; }
+    .sb-links { display:flex; flex-direction:column; gap:1px; padding:0.25rem 0; }
+    .sb-link { display:flex; align-items:center; gap:0.6rem; padding:0.5rem 0.75rem; border-radius:0.5rem; text-decoration:none; font-size:0.875rem; color:#374151; white-space:nowrap; transition:background 0.15s, color 0.15s; }
+    .sb-link:hover { background:#f1f5f9; color:#1e293b; }
+    .sb-link.active { background:#dbeafe; color:#2563eb; font-weight:600; }
+    .sb-link svg { width:15px; height:15px; flex-shrink:0; opacity:0.7; }
+    .sb-divider { border:none; border-top:1px solid #f1f5f9; margin:0.5rem; }
+    .sb-logout { margin-top:auto; padding:0.75rem 0.5rem; border-top:1px solid #e5e7eb; }
+    .sb-logout-btn { width:100%; padding:0.5rem; background:#fee2e2; color:#991b1b; border:1px solid #fecaca; border-radius:0.5rem; font-size:0.85rem; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:0.4rem; }
+    .sb-logout-btn:hover { background:#fecaca; }
+    @media (max-width:768px) {
+      .sb-hamburger { display:flex; }
+      .sa-sidebar { position:fixed; top:0; left:0; height:100vh; transform:translateX(-100%); }
+      .sa-sidebar.open { transform:translateX(0); }
+      .sa-body > main, .sa-body > .sa-main, .main-area, .sidebar-body > main { padding-top:3.75rem !important; }
+    }
+  </style>
 </head>
 <body>
-  <div class="layout">
-    <aside class="sidebar">
-      <a href="admin-dashboard.html" class="brand">
+  <button class="sb-hamburger" id="sb-hamburger" aria-label="Open menu" onclick="toggleSidebar()">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="sb-overlay" id="sb-overlay" onclick="closeSidebar()"></div>
+
+  <div class="sa-layout">
+    <aside class="sa-sidebar" id="sa-sidebar">
+      <a href="admin-dashboard.html" class="sb-brand">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         Barangay E-Request
       </a>
-      <div class="user"><div class="avatar" id="avatar">SA</div><div><div class="name" id="name">Loading...</div><div class="role">Admin</div></div>
-    </div>
-    <div class="section" id="sec-sa">
-      <div class="section-header" onclick="toggleSection('sec-sa')"><span class="label">Admin</span><span class="chevron">▼</span></div>
-      <div class="links">
-        <a href="admin-dashboard.html" class="link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</a>
-        <a href="admin-requests.html" class="link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>All Requests</a>
-        <a href="admin-blotter.html" class="link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Blotter</a>
-        <a href="admin-reports.html" class="link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Reports</a>
+      <div class="sb-user">
+        <div class="sb-avatar" id="avatar">SA</div>
+        <div>
+          <div class="sb-name" id="name">Loading...</div>
+          <div class="sb-role">Admin</div>
+        </div>
       </div>
-    </div>
-    <hr class="divider">
-    <div class="section" id="sec-user">
-      <div class="section-header" onclick="toggleSection('sec-user')"><span class="label">My User Area</span><span class="chevron">▼</span></div>
-      <div class="links">
-        <a href="sa-dashboard.html" class="link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</a>
-        <a href="sa-new-request.html" class="link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>New Request</a>
-        <a href="sa-my-requests.html" class="link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12"/></svg>My Requests</a>
-        <a href="sa-blotter.html" class="link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Blotter</a>
-        <a href="admin-profile.html" class="link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</a>
+      <div class="sb-section" id="sec-sa">
+        <div class="sb-section-header" onclick="toggleSection('sec-sa')">
+          <span class="sb-label">Admin</span><span class="sb-chevron">▼</span>
+        </div>
+        <div class="sb-links">
+          <a href="admin-dashboard.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg> Dashboard</a>
+          <a href="admin-requests.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> All Requests</a>
+          <a href="admin-blotter.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Blotter</a>
+          <a href="admin-reports.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Reports</a>
+        </div>
       </div>
-    </div>
-    <div class="logout"><button class="logout-btn" onclick="doLogout()">Logout</button></div>
-  </aside>
-  <div class="sidebar-body">
+      <hr class="sb-divider">
+      <div class="sb-section" id="sec-user">
+        <div class="sb-section-header" onclick="toggleSection('sec-user')">
+          <span class="sb-label">My User Area</span><span class="sb-chevron">▼</span>
+        </div>
+        <div class="sb-links">
+          <a href="sa-dashboard.html" class="sb-link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg> Dashboard</a>
+          <a href="sa-new-request.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> New Request</a>
+          <a href="sa-my-requests.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg> My Requests</a>
+          <a href="sa-blotter.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Blotter</a>
+          <a href="admin-profile.html" class="sb-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Profile</a>
+        </div>
+      </div>
+      <div class="sb-logout">
+        <button class="sb-logout-btn" onclick="doLogout()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Logout</button>
+      </div>
+    </aside>
+  <div class="sa-body">
     <main class="dashboard-content">
       <div class="dashboard-header">
         <div class="fiscal-info">
