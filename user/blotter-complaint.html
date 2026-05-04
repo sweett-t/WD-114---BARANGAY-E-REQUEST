@@ -102,6 +102,27 @@
       </div>
     </main>
 
+    <!-- Step 2: Form (shown after selecting a card and clicking Continue) -->
+    <div id="step-2" style="display:none;">
+      <main>
+        <div id="form-container"></div>
+      </main>
+    </div>
+
+    <!-- Step 3: Success screen -->
+    <div id="step-success" style="display:none;">
+      <main>
+        <div class="page-header">
+          <h1>Submitted Successfully</h1>
+          <p>Your request has been received. You can track it under <strong>My Requests</strong>.</p>
+        </div>
+        <div class="step-actions">
+          <a href="my-requests.html" class="btn btn-primary">View My Requests</a>
+          <button type="button" class="btn btn-secondary" onclick="BC.goBack()">Submit Another</button>
+        </div>
+      </main>
+    </div>
+
     <!-- Notification Modal -->
     <div
       class="notification-modal"

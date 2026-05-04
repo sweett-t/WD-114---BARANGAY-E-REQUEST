@@ -215,7 +215,7 @@ var BC = {};
         '<h3>Payment</h3>' +
         '<div class="payment-summary" id="payment-summary"></div>' +
         '<div class="form-field"><label>Payment Method <span class="required">*</span></label>' +
-        '<select name="payment-method" id="payment-method-select" required onchange="BC.handlePaymentMethod()">' +
+        '<select name="payment-method" id="payment-method-select" onchange="BC.handlePaymentMethod()">' +
         '<option value="">Select</option>' +
         '<option value="cash">Cash (Pay at Barangay Hall)</option>' +
         '<option value="online">Online Payment (QR Ph, GCash, Maya, Mobile Banking)</option>' +
@@ -294,6 +294,7 @@ BC.submitForm = function(e, type) {
       id: 'REQ_' + Date.now(),
       userId: user ? user.id : null,
       type: type === 'blotter' ? 'Blotter' : 'Complaint',
+      typeKey: type,
       fee: fee,
       paymentMethod: paymentMethod,
       transactionId: transactionId,
@@ -308,9 +309,7 @@ BC.submitForm = function(e, type) {
       }
     });
     
-    var requests = JSON.parse(localStorage.getItem(STORAGE_KEYS.REQUESTS) || '[]');
-    requests.push(formData);
-    localStorage.setItem(STORAGE_KEYS.REQUESTS, JSON.stringify(requests));
+    saveItem(STORAGE_KEYS.REQUESTS, formData);
     
     document.getElementById('step-2').style.display = 'none';
     document.getElementById('step-success').style.display = 'block';
