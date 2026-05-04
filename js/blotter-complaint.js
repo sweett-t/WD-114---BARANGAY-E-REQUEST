@@ -346,8 +346,7 @@ BC.submitForm = function(e, type) {
     BC.updatePaymentSummary();
   };
 
-  // Expose functions
+  // Expose Functions
   BC.handlePaymentMethod = BC.handlePaymentMethod;
   BC.updatePaymentSummary = BC.updatePaymentSummary;
-  
 })();
